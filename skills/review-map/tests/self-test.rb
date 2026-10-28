@@ -119,6 +119,7 @@ CARRY = "scripts/carry-plan.sh"
 EXCERPT = "scripts/excerpt.sh"
 LINT = "scripts/page-lint.sh"
 USAGE = "scripts/usage.sh"
+SKILL_MD = "SKILL.md"
 
 CASES = [
   # ---- script breaks: the partition assertion, which no template break can exercise ----
@@ -372,8 +373,19 @@ CASES = [
            section: :carry_plan, expect: "a recorded search with a context window is replayed rather than refused"),
 
   # The substring trap. Without the token boundaries api/Gemfile matches inside api/Gemfile.lock.
+  # A linked phrase keeps its file in the href, so a carry rule reading only visible text carries a
+  # checkpoint that turns on the changed file — once per href form.
+  Case.new(desc: "a linked phrase's blob href is not read as a path", file: CARRY,
+           edit: sed(%q<  body=$(printf '%s' "$1" | sed 's#/blob/[0-9a-f]\{7,40\}/# #g')>, '  body=$1'),
+           section: :carry_plan, expect: "a linked phrase whose blob href names a delta path is re-derived"),
+  Case.new(desc: "a linked phrase's diff href is not hashed against the delta", file: CARRY,
+           edit: sed('grep -qF "#diff-$h"', 'grep -qF "#diff-x$h"'),
+           section: :carry_plan, expect: "and so is one whose diff href hashes to it"),
+
   Case.new(desc: "the path test is a substring match rather than a whole token", file: CARRY,
-           edit: sed(%r{^BOUND='\[\^A-Za-z0-9\._/-\]'$}, "BOUND=''"),
+           # A boundary of any character, not none: `(^|)` is an empty subexpression some greps refuse,
+           # and a refused pattern matches nothing, which would leave the row green for the wrong reason.
+           edit: sed(%r{^BOUND='\[\^A-Za-z0-9\._/-\]'$}, "BOUND='.'"),
            section: :carry_plan, expect: "api/Gemfile in the delta does not match api/Gemfile.lock on the page"),
 
   # A Context entry is outside every checkpoint, so the cp rule never reaches it.
@@ -466,6 +478,12 @@ CASES = [
            edit: sed(/^  if \[ "\$name" = "\$THEME" \]; then$/, '  [ "$name" = "$THEME" ] || continue; if true; then'),
            section: :skeleton, expect: "and all but one arrive switched off"),
 
+  # A figure in the explanation keeps the caption it carried as evidence, so the sentence before it
+  # and the line under it say one thing twice, in the middle of the argument.
+  Case.new(desc: "a figure in a checkpoint's explanation carries a figcaption", file: T,
+           edit: insert(%r{^        </figure>}, "          <figcaption>x</figcaption>", armed: /<figure class="chain">/),
+           section: :skeleton, expect: "checkpoint A's explanation sets its figure like prose, with no figcaption"),
+
   # ---- one citation per Look at entry ----
 
   # An entry keeps its own a.path beside the excerpt whose summary is the link.
@@ -496,6 +514,12 @@ CASES = [
            edit: sed(/^  if \[ -n "\$LINK" \]; then$/, "  if false; then"),
            section: :excerpt, expect: "--at with a link puts it on the summary's location, with the range it read"),
 
+  # --inline is parsed and then ignored, so the snippet the explanation shows ships as a shut
+  # disclosure with a why placeholder in it, in the middle of the prose.
+  Case.new(desc: "excerpt.sh ignores --inline", file: EXCERPT,
+           edit: sed("--inline) INLINE=1; shift ;;", "--inline) shift ;;"),
+           section: :excerpt, expect: "--inline --diff emits the open snippet, not a disclosure"),
+
   # ---- page-lint.sh: each break one rule switched off ----
   #
   # A lint whose rule never fires passes every page, which is the check that always passes in a new
@@ -511,6 +535,24 @@ CASES = [
   Case.new(desc: "page-lint.sh stops resolving a citation to the changed set", file: LINT,
            edit: sed("  if (path in changed) return 1", "  return 0"),
            section: :page_lint, expect: "a citation's path is read from its href, a diff href is changed, plain text matches on its suffix"),
+
+  # The linked phrase is no longer a citation, so a claim woven into the prose resting on a file
+  # outside the diff carries no tier and nothing notices.
+  Case.new(desc: "page-lint.sh stops reading a linked phrase as a citation", file: LINT,
+           edit: sed('    pr = match(rest, /<a class="ref"[^>]*>/) ? RSTART : 0; lr = RLENGTH', "    pr = 0"),
+           section: :page_lint, expect: "a linked phrase is a citation read from its href: one outside the diff with no tier is unlabelled"),
+
+  # Only a pull request's diff anchor counts as changed, so on a branch with no pull request every
+  # linked phrase into the diff is unplaceable and its tier goes unchecked.
+  Case.new(desc: "page-lint.sh reads only /files#diff- as a diff anchor", file: LINT,
+           edit: sed("  if (attrs ~ /#diff-[0-9a-f]/) return 1", '  if (index(attrs, "/files#diff-")) return 1'),
+           section: :page_lint, expect: "a linked phrase into a compare range's diff is changed code, so the unchanged label on it is on-changed"),
+
+  # An inline snippet's caption is read as a sentence, so every snippet quoting unchanged code in an
+  # explanation draws an unlabelled WARN, and a run learns to stop using the form.
+  Case.new(desc: "page-lint.sh reads an inline snippet's caption as a sentence", file: LINT,
+           edit: sed("(note|buildstate|ex-cap)", "(note|buildstate)"),
+           section: :page_lint, expect: "an inline snippet's caption is not a sentence, and the prose around it still is"),
 
   # The on-changed shape is dropped, so a label on changed code passes.
   Case.new(desc: "page-lint.sh stops warning on from-unchanged-code over changed files", file: LINT,
@@ -554,7 +596,20 @@ CASES = [
   # A window that reset is reported as a share — a delta across two different windows.
   Case.new(desc: "usage.sh reports a share across a window reset", file: USAGE,
            edit: sed('a[w "_reset"] == b[w "_reset"] && ', ""),
-           section: :usage, expect: "a window that reset is reported where it stands, never as a share")
+           section: :usage, expect: "a window that reset is reported where it stands, never as a share"),
+
+  # ---- the voice comparison in SKILL.md step 10: each break a snippet the shell no longer counts ----
+
+  # The page side stops on the review question's first line, so a question that wraps loses its
+  # second line there and a page that landed its draft whole reports a change it never made.
+  Case.new(desc: "the voice comparison cuts the review question at its first line", file: SKILL_MD,
+           edit: sed(%(on && (q && /<\\/p>/ || /<\\/section>/) {print; exit} on'), %(on && /class="open"|<\\/section>/ {print; exit} on')),
+           section: :voice, expect: "a page that landed its draft whole draws no voice line, though its question wraps and its evidence cites"),
+
+  # The inline snippet's caption link is not collected, so a revision that moves it out lands unflagged.
+  Case.new(desc: "the voice comparison stops collecting the inline snippet's citation", file: SKILL_MD,
+           edit: sed("(ref|cite|path ip-loc)", "(ref|path ip-loc)"),
+           section: :voice, expect: "a revision that drops the inline snippet draws a voice line")
 ].freeze
 
 # ------------------------------------------------------------------ running

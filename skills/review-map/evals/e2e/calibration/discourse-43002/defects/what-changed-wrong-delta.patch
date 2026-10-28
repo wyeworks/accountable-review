@@ -1,13 +1,33 @@
 --- gold.html
 +++ gold.html
-@@ -1399,8 +1399,8 @@
-       <p>Before this change, the reports layout was an ordered list of reports. Every card was the same size.
-         Now each entry also has <code>rows</code> (1&ndash;4) and <code>cols</code> (1&ndash;2), and a card
-         taller than one row must span both columns. The layout endpoint still replaces the whole list on every
--        save. As a result, any request that leaves out a card's size now resets that card to one cell. Only
--        admins see the handle, and only after the card's data has loaded. The handle is hidden on narrow
-+        save. As a result, any request that leaves out a card's size now resets that card to one cell. Admins and
-+        moderators see the handle, and only after the card's data has loaded. The handle is hidden on narrow
-         viewports. The commits also add reduced-motion handling and right-to-left handle placement. The
-         description says cards &ldquo;remember their size&rdquo;. Checkpoint A tests that claim against the
-         one writer the diff did not touch.</p>
+@@ -2334,21 +2334,24 @@
+ 
+     <section id="changed">
+       <div class="eyebrow"><span class="lbl lbl-a">What changed</span><i></i></div>
+-      <h2 style="max-width:30ch;margin-bottom:18px">Admins can resize report cards, and each card keeps its size</h2>
++      <h2 style="max-width:30ch;margin-bottom:18px">Admins can resize report cards, and the dashboard stores each card&#39;s size</h2>
+ 
+       <p>The redesigned admin dashboard shows the reports an admin has pinned as a grid of cards, two
+         columns wide. Admins already choose which reports appear and in what order. Every card was the
+         same size, though, one fixed-height cell, so a report with more to show had to fit in it.</p>
+       <p><strong>Each pinned report now carries a stored size: one to four rows tall and one or two
+-        columns wide.</strong> Two new columns on the dashboard&#39;s layout table hold it, and
+-        <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-59d620a03a4ddb1d01b1811c3a1217d2d6621dd785563941c64536fe1d21e112R5">both default to 1</a>.
++        columns wide.</strong> Two new columns on the dashboard&#39;s layout table hold it, and both default to 1:
++        <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-59d620a03a4ddb1d01b1811c3a1217d2d6621dd785563941c64536fe1d21e112R5">rows</a> and
++        <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-91368d121fcc9b195af286b35b9cf000337a81d43dd7831772500ce2d66d3fb5R5">cols</a>.
+         The layout endpoint accepts a size with each report, and it
+         <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R246">rejects a size out of range, or a card taller than one row that does not span both columns</a>.
+         The dashboard returns each card&#39;s size alongside its other fields. In the browser, an admin
+         drags a card&#39;s lower corner to grow or shrink it, watches it reflow live, and the size is
+-        saved on release. A click on the corner without dragging toggles the card&#39;s width instead.
+-        The handles appear only for admins, and not while a card is still loading.</p>
+-      <p>Admins get layouts that survive a reload, and anyone else who can open the dashboard sees the
++        saved on release. A click on the corner without dragging instead widens a card of the smallest size to one row at full width,
++        and returns a card of any other size to the smallest.
++        The handles appear for admins and moderators, and not while a card is still loading.</p>
++      <p>Admins get layouts that survive a reload until the Manage reports modal is next saved
++        (<a href="#cp-a">Checkpoint A</a>), and anyone else who can open the dashboard sees the
+         sizes admins chose. A dashboard where no card has been resized looks as it did: every existing
+         row reads one row by one column, which is how every card rendered before.</p>
+     </section>

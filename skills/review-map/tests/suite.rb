@@ -34,6 +34,7 @@
 # EVERY RECORDED SEARCH IN THIS SUITE IS A grep, AND NONE MAY BE AN rg. GitHub's runners have no
 # ripgrep, so a fixture recording an rg search is a row asserting that ripgrep is installed.
 
+require "digest"
 require "fileutils"
 require "open3"
 
@@ -48,6 +49,7 @@ class ReviewMapSuite
     carry_plan:  "carry-plan.sh",
     excerpt:     "excerpt.sh",
     page_lint:   "page-lint.sh",
+    voice:       "the voice comparison in SKILL.md step 10",
     usage:       "usage.sh"
   }.freeze
 
@@ -320,7 +322,35 @@ class ReviewMapSuite
     assert_eq count(markup, 'class="cp"'),     6, "five checkpoints assembled whole and one pending stub"
     assert_eq count(markup, 'id="cp-a"'),      1, "the first checkpoint is anchored for the rail and the reading path"
     assert_eq count(markup, 'class="lookat"'), 5, "each written checkpoint carries its own where-to-look list"
-    assert_eq count(markup, 'class="open"'),   1, "the open-question line is assembled once"
+    assert_eq count(markup, 'class="open"'),   6, "every checkpoint, the pending stub included, ends its explanation in its review question"
+    assert_eq count(markup, '<details class="cp-ev">'), 5, "each written checkpoint carries its supporting evidence in one block"
+
+    # NARRATIVE FIRST, PROOF BENEATH IT — AND PURPOSE DECIDES THE SIDE, NOT FORMAT. The explanation
+    # reads straight through to the question, so nothing a reader opens to verify it — a collapsed
+    # excerpt, the where-to-look list, a probe — sits above the question. What carries the argument
+    # does: the template's figures sit in the explanation, set like prose with no figcaption (the
+    # sentence before one is its caption), and checkpoint A shows the one inline snippet a checkpoint
+    # may hold, which is open because there is nothing to open.
+    %w[a b c d e].each do |x|
+      cp = markup[/<section class="cp" id="cp-#{x}">.*?\n      <\/section>/m].to_s
+      q = cp.index('class="open"')
+      ev = cp.index('<details class="cp-ev">')
+      check q && ev && q < ev, "checkpoint #{x.upcase} asks its question before its supporting evidence"
+      narrative = cp[0...(q || 0)]
+      %w[<details\ class="excerpt class="lookat" class="probe"].each do |part|
+        check !narrative.include?(part), "checkpoint #{x.upcase}'s explanation carries no #{part.delete('<"')} — it is evidence"
+      end
+      evidence = cp[(ev || cp.size)..]
+      assert_eq count(evidence, "<figure"), 0, "checkpoint #{x.upcase}'s figure, if it has one, is in the explanation, not the evidence"
+      assert_eq count(narrative, "<figcaption"), 0, "checkpoint #{x.upcase}'s explanation sets its figure like prose, with no figcaption"
+    end
+    cp_a = markup[/<section class="cp" id="cp-a">.*?\n      <\/section>/m].to_s
+    a_narrative = cp_a[0...(cp_a.index('class="open"') || 0)]
+    assert_eq count(a_narrative, '<div class="excerpt excerpt--diff ex-inline">'), 1, "checkpoint A's explanation shows an inline snippet, as excerpt.sh --inline writes it"
+    assert_eq count(markup, "ex-inline"), 1, "and it is the only one assembled — a snippet is earned, not a slot"
+    %w[chain converge lifecycle structure].each do |kind|
+      check head.include?(".cp > figure.#{kind}"), "a #{kind} in the explanation loses its card — the head range sets it like prose"
+    end
 
     # THE CHAIN, AND THE RULE THAT KEEPS IT OUT OF SECTION 05. A chain inside a checkpoint shows
     # mechanism inside the change, so it holds .ip-step and never .ip-aff: a hop into unchanged code
@@ -892,6 +922,18 @@ class ReviewMapSuite
     assert_eq rows(out, /^cp\tcp-c\tcarry\t-$/), 1, "api/Gemfile in the delta does not match api/Gemfile.lock on the page"
     assert_eq rows(out, /^ctx\tLock & bundle\tcarry\t-$/), 1, "and a Context entry citing api/Gemfile.lock is carried by the same boundary"
 
+    # A citation woven into the prose shows a claim and keeps its file in the href: a blob href
+    # spells the path, a diff href only its sha256. Either one citing the delta file is a redo — a
+    # carry here is a checkpoint that turns on the changed file, never re-read.
+    hash = Digest::SHA256.hexdigest("app/queries/active.rb")
+    cpage(NOHIT, <<~REFS)
+      <section class="cp" id="cp-r1"><h3>R1</h3><p>The <a class="ref" href="https://github.com/o/r/blob/#{"0" * 40}/app/queries/active.rb#L1">scope filters on status</a>.</p></section>
+      <section class="cp" id="cp-r2"><h3>R2</h3><p>The <a class="ref" href="https://github.com/o/r/pull/1/files#diff-#{hash}R1">scope now filters on status</a>.</p></section>
+    REFS
+    out, = plan("--prev-head", cprev, "--base", cbase, "--head", chead)
+    assert_eq rows(out, %r{^cp\tcp-r1\tredo\tcites app/queries/active\.rb$}), 1, "a linked phrase whose blob href names a delta path is re-derived"
+    assert_eq rows(out, %r{^cp\tcp-r2\tredo\tcites app/queries/active\.rb$}), 1, "and so is one whose diff href hashes to it"
+
     # Back to the first scenario, because the rows below read its plan.
     cpage(NOHIT)
     out, = plan("--prev-head", cprev, "--base", cbase, "--head", chead)
@@ -1095,6 +1137,28 @@ class ReviewMapSuite
     out = ex.("--diff", "app/changed.rb", "--base", "HEAD~1").out
     assert_eq count(out, '<span class="ex-loc">app/changed.rb:1-3</span>'), 1, "--diff with no link leaves the location plain"
     assert_eq count(out, "WHY_THIS_MATTERS"), 1, "and an unwritten why stays visibly unwritten"
+
+    # --inline is the snippet the explanation shows: open, because there is nothing to open, and
+    # captioned with the location and the tag alone, because the sentence above it is its why.
+    out = ex.("--diff", "app/changed.rb", "--base", "HEAD~1", "--inline", "--blob", "https://h/blob/s/app/changed.rb").out
+    assert_eq count(out, '<div class="excerpt excerpt--diff ex-inline">'), 1, "--inline --diff emits the open snippet, not a disclosure"
+    assert_eq count(out, /<details|<summary|ex-why|WHY_THIS_MATTERS/), 0, "with no disclosure and no why"
+    assert_eq count(out, '<p class="ex-cap"><span class="ex-loc"><a class="cite" href="https://h/blob/s/app/changed.rb#L1-L3">app/changed.rb:1-3</a></span> <span class="tag">Changed</span></p>'), 1,
+              "and a caption holding the linked hunk range and the computed tag"
+    out = ex.("--at", "app/same.rb:1-1", "--base", "HEAD~1", "--inline").out
+    assert_eq count(out, '<div class="excerpt excerpt--source ex-inline">'), 1, "--inline --at emits the open snippet too"
+    assert_eq count(out, '<span class="tag">Unchanged</span>'), 1, "with the tag still read off the diff"
+    check out.rstrip.end_with?("</div>") && count(out, "</details>").zero?, "and closes the div it opened"
+    %w[--in-entry --why].each do |flag|
+      args = ["--at", "app/same.rb:1-1", "--base", "HEAD~1", "--inline", flag]
+      args << "w" if flag == "--why"
+      assert_eq ex.(*args).code, 2, "--inline with #{flag} is refused — the sentence above the snippet is its why"
+    end
+    write(File.join(repo, "app/long.rb"), (1..12).map { |n| "l#{n}" }.join("\n") + "\n")
+    commit_all(repo, "long")
+    warned = ex.("--at", "app/long.rb:1-12", "--base", "HEAD~2", "--inline")
+    check warned.err.include?("budget for an inline snippet"), "--inline warns past its own, shorter budget"
+    check !ex.("--at", "app/long.rb:1-12", "--base", "HEAD~2").err.include?("budget"), "which a Look at excerpt of the same length does not reach"
   end
 
   # ------------------------------------------------------------------ page-lint.sh
@@ -1146,6 +1210,49 @@ class ReviewMapSuite
     assert_eq count(r.out, "WARN"), 1, "a citation's path is read from its href, a diff href is changed, plain text matches on its suffix"
     assert_eq count(r.out, "other.rb:3"), 1, "and the one WARN names the file outside the ledger"
 
+    # A citation woven into the prose is an a.ref: its text is the claim, so the path comes from
+    # the href alone. Three sentences, one per answer — a diff href over a phrase holding a <code>
+    # (changed, untiered: clean), a blob href outside the ledger with no tier (unlabelled), and a
+    # blob href inside it under the unchanged label (on-changed).
+    write(path("ref.html"), <<~HTML)
+      <section class="cp" id="cp-a">
+        <p>The <a class="ref" href="https://github.com/o/r/pull/1/files#diff-abc">column is now set in <code>save</code></a>. The <a class="ref" href="https://github.com/o/r/blob/0123abcd/lib/other.rb#L3">helper reads it unguarded</a>. The <a class="ref" href="https://github.com/o/r/blob/0123abcd/app/models/project.rb#L9">validator beside it</a> accepts nil <span class="tier tier-unc">from unchanged code</span>.</p>
+      </section>
+      <details class="evidence"><summary>Evidence</summary><div class="gt gt-paths">
+      <div class="c" data-path="app/models/project.rb">app/models/project.rb</div>
+      </div></details>
+    HTML
+    r = lint(path("ref.html"))
+    assert_eq count(r.out, "WARN  unlabelled"), 1, "a linked phrase is a citation read from its href: one outside the diff with no tier is unlabelled"
+    assert_eq count(r.out, "WARN  on-changed"), 1, "and one over a changed file under the unchanged label is on-changed"
+    assert_eq count(r.out, "WARN"), 2, "while a diff-form phrase holding a code chip is changed code, and clean"
+
+    # On a branch with no pull request (rung 2) the diff-page anchor hangs off a compare range. A
+    # linked phrase has no path in its text to fall back on, so the anchor alone has to say changed.
+    write(path("ref-compare.html"), %(<p>The <a class="ref" href="https://github.com/o/r/compare/aaa...bbb#diff-0123abcdR4">guard</a> accepts nil <span class="tier tier-unc">from unchanged code</span>.</p>\n) + ledger)
+    assert_eq count(lint(path("ref-compare.html")).out, "WARN  on-changed"), 1, "a linked phrase into a compare range's diff is changed code, so the unchanged label on it is on-changed"
+
+    # An inline snippet's caption is a location and a computed tag, the open twin of an excerpt's
+    # summary, so it is not a sentence: an Unchanged snippet in the explanation draws no unlabelled
+    # WARN, while the prose around it is still read.
+    write(path("inline.html"), <<~HTML)
+      <section class="cp" id="cp-a">
+        <p>The finder relies on the guard, which reads like this:</p>
+        <div class="excerpt excerpt--source ex-inline">
+          <p class="ex-cap"><span class="ex-loc"><a class="cite" href="https://github.com/o/r/blob/0123abcd/lib/guard.rb#L3-L4">lib/guard.rb:3-4</a></span> <span class="tag">Unchanged</span></p>
+          <div class="ex-body">
+      <pre data-src="lib/guard.rb" style="counter-reset: exl 2"><span class="l">  return nil if late?</span>
+      </pre>
+          </div>
+        </div>
+        <p>The <a class="ref" href="https://github.com/o/r/blob/0123abcd/lib/other.rb#L3">helper reads it unguarded</a>.</p>
+      </section>
+      <details class="evidence"><summary>Evidence</summary><div class="gt gt-paths">
+      <div class="c" data-path="app/models/project.rb">app/models/project.rb</div>
+      </div></details>
+    HTML
+    assert_eq count(lint(path("inline.html")).out, "WARN"), 1, "an inline snippet's caption is not a sentence, and the prose around it still is"
+
     # A card's why may not carry a citation — impact-paths.rb holds that line — so its unchanged-code
     # label is never the uncited shape. The same label in a paragraph is.
     write(path("why.html"), %(<p class="ip-why">An archived project stays selectable <span class="tier tier-unc">from unchanged code</span>. <a href="#cp-a">Checkpoint A</a></p>\n) + ledger)
@@ -1188,6 +1295,43 @@ class ReviewMapSuite
     # A comment carries every placeholder and rule name in the template; none of it is read.
     write(path("comment.html"), %(<!-- {{IN_A_COMMENT}} from unchanged code --><p>Plain.</p>\n<div class="c" data-path="a.rb">a</div>\n))
     assert_eq count(lint(path("comment.html")).out, "FAIL"), 0, "a placeholder inside a comment is not on the page"
+  end
+
+  # ------------------------------------------------------------------ the voice comparison
+  #
+  # Step 10's check that the voice pass kept every link, tier, snippet and figure of a draft. It is
+  # shell written into SKILL.md rather than a script, so the row runs the block exactly as a run
+  # copies it: lifted from the prose, `<page.html>` replaced by a path, under plain sh.
+
+  def voice(page, draft, id = "cp-a")
+    block = first_block(read(File.join(@skill, "SKILL.md")).split("The same call checks that the voice pass", 2).last.to_s,
+                        "```sh", /^\s*```\s*$/).lines[1...-1].to_a.join
+    w = path("voice-run")
+    FileUtils.rm_rf(w)
+    write(File.join(w, "page.html"), page)
+    write(File.join(w, "voice", "#{id}.html"), draft)
+    sh("sh", "-c", block.gsub("<page.html>", '"$W/page.html"'), env: { "W" => w })
+  end
+
+  def section_voice
+    ref = %(<a class="ref" href="https://github.com/o/r/blob/abc/app/a.rb#L3">reads the column</a>)
+    snip = %(<div class="excerpt excerpt--diff ex-inline">\n  <p class="ex-cap"><span class="ex-loc"><a class="cite" href="https://github.com/o/r/pull/1/files#diff-ab">app/a.rb:3</a></span></p>\n</div>\n)
+    tier = %(<span class="tier tier-unc">from unchanged code</span>)
+    expl = %(<p>The model #{ref} on every save.</p>\n#{snip})
+    question = %(<p class="open"><b>Review question</b>Does the caller\nthat #{tier} still pass?</p>\n)
+    evidence = %(<details class="cp-ev"><summary>Supporting evidence</summary>\n<a class="cite" href="https://github.com/o/r/blob/abc/lib/b.rb#L9">lib/b.rb:9</a>\n</details>\n)
+    page = ->(body) { %(<section class="cp" id="cp-a">\n<h3>Saving</h3>\n#{body}</section>\n) }
+    draft = expl + question
+
+    r = voice(page.(expl + question + evidence), draft)
+    assert_eq r.out, "", "a page that landed its draft whole draws no voice line, though its question wraps and its evidence cites"
+    assert_eq r.code, 0, "and the comparison runs under plain sh"
+
+    r = voice(page.(%(<p>The model #{ref} on every save.</p>\n) + question + evidence), draft)
+    assert_eq r.out, "voice: cp-a\n", "a revision that drops the inline snippet draws a voice line"
+
+    r = voice(page.(expl + question.sub(" #{tier}", "") + evidence), draft)
+    assert_eq r.out, "voice: cp-a\n", "a tier dropped from the question's second line draws a voice line"
   end
 
   # ------------------------------------------------------------------ usage.sh

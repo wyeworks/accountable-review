@@ -91,7 +91,7 @@ rows.group_by { |r| r["id"] }.each do |id, by_pr|
     body << %(<p class="meta">generated #{gen}/#{reps}.)
     body << " Check fails per run: #{group.map { |r| r['check_failed'] || '—' }.join(', ')}."
     words = group.filter_map { |r| r["changed_words"] }
-    body << " §01 words: #{words.join(', ')} <span class=\"hint\">(budget 80–160, guidance)</span>." unless words.empty?
+    body << " §01 words: #{words.join(', ')} <span class=\"hint\">(an observation, never a verdict)</span>." unless words.empty?
     secs = group.filter_map { |r| r["model_seconds"] }
     body << " Model seconds: #{secs.map(&:round).join(', ')}." unless secs.empty?
     body << "</p>"

@@ -187,26 +187,29 @@ approve a change, with the code that settles each one attached.
 Five parts, and a shut evidence block at the foot:
 
 ```text
-What changed                    one paragraph: what is now true that was not
+What changed                    a short narrative: what is now true that was not
 Context                         when earned: the pieces of this repository the judgments rely
                                 on, for a reader who knows the stack but not the codebase
 What needs your attention       3-5 checkpoints per independent change the PR makes, 7 at the
                                 outside (9 or 11 on a broad change to application code);
                                 about behaviour, structure or how the code was built;
-                                each one judgment, framed as a question, and at
-                                most one small figure where its shape is clearer than prose:
-                                a chain, paths converging on one invariant, a lifecycle, or
-                                an entity and its relationships
+                                each one judgment, explained first and asked last, readable
+                                on its own, with at most one small figure where its shape
+                                is clearer than prose: a chain, paths converging on one
+                                invariant, a lifecycle, or an entity and its relationships;
+                                the proof beneath it in a shut Supporting evidence block
 Read the code in this order     3-7 stops, in the order that builds understanding
 Impact outside the diff         1-3 chains, from changed code into code it gives new meaning to,
                                 each node linked to the file it lives in
 ▸ Evidence & diff coverage      every changed path, the searches run, the rest of what was found
 ```
 
-Claims about unchanged code come with the code attached: a collapsed excerpt of the real source,
-quoted by a script rather than retyped, that you open when you are ready to check that particular
-claim. The page reads completely with every excerpt closed — the sentence carries the consequence,
-the excerpt carries the proof.
+Each checkpoint explains before it asks: what the system does, what the change did to it and why
+that matters, then the question. A claim that rests on code is itself the link to that code. The
+proof sits beneath the question, shut: one to four places to look, each cited and usually carrying
+a collapsed excerpt of the real source, quoted by a script rather than retyped, that you open when
+you are ready to check that particular claim. The page reads completely with every block closed — the explanation carries
+the consequence, the evidence carries the proof.
 
 The Review Map does **not** replace the diff.
 
@@ -386,8 +389,8 @@ be merged, but it also works well with already-merged PRs when you want to catch
 /accountable-review:review-map 412
 ```
 
-What makes it onto the page is the part you actually need to act on. For a small or medium-sized PR,
-that usually means around 700 to 1,500 words.
+What makes it onto the page is the part you actually need to act on, explained so you can follow it
+without reconstructing it yourself.
 
 ### How hard it works
 

@@ -52,10 +52,12 @@ require_relative "lib/review_map/check"
 
 module RailsAnchors
   # A code permalink belongs to the deep-link ladder, which page_invariants.rb § 5 owns.
-  # `tree/` is NOT excluded, though it once was: a tag-pinned gem README — the only github.com
-  # shape a doc link may take — is exactly `tree/v2.8.0#section`, so excluding it meant the one
-  # github doc link the catalogue offers was the one nothing checked.
-  PERMALINK = %r{\Ahttps://github\.com/[^/]+/[^/]+/(?:blob|pull|compare|commit)/}
+  # `tree/` is excluded only before a full commit sha, which is how a directory of this repository
+  # is cited (report-format.md § Coding decisions: "a populated directory"). Any other `tree/` is
+  # checked: a tag-pinned gem README — the only github.com shape a doc link may take — is exactly
+  # `tree/v2.8.0#section`, and that is the github doc link the catalogue offers.
+  # anchors-repo-tree-clean.html and anchors-tree-tag-uncatalogued.html pin the two sides.
+  PERMALINK = %r{\Ahttps://github\.com/[^/]+/[^/]+/(?:(?:blob|pull|compare|commit)/|tree/[0-9a-f]{40}(?:/|\z))}
   RAILS_HOST = %r{\Ahttps://(?:guides|api)\.rubyonrails\.org/}
   # /v<digit>, NOT /v — a guide page whose name merely begins with the letter v
   # (`validations.html`) took the "pinned" branch under a /v* glob, yielded no series, and so
@@ -474,9 +476,10 @@ end
 
 unless external.empty?
   # A doc link is provenance. The claim it decorates still has to cite this repository, so the
-  # element carrying the link needs a file:line — its own, not one from elsewhere on the page.
+  # element carrying the link needs a file:line — its own, not one from elsewhere on the page. In
+  # prose that citation is the claim linked, an a.ref, whose href is the file:line.
   alone = RailsAnchors.link_blocks(page.lines).count do |block|
-    next false if block.include?('class="path"') || block.include?('class="cite"')
+    next false if block.include?('class="path"') || block.include?('class="cite"') || block.include?('class="ref"')
 
     # A bare path:line with no anchor counts too — that is the rung-3 and rung-4 form.
     !block.match?(RailsAnchors::FILE_LINE)

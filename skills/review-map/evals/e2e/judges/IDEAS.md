@@ -1,7 +1,7 @@
 # Judges not yet written
 
-**Notes, not code.** Six judges exist — `what-changed`, `checkpoint-judgments`,
-`checkpoint-claims`, `reading-path`, `impact` and `evidence` — and each is calibrated only once a
+**Notes, not code.** Seven judges exist — `what-changed`, `checkpoint-judgments`,
+`checkpoint-explanation`, `checkpoint-claims`, `reading-path`, `impact` and `evidence` — and each is calibrated only once a
 person has certified a gold page for it. Everything below is a candidate, recorded so the next one
 starts from the real question rather than from a blank file. `run.rb` and `calibrate.rb` pick up
 every `*.md` in this directory except this one, so writing a judge means writing its file, then its
@@ -10,8 +10,8 @@ says otherwise.
 
 Each candidate lists what it would grade and what a planted defect for it would look like,
 because a judge nobody can plant a defect for can't be calibrated. Most of them wait on a gold page
-that carries their subject: `discourse-43002`'s has no Context, no figure inside a checkpoint, no
-coding-decision checkpoint and no probe. The rule that applies to all of them: **grade the page,
+that carries their subject: `discourse-43002`'s carries one Context entry and one coding-decision
+checkpoint, and no figure inside a checkpoint and no probe. The rule that applies to all of them: **grade the page,
 never the PR.**
 
 ## § 02 context
@@ -23,8 +23,10 @@ still passes CAPTCHA and was unfollowable without three things the page never sa
 sequence of requests, CAPTCHA as a plugin wrapping a controller method, and what an approval signup
 is. A judge here reads Context and the checkpoints as that reader, and asks:
 
-- **Followable.** Each checkpoint can be understood with only *What changed* and Context in hand.
-  Defect: delete the entry a checkpoint relies on most; the page still passes every mechanical rule.
+- **Depth, never a step.** Each checkpoint can be understood on its own, Context unread, and an
+  entry adds the fuller picture rather than a fact the checkpoint left out. Defect: delete from a
+  checkpoint the sentence saying what a concept is, leaving only the Context entry; the page still
+  passes every mechanical rule.
 - **What it is, never what the change did.** No entry previews a judgment. Defect: append the
   checkpoint's own claim to the entry it relies on — *"and this PR moved the check to the later
   request"*.
@@ -45,10 +47,12 @@ is. A judge here reads Context and the checkpoints as that reader, and asks:
   checkpoints turn on. Defect: a shift whose moved state is a UI step rather than a request, or
   one with no `ul.lc-cases` on a flow the reviewer's question shows has several.
 
-## § 03 checkpoints, what the two judges leave
+## § 03 checkpoints, what the three judges leave
 
 `checkpoint-judgments` grades whether each checkpoint is a judgment, asked once, ordered without a
-grade and left to the reviewer; `checkpoint-claims` opens every cited line. Four things neither asks:
+grade and left to the reviewer; `checkpoint-explanation` whether its prose explains before it asks,
+stands alone and reads complete with its evidence shut; `checkpoint-claims` opens every cited line,
+the explanation's figure and inline snippet included. Four things none of them asks:
 
 - **The coding-decision bar.** Each coding-decision checkpoint cites its own precedent — a
   decision in the repository, or a convention on the lens file's closed stack list — asks rather
@@ -117,6 +121,20 @@ first item is the one that makes the feature worth having or not.
 - One canonical home: each fact is explained once, and later mentions are a one-sentence
   pointer.
 - No assurance, no narrated drafting, and no autobiography in a correction (SKILL.md step 8).
+- An explanation's figure and inline snippet (`report-format.md` § *The review checkpoint*,
+  *Narrative first*): each earned — the reader would otherwise rebuild what it shows — introduced by
+  the sentence before it, followed by what it means rather than a walk through its nodes, and no
+  qualification the prose owed left out because the figure tells a clean story. Whether its edges
+  and lines are true is already `checkpoint-claims`'s.
+- Citations and emphasis in the explanation (`report-format.md` § *The review checkpoint*, *The
+  writing*): no `(path:line)` aside where a link was possible, and each `<strong>` marks a sentence
+  the judgment turns on and grades nothing. Defects: restore a parenthesised path mid-sentence; bold
+  *the important part* of a checkpoint.
+- The voice pass (`report-format.md` § *The voice pass*): each explanation carries one named idea,
+  every paragraph opens on its turn in the argument, nothing is in the first person or in design-review
+  vocabulary, and no hedge the draft had was smoothed into a statement. The last needs the run's
+  `$W/voice/` drafts beside the page, so the harness would have to keep them. Judged against the
+  same target with and without the pass, it is also the measure of whether the pass earns its turn.
 - The page's word total is measured mechanically, not judged, the way `run.rb` already measures
   § 01.
 

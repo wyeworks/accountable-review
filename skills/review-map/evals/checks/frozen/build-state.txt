@@ -226,10 +226,22 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page anchors-reactdocs-unpinned.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-repo-tree-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-repo-tree-clean.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment anchors-runner-mutates.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page anchors-runner-mutates.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment anchors-tree-tag-uncatalogued.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page anchors-tree-tag-uncatalogued.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment anchors-uncatalogued-url.html
@@ -322,6 +334,12 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page excerpt-duplicate.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment excerpt-inline-unchanged-changed-file.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page excerpt-inline-unchanged-changed-file.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment excerpt-linked-clean.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
@@ -412,6 +430,12 @@ SKIP  build-state.rb needs a whole page, got a fragment
 ## --page figures-converge-target-loc.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
+## --fragment figures-evidence-no-caption.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-evidence-no-caption.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
 ## --fragment figures-lifecycle-aff.html
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
@@ -428,6 +452,12 @@ PASS  no build banner or pending markers left on the finished page
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page figures-lifecycle-no-loc.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment figures-narrative-clean.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page figures-narrative-clean.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment figures-shift-clean.html
@@ -572,6 +602,12 @@ PASS  no build banner or pending markers left on the finished page
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page impact-unlabelled-edge.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment impact-why-citation-ref.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page impact-why-citation-ref.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment impact-why-citation.html
@@ -806,6 +842,18 @@ PASS  no build banner or pending markers left on the finished page
 exit=3
 SKIP  build-state.rb needs a whole page, got a fragment
 ## --page links-collapsed-no-excerpt.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment links-collapsed-ref-no-excerpt.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page links-collapsed-ref-no-excerpt.html
+exit=0
+PASS  no build banner or pending markers left on the finished page
+## --fragment links-collapsed-ref.html
+exit=3
+SKIP  build-state.rb needs a whole page, got a fragment
+## --page links-collapsed-ref.html
 exit=0
 PASS  no build banner or pending markers left on the finished page
 ## --fragment links-range-truncated.html

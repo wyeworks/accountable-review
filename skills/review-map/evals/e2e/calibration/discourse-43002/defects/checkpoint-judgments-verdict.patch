@@ -1,11 +1,11 @@
 --- gold.html
 +++ gold.html
-@@ -1632,7 +1632,7 @@
-           width. Every other size, including a four-row card, goes straight to 1&times;1 and is saved. The
-           handle's own contract says to commit only when <code>moved</code> is set
-           <span class="tier tier-unc">from unchanged code</span>. This component commits on a click on purpose.
--          Decide whether collapsing a tall card on an accidental click is the intended behaviour. On narrow
-+          This is a bug: the click branch should widen a 1&times;1 card and leave every other size alone. On narrow
-           viewports the handles are hidden but <code>--rows-N</code> still spans rows, so a phone shows a tall card
-           that cannot be shrunk there.</p>
- 
+@@ -2700,7 +2700,7 @@
+           <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L531">eight
+           pixels of travel</a>, so a short, hesitant drag counts as a click too.</p>
+         <div class="gap"><b>GAP</b><span>Nothing tests a click on a card that is already larger than the smallest size.</span></div>
+-        <p class="open"><b>Review question</b>Should a click on a tall card&#39;s handle take it all the way back to the smallest size?</p>
++        <p class="open"><b>Review question</b>This is a bug: a click should widen a one-by-one card and leave every other size alone.</p>
+         <details class="cp-ev">
+           <summary><span class="chev">&#9656;</span><span class="cp-ev-lbl">Supporting evidence</span></summary>
+         <ul class="lookat">

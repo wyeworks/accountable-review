@@ -1,0 +1,12 @@
+--- gold.html
++++ gold.html
+@@ -2699,8 +2699,7 @@
+           loses the height and has to drag it back. A press only becomes a drag after
+           <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L531">eight
+           pixels of travel</a>, so a short, hesitant drag counts as a click too.</p>
+-        <div class="gap"><b>GAP</b><span>Nothing tests a click on a card that is already larger than the smallest size.</span></div>
+-        <p class="open"><b>Review question</b>Should a click on a tall card&#39;s handle take it all the way back to the smallest size?</p>
++                <p class="open"><b>Review question</b>Should a click on a tall card&#39;s handle take it all the way back to the smallest size?</p>
+         <details class="cp-ev">
+           <summary><span class="chev">&#9656;</span><span class="cp-ev-lbl">Supporting evidence</span></summary>
+         <ul class="lookat">

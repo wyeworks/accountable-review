@@ -35,6 +35,10 @@
 #   severity word can get in, after GAP and Open question, and the only one with no fixed label.
 #   It says what the path skips. Why that matters is the checkpoint's to say.
 #
+# WHERE A FIGURE SITS DECIDES ITS CAPTION. A figure carries part of the argument, so it sits in the
+# explanation, set like prose, and the sentence before it is its caption; one there needs none. One
+# in details.cp-ev is shut away from that sentence and has to say what it answers on its own.
+#
 # AND ONE FIGURE THAT IS NOT A CHECKPOINT'S. figure.lifecycle.lc-shift is Context's — the request
 # sequence before and after, drawn once because several checkpoints stand on it. This check reads
 # section 02 for it, because before it did, a figure arriving there was the one on the page nothing
@@ -113,7 +117,15 @@ checkpoints.each_with_index do |cp, i|
   id = html[/<section class="cp[^"]*" id="([^"]+)"/, 1] || "checkpoint #{i + 1}"
   # figure.impact is section 05's and impact-paths.rb grades it; it only reaches here through a
   # fragment with no checkpoint around it.
-  found = html.scan(FIGURE).reject { |kind, _, _| kind == "impact" }.map { |kind, variants, body| [id, kind, variants.split, body] }
+  # Where it sits decides whether it needs a caption: in details.cp-ev a figure is evidence and has
+  # to say what it shows on its own; in the explanation the sentence before it already did.
+  ev_at = html.index('<details class="cp-ev"')
+  found = html.to_enum(:scan, FIGURE).filter_map do
+    m = Regexp.last_match
+    next if m[1] == "impact"
+
+    [id, m[1], m[2].split, m[3], ev_at && m.begin(0) > ev_at]
+  end
   if found.size > 1
     check.bad("#{id} carries #{found.size} figures (#{found.map { |_, k, _, _| k }.join(', ')}) — one per checkpoint, of any kind, because two figures for one judgment are two answers to which shape it has")
   end
@@ -152,10 +164,10 @@ context_figures.each do |id, kind, variants, body|
     check.bad("#{where}: figure.#{([kind] + variants).join('.')} is not Context's figure — the one it may hold is figure.lifecycle.#{SHIFT}, and every other figure belongs to the checkpoint whose judgment earned it")
     next
   end
-  figures << [id, kind, variants, body]
+  figures << [id, kind, variants, body, true]
 end
 
-figures.each do |id, kind, variants, body|
+figures.each do |id, kind, variants, body, needs_caption|
   shift = kind == "lifecycle" && variants.include?(SHIFT)
   where = shift ? "#{id}'s shift" : "#{id}'s #{kind}"
   faults = []
@@ -172,7 +184,7 @@ figures.each do |id, kind, variants, body|
 
   faults << "an <svg> — this page has no drawings" if body.include?("<svg")
   faults << "a data-path — that attribute is the inventory's, and coverage-gate.sh greps it page-wide" if body.include?("data-path")
-  faults << "no figcaption saying what the figure answers" unless body.include?("<figcaption")
+  faults << "no figcaption saying what the figure answers — in the supporting evidence a figure has to say it on its own" if needs_caption && !body.include?("<figcaption")
   holes = body.scan(/\{\{[A-Z_|]+\}\}/).uniq
   faults << "#{holes.size} unsubstituted placeholder(s): #{holes.join(', ')}" unless holes.empty?
 

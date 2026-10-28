@@ -232,10 +232,22 @@ SKIP  no checkpoint figure in this input
 ## --page anchors-reactdocs-unpinned.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-repo-tree-clean.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-repo-tree-clean.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment anchors-runner-mutates.html
 exit=0
 SKIP  no checkpoint figure in this input
 ## --page anchors-runner-mutates.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment anchors-tree-tag-uncatalogued.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page anchors-tree-tag-uncatalogued.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment anchors-uncatalogued-url.html
@@ -326,6 +338,12 @@ PASS  no checkpoint carries a figure — a valid result, and most checkpoints ea
 exit=0
 SKIP  no checkpoint figure in this input
 ## --page excerpt-duplicate.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment excerpt-inline-unchanged-changed-file.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page excerpt-inline-unchanged-changed-file.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment excerpt-linked-clean.html
@@ -443,6 +461,14 @@ exit=1
 PASS  at most one figure per checkpoint
 WARN  cp-a's converge: no details.searched on the page — a converge claims its paths are all the writers, and only a recorded search makes that claim checkable
 FAIL  cp-a's converge: a locator on the target — an invariant is a property, not a file
+## --fragment figures-evidence-no-caption.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's chain: no figcaption saying what the figure answers — in the supporting evidence a figure has to say it on its own
+## --page figures-evidence-no-caption.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's chain: no figcaption saying what the figure answers — in the supporting evidence a figure has to say it on its own
 ## --fragment figures-lifecycle-aff.html
 exit=1
 PASS  at most one figure per checkpoint
@@ -469,6 +495,14 @@ FAIL  cp-a's lifecycle: the transition into state 2 has no locator — the line 
 exit=1
 PASS  at most one figure per checkpoint
 FAIL  cp-a's lifecycle: the transition into state 2 has no locator — the line that performs it is what shows whether it is guarded
+## --fragment figures-narrative-clean.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --page figures-narrative-clean.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
 ## --fragment figures-shift-clean.html
 exit=0
 PASS  Context's shift holds its shape and carries its locators
@@ -626,6 +660,12 @@ PASS  no checkpoint carries a figure — a valid result, and most checkpoints ea
 exit=0
 SKIP  no checkpoint figure in this input
 ## --page impact-unlabelled-edge.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment impact-why-citation-ref.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page impact-why-citation-ref.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment impact-why-citation.html
@@ -876,6 +916,18 @@ SKIP  no checkpoint figure in this input
 ## --page links-collapsed-no-excerpt.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment links-collapsed-ref-no-excerpt.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page links-collapsed-ref-no-excerpt.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment links-collapsed-ref.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page links-collapsed-ref.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment links-range-truncated.html
 exit=0
 SKIP  no checkpoint figure in this input
@@ -974,19 +1026,19 @@ PASS  no checkpoint carries a figure — a valid result, and most checkpoints ea
 exit=1
 PASS  at most one figure per checkpoint
 WARN  cp-a's chain node 2: "{{CAUSAL_VERB}}" is outside the causal vocabulary in report-format.md § Impact paths
-FAIL  cp-a's chain: 13 unsubstituted placeholder(s): {{CHANGED_ENTRY_POINT}}, {{WHAT_IT_NOW_DOES}}, {{DIFF}}, {{START}}, {{PATH}}, {{CAUSAL_VERB}}, {{HOP_INSIDE_THE_CHANGE}}, {{WHAT_IS_TRUE_HERE}}, {{BLOB}}, {{THE_NEXT_HOP}}, {{WHAT_IT_CARRIES}}, {{WHAT_THE_USER_SEES}}, {{WHAT_THE_CHAIN_SHOWS_IN_ONE_LINE}}
-FAIL  cp-c's converge: 11 unsubstituted placeholder(s): {{A_DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{ANOTHER_DOMAIN_ACTION}}, {{AN_UNCHANGED_WRITER}}, {{WHOSE_CALLBACKS_IT_SKIPS}}, {{BLOB}}, {{END}}, {{THE_INVARIANT}}, {{WHICH_PATHS_MUST_KEEP_THIS_TRUE}}
-FAIL  cp-d's lifecycle: 10 unsubstituted placeholder(s): {{FIRST_STATE}}, {{DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{NEW_STATE}}, {{LAST_STATE}}, {{AN_EARLIER_STATE}}, {{BLOB}}, {{WHAT_STATES_THIS_CAN_BE_IN}}
-FAIL  cp-e's structure: 13 unsubstituted placeholder(s): {{THE_ENTITY}}, {{NEW_OR_WHAT_CHANGED}}, {{A_FIELD_THE_BEHAVIOUR_TURNS_ON}}, {{DIFF}}, {{START}}, {{PATH}}, {{RELATION}}, {{CARDINALITY}}, {{AN_EXISTING_ENTITY}}, {{WHY_THE_ABSENCE_MATTERS}}, {{ANOTHER_ENTITY}}, {{BLOB}}, {{WHAT_RELATIONSHIP_NOW_EXISTS}}
+FAIL  cp-a's chain: 12 unsubstituted placeholder(s): {{CHANGED_ENTRY_POINT}}, {{WHAT_IT_NOW_DOES}}, {{DIFF}}, {{START}}, {{PATH}}, {{CAUSAL_VERB}}, {{HOP_INSIDE_THE_CHANGE}}, {{WHAT_IS_TRUE_HERE}}, {{BLOB}}, {{THE_NEXT_HOP}}, {{WHAT_IT_CARRIES}}, {{WHAT_THE_USER_SEES}}
+FAIL  cp-c's converge: 10 unsubstituted placeholder(s): {{A_DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{ANOTHER_DOMAIN_ACTION}}, {{AN_UNCHANGED_WRITER}}, {{WHOSE_CALLBACKS_IT_SKIPS}}, {{BLOB}}, {{END}}, {{THE_INVARIANT}}
+FAIL  cp-d's lifecycle: 9 unsubstituted placeholder(s): {{FIRST_STATE}}, {{DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{NEW_STATE}}, {{LAST_STATE}}, {{AN_EARLIER_STATE}}, {{BLOB}}
+FAIL  cp-e's structure: 12 unsubstituted placeholder(s): {{THE_ENTITY}}, {{NEW_OR_WHAT_CHANGED}}, {{A_FIELD_THE_BEHAVIOUR_TURNS_ON}}, {{DIFF}}, {{START}}, {{PATH}}, {{RELATION}}, {{CARDINALITY}}, {{AN_EXISTING_ENTITY}}, {{WHY_THE_ABSENCE_MATTERS}}, {{ANOTHER_ENTITY}}, {{BLOB}}
 FAIL  Context's shift: 13 unsubstituted placeholder(s): {{FIRST_STATE}}, {{REQUEST}}, {{DIFF}}, {{START}}, {{PATH}}, {{A_STATE}}, {{THE_STATE_THAT_MOVED}}, {{A_NEW_STATE}}, {{A_CASE_THAT_DIFFERS}}, {{HOW_ITS_SEQUENCE_DIFFERS_IN_A_CLAUSE}}, {{BLOB}}, {{END}}, {{WHICH_REQUEST_DOES_WHAT_FOR_THE_MAIN_PATH_NAMED}}
 ## --page page-template.html
 exit=1
 PASS  at most one figure per checkpoint
 WARN  cp-a's chain node 2: "{{CAUSAL_VERB}}" is outside the causal vocabulary in report-format.md § Impact paths
-FAIL  cp-a's chain: 13 unsubstituted placeholder(s): {{CHANGED_ENTRY_POINT}}, {{WHAT_IT_NOW_DOES}}, {{DIFF}}, {{START}}, {{PATH}}, {{CAUSAL_VERB}}, {{HOP_INSIDE_THE_CHANGE}}, {{WHAT_IS_TRUE_HERE}}, {{BLOB}}, {{THE_NEXT_HOP}}, {{WHAT_IT_CARRIES}}, {{WHAT_THE_USER_SEES}}, {{WHAT_THE_CHAIN_SHOWS_IN_ONE_LINE}}
-FAIL  cp-c's converge: 11 unsubstituted placeholder(s): {{A_DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{ANOTHER_DOMAIN_ACTION}}, {{AN_UNCHANGED_WRITER}}, {{WHOSE_CALLBACKS_IT_SKIPS}}, {{BLOB}}, {{END}}, {{THE_INVARIANT}}, {{WHICH_PATHS_MUST_KEEP_THIS_TRUE}}
-FAIL  cp-d's lifecycle: 10 unsubstituted placeholder(s): {{FIRST_STATE}}, {{DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{NEW_STATE}}, {{LAST_STATE}}, {{AN_EARLIER_STATE}}, {{BLOB}}, {{WHAT_STATES_THIS_CAN_BE_IN}}
-FAIL  cp-e's structure: 13 unsubstituted placeholder(s): {{THE_ENTITY}}, {{NEW_OR_WHAT_CHANGED}}, {{A_FIELD_THE_BEHAVIOUR_TURNS_ON}}, {{DIFF}}, {{START}}, {{PATH}}, {{RELATION}}, {{CARDINALITY}}, {{AN_EXISTING_ENTITY}}, {{WHY_THE_ABSENCE_MATTERS}}, {{ANOTHER_ENTITY}}, {{BLOB}}, {{WHAT_RELATIONSHIP_NOW_EXISTS}}
+FAIL  cp-a's chain: 12 unsubstituted placeholder(s): {{CHANGED_ENTRY_POINT}}, {{WHAT_IT_NOW_DOES}}, {{DIFF}}, {{START}}, {{PATH}}, {{CAUSAL_VERB}}, {{HOP_INSIDE_THE_CHANGE}}, {{WHAT_IS_TRUE_HERE}}, {{BLOB}}, {{THE_NEXT_HOP}}, {{WHAT_IT_CARRIES}}, {{WHAT_THE_USER_SEES}}
+FAIL  cp-c's converge: 10 unsubstituted placeholder(s): {{A_DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{ANOTHER_DOMAIN_ACTION}}, {{AN_UNCHANGED_WRITER}}, {{WHOSE_CALLBACKS_IT_SKIPS}}, {{BLOB}}, {{END}}, {{THE_INVARIANT}}
+FAIL  cp-d's lifecycle: 9 unsubstituted placeholder(s): {{FIRST_STATE}}, {{DOMAIN_ACTION}}, {{DIFF}}, {{START}}, {{PATH}}, {{NEW_STATE}}, {{LAST_STATE}}, {{AN_EARLIER_STATE}}, {{BLOB}}
+FAIL  cp-e's structure: 12 unsubstituted placeholder(s): {{THE_ENTITY}}, {{NEW_OR_WHAT_CHANGED}}, {{A_FIELD_THE_BEHAVIOUR_TURNS_ON}}, {{DIFF}}, {{START}}, {{PATH}}, {{RELATION}}, {{CARDINALITY}}, {{AN_EXISTING_ENTITY}}, {{WHY_THE_ABSENCE_MATTERS}}, {{ANOTHER_ENTITY}}, {{BLOB}}
 FAIL  Context's shift: 13 unsubstituted placeholder(s): {{FIRST_STATE}}, {{REQUEST}}, {{DIFF}}, {{START}}, {{PATH}}, {{A_STATE}}, {{THE_STATE_THAT_MOVED}}, {{A_NEW_STATE}}, {{A_CASE_THAT_DIFFERS}}, {{HOW_ITS_SEQUENCE_DIFFERS_IN_A_CLAUSE}}, {{BLOB}}, {{END}}, {{WHICH_REQUEST_DOES_WHAT_FOR_THE_MAIN_PATH_NAMED}}
 ## --fragment figures-clean.html
 exit=0
@@ -995,6 +1047,14 @@ PASS  cp-a's chain holds its shape and carries its locators
 PASS  cp-b's converge holds its shape and carries its locators
 PASS  cp-c's lifecycle holds its shape and carries its locators
 PASS  cp-d's structure holds its shape and carries its locators
+## --fragment figures-narrative-clean.html
+exit=0
+PASS  at most one figure per checkpoint
+PASS  cp-a's chain holds its shape and carries its locators
+## --fragment figures-evidence-no-caption.html
+exit=1
+PASS  at most one figure per checkpoint
+FAIL  cp-a's chain: no figcaption saying what the figure answers — in the supporting evidence a figure has to say it on its own
 ## --fragment figures-clean.html
 exit=0
 PASS  at most one figure per checkpoint

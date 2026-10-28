@@ -24,12 +24,15 @@
 #
 # Read per sentence inside the prose fields — a <p>, a <li> — on the comment-stripped page with the
 # regions that carry no claim or are labelled by their heading removed: <style>, <script>, <pre>,
-# the chain nodes (ol.ip-path), the Affected lists (ul.ev-list), the search record, Context, the
+# the chain nodes (ol.ip-path), an inline snippet's caption (p.ex-cap, a location and its computed
+# tag, like an excerpt's summary), the Affected lists (ul.ev-list), the search record, Context, the
 # evidence foot. A list entry is one unit, because its clause and its citation are separate
 # elements. A card's why (p.ip-why) may not carry a citation — its nodes' locators are its
 # citations — so it is never held to `uncited`. A citation's path comes from its blob href when
 # the link text is short (`oauth.rb:35`); a diff-form href names no path and is a changed file by
-# definition; plain text is matched on its suffix.
+# definition; plain text is matched on its suffix. A citation woven into the prose — `a.ref`, whose
+# text is the claim rather than a path (report-format.md § Deep links) — is read from its href
+# alone, because its text names no file.
 #
 # The changed set is `git diff --name-only BASE...HEAD` when --repo and --base are given, else the
 # page's own ledger (the data-path cells). With neither there is nothing to hold a label against,
@@ -178,7 +181,9 @@ function quote(s,   t) {
 # One citation: is the file it names in the diff? The path is in the blob href when the text is
 # short; a diff-form href is a changed file by definition; plain text matches on its suffix.
 function in_diff(attrs, text,   path, k, p) {
-  if (index(attrs, "/files#diff-")) return 1
+  # A diff-page anchor, on a pull request (rung 1) or a compare range (rung 2), is a changed file by
+  # definition: GitHub only anchors files that are in the diff.
+  if (attrs ~ /#diff-[0-9a-f]/) return 1
   path = ""
   if (match(attrs, /\/blob\/[0-9a-f]+\/[^#"]+/)) {
     path = substr(attrs, RSTART, RLENGTH); sub(/^\/blob\/[0-9a-f]+\//, "", path)
@@ -190,18 +195,30 @@ function in_diff(attrs, text,   path, k, p) {
   for (p in changed) { k = length(p) - length(path); if (k > 0 && substr(p, k) == "/" path) return 1 }
   return 0
 }
-function sentence(s, cites,   rest, attrs, text, outside, inside, any, v, tier, unc, m, tag_end, pa, la, pe, inner, e) {
+function sentence(s, cites,   rest, attrs, text, outside, inside, any, v, tier, unc, m, tag_end, pa, la, pe, pr, lr, inner, e) {
   outside = 0; inside = 0; any = 0
   rest = s
-  # Two citation forms. An a.path carries its text directly. An excerpt summary location is a
-  # span.ex-loc whose first child is the link (excerpt.sh: <span class="ex-loc"><a class="cite"
-  # href="…">path:line</a></span>), or the plain text on an unlinked rung — so the span is taken
-  # whole, its href from the inner <a> and its text with the tags stripped. Reading it as an
-  # element with empty text made every entry whose citation is an excerpt read as uncited.
+  # Three citation forms. An a.path carries its text directly. An a.ref is a phrase of the prose
+  # linked, so only its opening tag is read: the href is the citation and the text, which may hold
+  # a <code>, names no file. An excerpt summary location is a span.ex-loc whose first child is the
+  # link (excerpt.sh: <span class="ex-loc"><a class="cite" href="…">path:line</a></span>), or the
+  # plain text on an unlinked rung — so the span is taken whole, its href from the inner <a> and
+  # its text with the tags stripped. Reading it as an element with empty text made every entry
+  # whose citation is an excerpt read as uncited.
   while (1) {
     pa = match(rest, /<a class="path[^"]*"[^>]*>[^<]*</) ? RSTART : 0; la = RLENGTH
+    pr = match(rest, /<a class="ref"[^>]*>/) ? RSTART : 0; lr = RLENGTH
     pe = index(rest, "<span class=\"ex-loc\">")
-    if (!pa && !pe) break
+    if (!pa && !pe && !pr) break
+    if (pr && (!pa || pr < pa) && (!pe || pr < pe)) {
+      attrs = substr(rest, pr, lr); rest = substr(rest, pr + lr)
+      # A linked phrase is a citation even when its href cannot be placed in or out of the diff.
+      any = 1
+      v = in_diff(attrs, "")
+      if (v < 0) continue
+      if (v) inside = 1; else outside = 1
+      continue
+    }
     if (pa && (!pe || pa < pe)) {
       m = substr(rest, pa, la); rest = substr(rest, pa + la)
       tag_end = index(m, ">")
@@ -231,7 +248,7 @@ function sentence(s, cites,   rest, attrs, text, outside, inside, any, v, tier, 
 {
   f = $0
   if (f ~ /^<li[^>]*class="ip-n/) next
-  if (f ~ /^<p[^>]*class="(note|buildstate)/) next
+  if (f ~ /^<p[^>]*class="(note|buildstate|ex-cap)/) next
   if (f ~ /^<li/) { sentence(f, 1); next }
   cites = (f !~ /^<p[^>]*class="ip-why/)
   sub(/^<p[^>]*>/, "", f)

@@ -1,3 +1,5 @@
+<title>FEATURE: resizable report cards on the admin dashboard Review</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--
   accountable-review · review-map page template
 
@@ -6,16 +8,18 @@
   horizontal overflow, wide blocks scroll in their own container, and all three
   theme states resolve.
 
-  Design language: "PR review interface redesign". Warm paper ground, Fraunces
-  at weight 400 for display, and FOUR semantic colour families over one shared
-  five-slot ramp — slate for navigation, ochre for a stated gap, teal for code
+  Design language: "PR review interface redesign", in one of three themes —
+  Daylight (the default), Workshop or Field Notes — chosen by review_map.theme
+  in the repository's .accountable-review.yml. A theme decides typefaces, radii,
+  hues and a few label treatments; every theme keeps FOUR semantic colour
+  families over one shared five-slot ramp — slate for navigation, ochre for a stated gap, teal for code
   the diff does not touch, plum for provenance. Each one means one thing and the
   token block says which; a family used outside its rule stops carrying meaning
   everywhere else. A fifth ramp, --primer-*, is the exception that proves that
   rule: it means nothing at all. It frames aside.primer and nothing else, in
-  Rails red, and the token block says why a page with no severity vocabulary can
-  afford one. The structural idea is that a checkpoint is NOT a card — it
-  is a question, the two or three sentences that make it one, and where to look;
+  Rails red (graphite on a Rust primer, through aside.primer.pr-rust), and the
+  token block says why a page with no severity vocabulary can afford one. The structural idea is that a checkpoint is NOT a card — it
+  is a behaviour explained, the question it leads to, and where to look;
   a hairline separates one from the next. Cards are reserved for the few things
   that genuinely are objects: a chain figure, the impact panel.
 
@@ -27,7 +31,7 @@
   classic unreadable-artifact bug. The three
   states are: explicit dark, explicit light, and the unstamped default that most
   viewers actually get, where only prefers-color-scheme applies.
-  The source design is light-only; the dark half below is ours, and the pair
+  The source designs are light-only; each theme's dark half is ours, and the pair
   that inverts (.ip-out, the filled node that ends a chain) is written against
   tokens precisely so it keeps inverting relative to the page.
 
@@ -36,7 +40,7 @@
   directly, and that is the whole vocabulary. The checkpoints are ORDERED by
   what a reviewer would most regret misunderstanding, and an order is not a
   scale: no number beside a question, no "blocking", no "watch". The one line
-  that names an unresolved thing is p.open, labelled "Open question".
+  that hands the reader the judgment is p.open, labelled "Review question".
 
   AND NO VERIFICATION BADGE, for the same reason and in the same place so the two
   cannot come back separately. A run at --effort high sends an adversarial pass at
@@ -47,7 +51,7 @@
   never read as.
 
   AND NO STACK BADGE, in the same place for the same reason. This template serves
-  both Rails and Phoenix pages. What differs between them is the content of the
+  Rails, Phoenix, Rust and React pages alike. What differs between them is the content of the
   sentences, the nodes in a figure.chain and the command inside a pre.probe —
   never a chip, a marker or a section. A reader should not be able to tell which
   lens file produced the page except by reading what it says about their
@@ -60,20 +64,22 @@
   offer. A "mentor mode" banner, a count of the primers, an "onboarding" eyebrow:
   each one is the badge shape coming back through the one door that looks open.
 
-  AND NOTHING MARKS A CODING-DECISION CHECKPOINT AS ONE, which is the fifth and
-  the one that hides inside a component rather than beside it. At most one
-  checkpoint per page judges how the change was built rather than what it now does
-  — see report-format.md § Coding decisions — and it is an ordinary section.cp in
-  the last position. No label, no eyebrow, no section of its own, and no sentence
-  announcing that the page also checks conventions. Announcing it is how it turns
-  into a style review: a reader who is told a convention section exists expects it
-  filled every time, and a run that knows the reader expects it will fill it.
+  AND NOTHING MARKS A CODING-DECISION OR AN ARCHITECTURAL CHECKPOINT AS ONE, which
+  is the fifth and the one that hides inside a component rather than beside it. A
+  checkpoint that judges how the change was built — report-format.md § Coding
+  decisions — or what it made true of the system's structure — § Architectural
+  questions — rather than what it now does is an ordinary section.cp in the
+  positions § Ranking by delta gives it. No label, no eyebrow, no section of its
+  own, and no sentence announcing that the page also checks conventions or the
+  architecture. Announcing it is how it turns into a style review or a design
+  review: a reader who is told such a section exists expects it filled every
+  time, and a run that knows the reader expects it will fill it.
 
   AND NO CARRY BADGE, which is the sixth and now the one with the best excuse of
   all. --update re-reads only the commits since the previous map (SKILL.md
   § Re-running over new commits), so a real difference exists between the parts of
   the page and a marker for it feels owed. It is not. The page says WHICH REVISION
-  its content describes, once, in the masthead cell and one sentence in § 01 — and
+  its content describes, once, in the masthead cell and one sentence in *What changed* — and
   never which checkpoints were re-derived. No "new" flag on a checkpoint, no
   "carried" tag, no "3 of 5 updated" line: three ordered states beside a question
   is the severity chip above, rebuilt out of words that sound like provenance.
@@ -93,10 +99,18 @@
                             --primer-* is the fifth ramp and the only one that
                             means nothing: it is one component's frame
     shell, rail ........... .wrap, main, .progress, and the sticky numbered rail
-    type .................. headings, .lede, .note, .lbl, .path, .cite, code
+    type .................. headings, .lede, .note, .lbl, .path, .cite, a.ref, code
     section furniture ..... .eyebrow — a label and a rule that fills the row
     before / after ........ dl.ba — two rows, never one paragraph. Section 01
                             only, and only when a workflow fundamentally changed
+    context ............... dl.ctx — section 02, earned per concept: what a
+                            piece of THIS repository is, a citation, and
+                            span.ctx-used pointing at the checkpoints that rely
+                            on it. No tier, no grade, and one figure at most:
+                            figure.lifecycle.lc-shift, the request sequence
+                            before and after, when the change moved which
+                            request does what; at --context collapsed,
+                            all of it inside one shut details.ctx-fold
     evidence tier ......... .tier — neutral by default, .tier-unc teal for
                             `from unchanged code`, .tier-inf ochre for an
                             inference. .tag is an excerpt's state, in plum,
@@ -104,8 +118,11 @@
     gaps .................. .gap (ochre, a stated absence), details.searched (what was
                             grepped — collapsed, and plum: provenance, never a claim)
     source excerpts ....... details.excerpt -- generated by scripts/excerpt.sh, and
-                            it sits BESIDE the claim or the .lookat entry it
-                            confirms. The --source variant is syntax-tinted at
+                            it sits in the .lookat entry it confirms, inside
+                            the checkpoint's details.cp-ev. div.excerpt.ex-inline
+                            (--inline) is the one a checkpoint's explanation may
+                            show: open, a few lines, captioned with its location
+                            and tag. The --source variant is syntax-tinted at
                             runtime from its data-lang; --diff is not, its colour
                             means +/-
     framework anchors ..... a.doc (a link from references/rails-docs.md, never a
@@ -120,17 +137,28 @@
                             block on this page that may show a result line, because
                             its receiver is a class this repository does not have.
                             Its header names the stack in words — "Understanding
-                            Ruby on Rails" — and its frame is --primer-*
-    review checkpoint ..... section.cp — THE PRIMITIVE. An h3 question, 2-4
-                            sentences, an optional figure.chain, ul.lookat (1-4
-                            places to look, each a title, a clause and its
-                            citation, in that order), an optional p.open
+                            Ruby on Rails" — and its frame is --primer-*;
+                            a Rust primer adds .pr-rust, nothing else
+    review checkpoint ..... section.cp — THE PRIMITIVE. An h3 naming the
+                            behaviour, prose that explains before it asks —
+                            with the figure and an inline snippet where they
+                            carry the argument — p.open, the review question,
+                            last in the explanation, then details.cp-ev, the
+                            supporting evidence, shut: ul.lookat (1-4 places to
+                            look, each a title, a clause and its citation, in
+                            that order) and any probe
     start here ............ ol.begin — one list: the route through the code, 3-7
                             stops. Entries link into the checkpoint that owns them
     chains ................ figure.chain inside a checkpoint — mechanism INSIDE the
                             change, and therefore no .ip-aff node. .ip-step is the
                             neutral hop, and exists only here
-    impact paths .......... .impact — section 04. 1-3 directed chains + .legend,
+    topology figures ...... figure.converge (paths onto one invariant), .lifecycle
+                            (states and the actions between them), .structure (an
+                            entity and its relationships) — the shapes a chain
+                            cannot draw. Converge and structure MAY hold .ip-aff:
+                            an unchanged writer of an invariant is upstream of the
+                            change, not a consequence of it
+    impact paths .......... .impact — section 05. 1-3 directed chains + .legend,
                             ONE PATH PER .ip-card, so three diagrams read as three.
                             Each node past a path's first carries its INCOMING
                             relation in .ip-rel, so an edge is labelled or it is
@@ -145,41 +173,39 @@
     grid tables ........... .gt (gap:1px over --rule), .gt-meta, .gt-paths — the
                             inventory, paths with no classification. data-path stays
                             on a div.c, so the gate runs wherever the inventory sits
-    evidence foot ......... details.evidence — section 05, below the last section.
+    evidence foot ......... details.evidence — section 06, below the last section.
                             Not a section: no number, no rail entry, shut
     build state ........... .buildstate banner and .pending markers — deleted at the
                             final publish, never left on a finished page
-    body skeleton ......... rail, sections 01 -> 04, two checkpoints assembled whole
+    body skeleton ......... rail, sections 01 -> 05, two checkpoints assembled whole
                             and one pending stub, the impact panel, the evidence foot
     script ................ scroll progress, rail scroll-spy, and the syntax tint on
                             unchanged excerpts. Nothing else — no state, no
                             localStorage, no counters. All three are presentation:
                             delete the block and the page still reads
 -->
-<title>FEATURE: resizable report cards on the admin dashboard Review</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..600,0,0;1,9..144,400,0,0&family=IBM+Plex+Sans:wght@400;500;600&family=Roboto+Mono:wght@400;500;600&display=swap">
 
 <style>
 /* ============================================================
-   Tokens. Warm paper neutrals, and FOUR SEMANTIC FAMILIES that
-   share one ramp shape: every family is a single hue at fixed
-   lightness and chroma per slot, so no two can drift apart in
-   weight, and the dark half is one arithmetic reflection of the
-   light rather than a second hand-picked set.
-
-     light   bg .975/.014   bg-2 .955/.028   rule .885/.045
-             rule-2 .79/.065   ink .45/.105
-     dark    bg .235/.028   bg-2 .275/.045   rule .42/.055
-             rule-2 .52/.075   ink .80/.09
+   Tokens. NONE ARE DECLARED IN THIS BLOCK: every token — the
+   neutrals, the type stacks, the radii and the colour families —
+   comes from the theme page-skeleton.sh writes in at the theme
+   marker below this style block. What a theme may not
+   change is the rule that follows. Every theme carries FOUR
+   SEMANTIC FAMILIES that share one ramp shape: each family is a
+   single hue at fixed lightness and chroma per slot, so no two can
+   drift apart in weight, and the dark half is a reflection of the
+   light rather than a second hand-picked set. The hue numbers below
+   are approximate and move a few degrees between themes; what each
+   family means does not move at all.
 
    WHAT EACH FAMILY IS ALLOWED TO MEAN. The rule is the system —
    a family used outside it stops carrying meaning everywhere
    else on the page, which is the only thing colour is doing here.
 
-     --nav-*        slate 252   You can click it. Rail links,
+     --nav-*        slate        You can click it. Rail links,
                                 citations, paths, the progress bar,
                                 in-page anchors. Nothing that is not
                                 a link may be slate, which is why
@@ -187,11 +213,11 @@
                                 selection colour any more: they were
                                 two off-system hex values doing what
                                 two slots of this ramp already do.
-     --gap-*        ochre  72   Something is missing and the page is
+     --gap-*        ochre        Something is unsettled and the page is
                                 saying so: p.open, the inferred tier,
                                 the build-state banner. NEVER a
                                 severity and never a grade.
-     --unchanged-*  teal  200   This code is not in the diff. The
+     --unchanged-*  teal         This code is not in the diff. The
                                 `from unchanged code` tier, the
                                 dashed .ip-aff node and its legend
                                 key, the "Affected, not changed"
@@ -201,7 +227,7 @@
                                 to add to a page with no severity
                                 vocabulary. Never on a link, so it
                                 never competes with slate.
-     --prov-*       plum  318   How a thing is known, never what it
+     --prov-*       plum         How a thing is known, never what it
                                 means: the excerpt .tag, the searches
                                 block, the evidence foot, the probe
                                 label. The quietest family on purpose
@@ -211,7 +237,7 @@
    AND ONE RAMP THAT IS NOT A FAMILY, because it has no meaning to
    spend:
 
-     --primer-*     red    28   The frame of aside.primer, and of
+     --primer-*     red          The frame of aside.primer, and of
                                 nothing else on this page. Not a
                                 fifth meaning — a reminder of which
                                 framework is speaking, in the red
@@ -235,225 +261,27 @@
    a panel border around a lesson, the other a row stripe inside
    quoted code, and the two never abut.
 
-   ONE OPEN QUESTION, WRITTEN DOWN RATHER THAN GUESSED AT. Rails is
-   the only stack that earns a primer today, because elixir-docs.md
-   withholds every link and a primer is gated on one. If that
-   catalogue opens, a Phoenix primer in Rails red is wrong, and the
-   answer is a variant class on the aside — never a colour a run
-   types, and never a second component.
+     --primer-rust-*  graphite   The same frame for a Rust primer,
+                                reached by one class on the aside,
+                                aside.primer.pr-rust, which re-points
+                                --primer-* at this ramp and changes
+                                nothing else. Rust's own mark is
+                                black, so its frame is iron: the red
+                                ramp's lightness per slot at almost
+                                no chroma, and a near-black top rule
+                                where Rails draws a red one.
+
+   A RUST PRIMER IN RAILS RED WOULD BE WRONG, and that was the open
+   question this block used to record. The answer is the one it
+   predicted: a variant class, never a colour a run types and never
+   a second component. Graphite rather than Ferris orange because
+   orange sits between the red frame and the ochre that means
+   something is missing, and would read as the second. Phoenix still
+   has no frame of its own because elixir-docs.md withholds every
+   link and a primer is gated on one; when it opens, the same shape
+   applies. rails-anchors.rb § 8 checks that the class and the doc
+   link's host agree.
    ============================================================ */
-:root {
-  --ground:      #f6f5f1;
-  --surface:     #faf9f6;
-  --surface-hi:  #ffffff;
-  --surface-2:   #f1efe9;
-  --surface-3:   #fbfaf7;
-  --chip:        #eceae3;
-
-  --ink:         #1b1a17;
-  --ink-2:       #26251f;
-  --ink-3:       #3d3b36;
-  --muted:       #6f6c65;
-  --faint:       #8d8a82;
-  --fainter:     #a5a29a;
-  --on-ink:      #f2f0ea;
-  --on-ink-code: #dcd8cd;
-
-  --rule:        #e5e1d8;
-  --rule-soft:   #ece8e0;
-  --rule-strong: #cec9be;
-  --rule-dash:   #b9b4a8;
-  --rule-card:   #d8d3c8;
-
-  --nav-bg:            oklch(0.975 0.014 252);
-  --nav-bg-2:          oklch(0.955 0.028 252);
-  --nav-rule:          oklch(0.885 0.045 252);
-  --nav-rule-2:        oklch(0.79  0.065 252);
-  --nav-ink:           oklch(0.45  0.105 252);
-  --nav-ink-hi:        oklch(0.36  0.12  252);
-
-  --gap-bg:            oklch(0.975 0.014 72);
-  --gap-bg-2:          oklch(0.955 0.028 72);
-  --gap-rule:          oklch(0.885 0.045 72);
-  --gap-rule-2:        oklch(0.79  0.065 72);
-  --gap-ink:           oklch(0.45  0.105 72);
-
-  --unchanged-bg:      oklch(0.975 0.014 200);
-  --unchanged-bg-2:    oklch(0.955 0.028 200);
-  --unchanged-rule:    oklch(0.885 0.045 200);
-  --unchanged-rule-2:  oklch(0.79  0.065 200);
-  --unchanged-ink:     oklch(0.45  0.105 200);
-
-  --prov-bg:           oklch(0.975 0.014 318);
-  --prov-bg-2:         oklch(0.955 0.028 318);
-  --prov-rule:         oklch(0.885 0.045 318);
-  --prov-rule-2:       oklch(0.79  0.065 318);
-  --prov-ink:          oklch(0.45  0.105 318);
-
-  --primer-bg:         oklch(0.975 0.014 28);
-  --primer-bg-2:       oklch(0.955 0.028 28);
-  --primer-rule:       oklch(0.885 0.045 28);
-  --primer-rule-2:     oklch(0.79  0.065 28);
-  --primer-ink:        oklch(0.45  0.105 28);
-
-  --ex-add:      #e6efe6;
-  --add-sig:     #3f6b45;
-  --ex-del:      #f6e7e3;
-  --del-sig:     #a4453a;
-
-  /* Syntax tint for an unchanged excerpt. Applied at runtime by the page's
-     script — see the excerpt block below. Low chroma on purpose: this page
-     already spends colour on meaning (accent = navigation, ochre = a stated
-     gap, green/red = added and removed), and code that glows competes with
-     all three. Comments stay the quietest thing in the block. */
-  --syn-key:     oklch(0.44 0.12 318);
-  --syn-str:     oklch(0.46 0.09 150);
-  --syn-com:     oklch(0.60 0.02 80);
-  --syn-name:    oklch(0.45 0.09 235);
-  --syn-num:     oklch(0.50 0.10 50);
-
-  --display: 'Fraunces', Georgia, 'Times New Roman', serif;
-  --body:    'IBM Plex Sans', system-ui, -apple-system, sans-serif;
-  --mono:    'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-}
-
-/* The unstamped default most viewers get: only prefers-color-scheme applies,
-   and an explicit light choice must still beat a dark OS. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --ground:      #14130f;
-    --surface:     #1b1a16;
-    --surface-hi:  #201f1a;
-    --surface-2:   #26241f;
-    --surface-3:   #191814;
-    --chip:        #2b2924;
-
-    --ink:         #ece9e1;
-    --ink-2:       #ddd9cf;
-    --ink-3:       #c2bdb1;
-    --muted:       #9c968a;
-    --faint:       #837d72;
-    --fainter:     #6b665c;
-    --on-ink:      #14130f;
-    --on-ink-code: #3d3b36;
-
-    --rule:        #302e27;
-    --rule-soft:   #292720;
-    --rule-strong: #423f36;
-    --rule-dash:   #4d4940;
-    --rule-card:   #383529;
-
-    --nav-bg:            oklch(0.235 0.028 252);
-    --nav-bg-2:          oklch(0.275 0.045 252);
-    --nav-rule:          oklch(0.42  0.055 252);
-    --nav-rule-2:        oklch(0.52  0.075 252);
-    --nav-ink:           oklch(0.80  0.09  252);
-    --nav-ink-hi:        oklch(0.88  0.075 252);
-
-    --gap-bg:            oklch(0.235 0.028 72);
-    --gap-bg-2:          oklch(0.275 0.045 72);
-    --gap-rule:          oklch(0.42  0.055 72);
-    --gap-rule-2:        oklch(0.52  0.075 72);
-    --gap-ink:           oklch(0.80  0.09  72);
-
-    --unchanged-bg:      oklch(0.235 0.028 200);
-    --unchanged-bg-2:    oklch(0.275 0.045 200);
-    --unchanged-rule:    oklch(0.42  0.055 200);
-    --unchanged-rule-2:  oklch(0.52  0.075 200);
-    --unchanged-ink:     oklch(0.80  0.09  200);
-
-    --prov-bg:           oklch(0.235 0.028 318);
-    --prov-bg-2:         oklch(0.275 0.045 318);
-    --prov-rule:         oklch(0.42  0.055 318);
-    --prov-rule-2:       oklch(0.52  0.075 318);
-    --prov-ink:          oklch(0.80  0.09  318);
-
-    --primer-bg:         oklch(0.235 0.028 28);
-    --primer-bg-2:       oklch(0.275 0.045 28);
-    --primer-rule:       oklch(0.42  0.055 28);
-    --primer-rule-2:     oklch(0.52  0.075 28);
-    --primer-ink:        oklch(0.80  0.09  28);
-
-    --ex-add:      #1b2a1d;
-    --add-sig:     #7fbf8c;
-    --ex-del:      #33201d;
-    --del-sig:     #e0918a;
-
-    --syn-key:     oklch(0.79 0.10 318);
-    --syn-str:     oklch(0.79 0.09 150);
-    --syn-com:     oklch(0.63 0.02 80);
-    --syn-name:    oklch(0.80 0.08 235);
-    --syn-num:     oklch(0.79 0.09 50);
-  }
-}
-
-/* The explicit toggle, so it wins in the other direction too. */
-:root[data-theme="dark"] {
-  --ground:      #14130f;
-  --surface:     #1b1a16;
-  --surface-hi:  #201f1a;
-  --surface-2:   #26241f;
-  --surface-3:   #191814;
-  --chip:        #2b2924;
-
-  --ink:         #ece9e1;
-  --ink-2:       #ddd9cf;
-  --ink-3:       #c2bdb1;
-  --muted:       #9c968a;
-  --faint:       #837d72;
-  --fainter:     #6b665c;
-  --on-ink:      #14130f;
-  --on-ink-code: #3d3b36;
-
-  --rule:        #302e27;
-  --rule-soft:   #292720;
-  --rule-strong: #423f36;
-  --rule-dash:   #4d4940;
-  --rule-card:   #383529;
-
-  --nav-bg:            oklch(0.235 0.028 252);
-  --nav-bg-2:          oklch(0.275 0.045 252);
-  --nav-rule:          oklch(0.42  0.055 252);
-  --nav-rule-2:        oklch(0.52  0.075 252);
-  --nav-ink:           oklch(0.80  0.09  252);
-  --nav-ink-hi:        oklch(0.88  0.075 252);
-
-  --gap-bg:            oklch(0.235 0.028 72);
-  --gap-bg-2:          oklch(0.275 0.045 72);
-  --gap-rule:          oklch(0.42  0.055 72);
-  --gap-rule-2:        oklch(0.52  0.075 72);
-  --gap-ink:           oklch(0.80  0.09  72);
-
-  --unchanged-bg:      oklch(0.235 0.028 200);
-  --unchanged-bg-2:    oklch(0.275 0.045 200);
-  --unchanged-rule:    oklch(0.42  0.055 200);
-  --unchanged-rule-2:  oklch(0.52  0.075 200);
-  --unchanged-ink:     oklch(0.80  0.09  200);
-
-  --prov-bg:           oklch(0.235 0.028 318);
-  --prov-bg-2:         oklch(0.275 0.045 318);
-  --prov-rule:         oklch(0.42  0.055 318);
-  --prov-rule-2:       oklch(0.52  0.075 318);
-  --prov-ink:          oklch(0.80  0.09  318);
-
-  --primer-bg:         oklch(0.235 0.028 28);
-  --primer-bg-2:       oklch(0.275 0.045 28);
-  --primer-rule:       oklch(0.42  0.055 28);
-  --primer-rule-2:     oklch(0.52  0.075 28);
-  --primer-ink:        oklch(0.80  0.09  28);
-
-  --ex-add:      #1b2a1d;
-  --add-sig:     #7fbf8c;
-  --ex-del:      #33201d;
-  --del-sig:     #e0918a;
-
-  --syn-key:     oklch(0.79 0.10 318);
-  --syn-str:     oklch(0.79 0.09 150);
-  --syn-com:     oklch(0.63 0.02 80);
-  --syn-name:    oklch(0.80 0.08 235);
-  --syn-num:     oklch(0.79 0.09 50);
-}
-
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
@@ -470,12 +298,13 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 }
 
 /* ============================================================
-   Type. Fraunces is variable: SOFT and WONK are pinned off —
-   WONK gives it a swashy single-storey g, which is the wrong
-   register for a review document and is on by default at some
-   weights. opsz follows the size, which is the whole point of
-   the face. Display weight is 400 everywhere; the design rests
-   on that not reading as decorative, so do not reach for 700.
+   Type. The faces are the theme's — --display, --body, --mono —
+   and so is the display weight: each theme sets its own on the
+   headings in its overrides. The variation settings below are
+   for a variable display face with SOFT and WONK axes (WONK gives
+   a swashy single-storey g, the wrong register for a review
+   document); a theme whose face has neither resets them to
+   normal. opsz follows the size wherever the face has it.
    ============================================================ */
 h1, h2, h3, h4 {
   font-family: var(--display); font-weight: 400; margin: 0; text-wrap: pretty;
@@ -535,6 +364,11 @@ h3 code, h4 code { font-size: .72em; }
    underline is slate, because the underline is the part that says "clickable" and
    an off-family hairline here is exactly what --accent-line was. */
 a.path, a.cite { text-decoration-color: var(--nav-rule); }
+/* A citation woven into the prose: the claim itself is the link, so it reads as a sentence and
+   not as a filename. It keeps the prose ink — a run of slate across a clause would outshout the
+   argument it carries — and says "clickable" with the slate underline alone, as a.path does. */
+a.ref { color: inherit; text-decoration-color: var(--nav-rule-2); }
+a.ref:hover { color: var(--nav-ink-hi); text-decoration-color: currentColor; }
 
 /* The uppercase mono micro-label. The most-used device in this system:
    it is how a field, a section and a legend all announce themselves. */
@@ -627,6 +461,38 @@ section { padding: 58px 0 0; scroll-margin-top: 20px; }
   .ba > dd { padding-top: 0; border-top: 0; }
 }
 
+/* Context — section 02. The repository concepts a checkpoint relies on,
+   one dt/dd pair each. It borrows dl.ba's grid on purpose: both are a term
+   beside its explanation, and a second grid geometry for the same shape
+   would be a decision nobody made. What differs is that every row is equal
+   — there is no "now" row — and that each dd ends in span.ctx-used, which
+   names the checkpoints the entry was earned by. That pointer is set small
+   and quiet, like a reading-path .ptr, because it is navigation rather than
+   content. No colour of its own: Context is not a meaning, and slate on the
+   link already says "you can click it". */
+.ctx { display: grid; grid-template-columns: 180px 1fr; gap: 0 28px; margin-top: 8px; border-top: 1px solid var(--rule); }
+.ctx > dt { min-width: 0; overflow-wrap: anywhere; padding: 18px 0 0; font-size: 14.5px; font-weight: 600; line-height: 1.5; color: var(--ink); }
+.ctx > dd { min-width: 0; overflow-wrap: anywhere; margin: 0; padding: 18px 0 20px; max-width: 62ch; font-size: 15.5px; line-height: 1.66; color: var(--ink-2); }
+.ctx > dt:not(:first-of-type), .ctx > dd:not(:first-of-type) { border-top: 1px solid var(--rule); }
+.ctx .ctx-used, .lc-shift .ctx-used { display: block; margin-top: 6px; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.ctx .ctx-used a, .lc-shift .ctx-used a { color: inherit; }
+/* --context collapsed: the same section, its entries (and shift) behind one shut
+   details.ctx-fold whose summary is the fixed label and the entry names. Neutral
+   rules, no family colour: plum would say "how a thing is known", and Context is
+   what a thing is. The one fold allowed to hold content rather than provenance —
+   report-format.md § How much Context says why that is safe. */
+details.ctx-fold { margin-top: 8px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+details.ctx-fold > summary { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; padding: 12px 0; cursor: pointer; list-style: none; font-size: 14px; color: var(--ink-2); }
+details.ctx-fold > summary::-webkit-details-marker { display: none; }
+details.ctx-fold > summary::marker { content: ""; }
+.ctx-fold-lbl { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+details.ctx-fold > .ctx { margin-top: 0; }
+@media (max-width: 700px) {
+  .ctx { grid-template-columns: minmax(0, 1fr); }
+  .ctx > dd { padding-top: 4px; }
+  .ctx > dd:not(:first-of-type) { border-top: 0; }
+}
+
 /* ============================================================
 /* ============================================================
    Evidence tier and the neutral tag. Neither grades the change.
@@ -650,10 +516,14 @@ section { padding: 58px 0 0; scroll-margin-top: 20px; }
 .tag { border: 1px solid var(--prov-rule); background: var(--prov-bg); color: var(--prov-ink); }
 
 /* A stated absence. Ochre, deliberately not the accent: a gap is
-   evidence, not a feature, and never a severity. */
-.gap { display: flex; gap: 12px; padding: 14px 16px; background: var(--gap-bg-2); border: 1px solid var(--gap-rule); }
-.gap > b { flex: 0 0 auto; font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .1em; color: var(--gap-ink); }
-.gap > span { font-size: 14.5px; line-height: 1.6; color: var(--ink-3); }
+   evidence, not a feature, and never a severity. It is SECONDARY to the review
+   question below it, and set as a note rather than a box: no fill, no frame, a
+   thin ochre rule on the left, smaller and quieter type. Two filled ochre boxes
+   in a row read as two equal calls to act, and only the question is one — the
+   gap is a fact the question takes into account. Every theme keeps it that way. */
+.gap { display: flex; gap: 10px; margin-top: 14px; padding: 2px 0 2px 12px; background: none; border: 0; border-left: 2px solid var(--gap-rule); border-radius: 0; }
+.gap > b { flex: 0 0 auto; font-family: var(--mono); font-size: 10.5px; font-weight: 400; letter-spacing: .1em; color: var(--gap-ink); line-height: 2; }
+.gap > span { font-size: 13.5px; line-height: 1.6; color: var(--muted); }
 /* What was grepped, including the searches that came up empty — collapsed, and the
    second component on the page that is. It is provenance, not a claim: the entries it
    backs are the div.item rows above it, so the page must read complete with it shut.
@@ -748,10 +618,11 @@ pre.probe {
    the budget and what earns one.
 
    IT IS FRAMED IN RAILS RED, on --primer-*, and that ramp exists
-   for this component alone. The reason is the reader it is for:
-   someone new to the stack, who needs to recognise the block that
+   for this component alone. A Rust primer carries .pr-rust, which
+   re-points the same tokens at the graphite --primer-rust-* ramp.
+   The reason is the reader it is for: someone new to the stack, who needs to recognise the block that
    was written for them before reading a word of it. A hue does
-   that and a heading does not. The token block owns why a page
+   that and a heading does not. The Tokens comment owns why a page
    with no severity vocabulary can afford a red — it is attached to
    no claim, so it cannot be read as a verdict — and the rule that
    keeps it honest is that the frame may never spread. Red on
@@ -760,7 +631,7 @@ pre.probe {
 
    The ramp is declared in all three theme states like every other
    colour here, which is the defect the tint tokens are counted by
-   name to catch, and tests/run.sh counts --primer-ink the same way
+   name to catch, and tests/run.rb counts --primer-ink the same way
    for the same reason.
 
    THE HEADER IS THE STACK, IN WORDS — "Understanding Ruby on
@@ -802,6 +673,14 @@ pre.probe {
   margin: 16px 0 6px; background: var(--primer-bg);
   border: 1px solid var(--primer-rule); border-top: 2px solid var(--primer-rule-2);
 }
+/* A Rust primer: same component, the frame re-pointed at the graphite ramp. The
+   class is the stack's, chosen by which catalogue the doc link came from, and
+   rails-anchors.rb fails a primer whose class and link disagree. */
+.primer.pr-rust {
+  --primer-bg: var(--primer-rust-bg); --primer-bg-2: var(--primer-rust-bg-2);
+  --primer-rule: var(--primer-rust-rule); --primer-rule-2: var(--primer-rust-rule-2);
+  --primer-ink: var(--primer-rust-ink); --primer-ink-hi: var(--primer-rust-ink-hi);
+}
 .pr-head {
   display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
   padding: 12px 20px; border-bottom: 1px solid var(--primer-rule);
@@ -809,7 +688,7 @@ pre.probe {
 /* What the block teaches, said in words, in the display serif at the page's own
    ink, and never in the frame ink. The frame is the reminder of which framework is
    speaking, and a red title as well would make the header the loudest thing in a
-   checkpoint whose h3 is the question the reader is actually there to answer.
+   checkpoint whose review question is what the reader is actually there to answer.
    Near-black is also the closest this page comes to a logotype, which is on
    purpose — there is no <svg> anywhere here, and a primer that grows one fails
    rails-anchors.rb. */
@@ -854,7 +733,10 @@ pre.demo {
 /* ============================================================
    Source excerpts — generated by scripts/excerpt.sh, never typed.
    The page must read complete with EVERY excerpt closed, which is
-   why the why-line lives in the summary and not in the body.
+   why the why-line lives in the summary and not in the body — and
+   why the link does too: .ex-loc is the excerpt's one citation, linked
+   when the rung allows, so the closed block is still a followable
+   citation and nothing below the code repeats it.
    The pre grows to max-content and .ex-body scrolls, so the add/del
    stripes span the whole scroll width instead of stopping at the fold.
    data-src, never data-path: coverage-gate.sh greps data-path page-wide.
@@ -866,7 +748,17 @@ details.excerpt > summary::marker { content: ""; }
 .excerpt .chev { font-family: var(--mono); font-size: 10px; color: var(--faint); transition: transform 120ms ease; }
 details.excerpt[open] .chev { transform: rotate(90deg); }
 .excerpt .ex-loc { font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); overflow-wrap: anywhere; }
+.excerpt .ex-loc > a.cite { font-size: inherit; color: inherit; }
 .excerpt .ex-why { grid-column: 2 / -1; font-size: 13.5px; line-height: 1.55; color: var(--muted); max-width: 66ch; }
+/* The inline snippet (excerpt.sh --inline) sits in a checkpoint's explanation, between
+   two sentences, and is read rather than opened: no disclosure, no frame, the code on
+   the excerpt's own tint and a one-line caption above it holding the linked location
+   and the computed tag. The sentence before it is its why. Each rule leads with
+   div.excerpt.ex-inline because the .excerpt .ex-body rules below would otherwise win on order. */
+div.excerpt.ex-inline { margin: 16px 0 20px; max-width: 76ch; }
+div.excerpt.ex-inline .ex-cap { display: flex; gap: 10px; align-items: baseline; margin: 0 0 6px; }
+div.excerpt.ex-inline .ex-body { padding: 10px 14px; border-top: 0; background: var(--surface-hi); }
+div.excerpt.ex-inline .ex-body > pre { margin: 0; }
 .excerpt .ex-body { padding: 0 14px 14px; border-top: 1px solid var(--rule); overflow-x: auto; }
 .excerpt .ex-body > pre {
   margin: 12px 0 0; padding: 0; font-family: var(--mono); font-size: 12px; line-height: 1.6;
@@ -888,7 +780,6 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 .excerpt .ex-body .sig { color: var(--fainter); user-select: text; }
 .excerpt .ex-body .l.add .sig { color: var(--add-sig); }
 .excerpt .ex-body .l.del .sig { color: var(--del-sig); }
-.excerpt .ex-src { margin-top: 10px; font-size: 12.5px; color: var(--muted); }
 
 /* Syntax tint, --source only. The script at the bottom of this file rewrites the
    text nodes inside each .l into these classes; with the script gone, or the CDN
@@ -931,7 +822,7 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 .excerpt--source .ex-body span[class^="hljs-"] { font-weight: inherit; background: none; }
 
 /* ============================================================
-   Section 3 · start here. ONE list: the route through the code
+   Section 4 · start here. ONE list: the route through the code
    and what on it needs judgment are the same question.
    ============================================================ */
 .begin { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
@@ -953,9 +844,10 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 @media (max-width: 700px) { .begin li { grid-template-columns: 26px 1fr; } .begin .ptr { grid-column: 2; padding-top: 0; } }
 
 /* ============================================================
-   Section 02 · THE REVIEW CHECKPOINT. One judgment the reviewer
-   has to make: the question as the h3, why it is a question in
-   the paragraph, and where to look below that. It is NOT a card
+   Section 03 · THE REVIEW CHECKPOINT. One judgment the reviewer
+   has to make: the behaviour as the h3, the explanation in the
+   prose, the question last, and the supporting evidence shut
+   beneath it. It is NOT a card
    — a hairline between checkpoints is the whole frame, because a
    box drawn around each of five judgments reads as five reports,
    which is the shape this page replaced.
@@ -990,27 +882,57 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
    the whole separation, and shrinking the gap towards the internal spacing is what
    makes four entries read as one block. The list's own top rule stays — it is what
    separates the list from the explanation above it. An excerpt sits under the
-   entry it confirms, full width. */
+   entry it confirms, full width.
+
+   The clause span is a block and a tier chip is not, so the selector excludes
+   .tier. The markup nests the tier inside the clause, but a run that places it
+   as a sibling of the path is legal markup too, and a bare li > span rule turned
+   that chip into a full-width bar on a published page. */
 .lookat { list-style: none; margin: 22px 0 24px; padding: 18px 0 0; border-top: 1px solid var(--rule); display: grid; gap: 26px; }
 .lookat > li { min-width: 0; font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
 .lookat > li > b { display: block; font-weight: 600; color: var(--ink); }
-.lookat > li > span { display: block; }
+.lookat > li > span:not(.tier) { display: block; }
 .lookat > li > .path { display: block; margin-top: 4px; }
 .lookat .excerpt { margin: 10px 0 0; }
 
-/* An open question. Ochre like .gap and for the same reason: a stated absence
-   is evidence, never a severity. The label is fixed at "Open question" —
-   "Watch" and "Blocking" are a severity vocabulary with the chip taken off,
-   and page-invariants.rb warns on both. */
-/* Full width, like the prose and the list above it: an open line ending short of
-   both read as an aside, where it is in fact the one thing in the checkpoint the
-   code could not settle. */
-.open { margin-top: 20px; padding: 14px 16px; background: var(--gap-bg-2); border-left: 2px solid var(--gap-rule); font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
+/* The review question, last in every checkpoint's explanation. Ochre like .gap and for the
+   same reason: an unsettled thing is stated, never graded. The label is fixed
+   at "Review question" — "Watch" and "Blocking" are a severity vocabulary with
+   the chip taken off, and page-invariants.rb warns on both. */
+/* Full width, like the prose and the list above it: a question ending short of
+   both read as an aside, where it is in fact the judgment the whole checkpoint
+   was leading to. Room on both sides for the same reason: it is the one box in
+   the checkpoint, and set tight against the GAP note above or the evidence below
+   it reads as part of either. A theme that hangs a badge off its top edge adds
+   the badge's overhang to the space above. */
+.open { margin: 28px 0; padding: 14px 16px; background: var(--gap-bg-2); border-left: 2px solid var(--gap-rule); font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
 .open > b { display: block; margin-bottom: 5px; font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .1em; color: var(--gap-ink); }
+
+/* Supporting evidence — the checkpoint's proof, after its question and shut by
+   default. The explanation above is the narrative and reads complete without it;
+   in here are the Look at list, its excerpts and the probe, which substantiate
+   that narrative rather than continue it. Plum ink on the label because plum
+   means HOW A THING IS KNOWN, as on details.searched and the evidence foot. The
+   label is fixed and carries no count: a number of locations beside every
+   checkpoint is a heft the reader would read as thoroughness.
+   Every selector into the summary is a child combinator, because the excerpts
+   inside are details with a .chev of their own, and opening this block must not
+   rotate theirs. */
+details.cp-ev { margin-top: 22px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+/* The next checkpoint's top rule closes the block, so its own would draw a second line beside it. */
+.cp:has(+ .cp) > details.cp-ev:last-child { border-bottom: 0; }
+details.cp-ev > summary { display: flex; gap: 10px; align-items: baseline; padding: 12px 0; cursor: pointer; list-style: none; }
+details.cp-ev > summary::-webkit-details-marker { display: none; }
+details.cp-ev > summary::marker { content: ""; }
+details.cp-ev > summary > .chev { font-family: var(--mono); font-size: 10px; color: var(--faint); transition: transform 120ms ease; }
+details.cp-ev[open] > summary > .chev { transform: rotate(90deg); }
+.cp-ev-lbl { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--prov-ink); }
+details.cp-ev > figure { margin-top: 6px; }
+details.cp-ev > .lookat { margin-top: 10px; padding-top: 0; border-top: 0; }
 
 
 /* ============================================================
-   Section 4 · IMPACT PATHS. Replaces the .blast box grid, which
+   Section 5 · IMPACT PATHS. Replaces the .blast box grid, which
    carried membership of two sets and nothing else — so it read
    as a word cloud, and the one thing it could not express is the
    one thing this section is about: a directed edge.
@@ -1023,9 +945,11 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 
    THE LANE IS DERIVED FROM THE NODE KIND, NEVER AUTHORED:
    .ip-chg sits left, .ip-aff right, .ip-out spans both. So the
-   boundary between "changed by this PR" and "the existing
-   system" is structurally true, and there is no lane class for
-   a run to get backwards.
+   boundary between "in this PR's files" and "outside the diff"
+   is structurally true, and there is no lane class for a run to
+   get backwards. The split is by file: an untouched line of a
+   changed file sits left, because that is where the reader
+   opens it.
 
    ONE PATH PER .ip-card, AND THE FIGURE IS A GROUP RATHER THAN
    A BOX. It began as five paths stacked inside one bordered
@@ -1073,8 +997,8 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
    IT IS DASHED, AND IT IS NOT --rule-strong. It began as a 1px solid --rule-strong hairline,
    which is byte-for-byte what a connector and an elbow are drawn in — so the one line on the
    figure that carries no direction looked exactly like the lines that do, and a path crossing
-   it read as joining it. Dashed --rule-dash is the treatment .ip-aff already uses for "the
-   existing system", so the vocabulary is now consistent across the whole card: SOLID HAIRLINES
+   it read as joining it. Dashed --rule-dash is the treatment .ip-aff already uses for "outside
+   the diff", so the vocabulary is now consistent across the whole card: SOLID HAIRLINES
    FLOW, DASHES BOUND. Anything drawn in --rule-strong is part of a chain.
 
    DOTTED RATHER THAN DASHED, and that is the second half of it. At 3-on-5-off in the same ink
@@ -1211,7 +1135,7 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 
 /* ============================================================
    figure.chain — the same vertical chain inside a CHECKPOINT,
-   where the job is different. Section 04 shows a consequence
+   where the job is different. Section 05 shows a consequence
    crossing into code the change did not touch; a chain in a
    checkpoint shows a mechanism INSIDE the change — a request
    path, a value derived over several hops, the order guards run
@@ -1221,8 +1145,9 @@ details.excerpt[open] .chev { transform: rotate(90deg); }
 
    That last one is a rule rather than a style. A hop that lands
    in unchanged code whose meaning the change altered IS an impact
-   path: it belongs in section 04, drawn once, and the checkpoint
-   that turns on it says so in a clause. Drawing it here as well
+   path: it belongs in section 05, drawn once, and the checkpoint
+   that turns on it explains the consequence in its prose and
+   points at the drawing. Drawing it here as well
    is the same consequence drawn twice at conversational distance,
    which reads as thoroughness.
 
@@ -1236,6 +1161,142 @@ figure.chain .ip-n { grid-template-columns: minmax(0, 1fr); }
 figure.chain .ip-n > * { grid-column: 1; }
 figure.chain > figcaption { margin-top: 14px; }
 .ip-step > .ip-box { border: 1px solid var(--rule-strong); background: var(--surface-3); }
+
+/* ============================================================
+   Three more checkpoint figures, for the shapes a chain cannot
+   draw because it has one successor per node: a FAN-IN onto one
+   invariant (figure.converge), STATES and the actions between
+   them (figure.lifecycle), and an ENTITY with its relationships
+   (figure.structure). report-format.md § Figures owns when each
+   is earned; this block owns only how they sit.
+
+   All three share the chain's card and its node boxes, so the
+   kinds keep their meaning: solid ink is changed code, dashed
+   teal is code the diff did not touch. NONE OF THEM HAS AN
+   .ip-rel BETWEEN .ip-n NODES. The impact panel's lane crossing
+   hangs off `.ip-chg + .ip-aff > .ip-rel`, and a converge alternates
+   exactly those kinds — a connector there would fire an elbow
+   into a lane this figure does not have.
+   ============================================================ */
+figure.converge, figure.lifecycle, figure.structure { margin-top: 26px; padding: 20px 24px 22px; background: var(--surface-hi); border: 1px solid var(--rule); }
+figure.converge > figcaption, figure.lifecycle > figcaption, figure.structure > figcaption { margin-top: 14px; }
+
+/* A FIGURE IN THE EXPLANATION IS PART OF THE ARGUMENT, so it is set like prose
+   rather than shown like an exhibit: no card, no fill, no frame, at the prose's
+   measure and with a paragraph's rhythm on both sides. The sentence before it is
+   its caption — it says what the reader is about to see — and the sentence after it
+   says what follows, so a figure here carries no figcaption. The card above stays
+   for a figure in details.cp-ev, where it is evidence and has to say what it shows
+   on its own. The selector is the child combinator on purpose: section.cp > figure
+   is the explanation, and nothing nested reaches it. Every theme's override of the
+   card (a radius, workshop's frame and shadow) is cancelled here too, because a
+   theme that boxed this figure would undo the rule. */
+.cp > figure.chain, .cp > figure.converge, .cp > figure.lifecycle, .cp > figure.structure {
+  margin: 18px 0 22px; padding: 0; background: none; border: 0; border-radius: 0; box-shadow: none; max-width: 76ch;
+}
+figure.converge .ip-n, figure.structure .ip-n { grid-template-columns: minmax(0, 1fr); }
+figure.converge .ip-n > *, figure.structure .ip-n > * { grid-column: 1; }
+
+/* CONVERGE. Paths on the left, the invariant on the right, and between them a bus: each path
+   row draws its own tick out to the right edge and its own slice of the vertical, so the bus
+   is continuous across rows with no geometry a run has to place. The first row's slice starts
+   at its middle and the last row's ends at its middle, which is what makes it read as a
+   bracket rather than a rail. The target is centred on the paths column, so its arrow always
+   lands inside the bracket — given at least two paths, which is the figure's floor anyway. */
+.cv-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: center; }
+.cv-paths { list-style: none; margin: 0; padding: 0; }
+.cv-paths > li { position: relative; padding: 5px 22px 5px 0; }
+.cv-paths > li::after { content: ""; position: absolute; right: 0; top: 50%; width: 22px; height: 1px; background: var(--rule-strong); }
+.cv-paths > li::before { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 1px; background: var(--rule-strong); }
+.cv-paths > li:first-child::before { top: 50%; }
+.cv-paths > li:last-child::before { bottom: 50%; }
+/* What the path skips — a fact about the code, never why it matters. Ochre because it is the
+   page saying something is missing on this path; it is not a severity, and it has no label. */
+.cv-note { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--gap-ink); }
+.cv-target { position: relative; padding-left: 30px; }
+.cv-target::before { content: ""; position: absolute; left: 0; top: 50%; width: 24px; height: 1px; background: var(--rule-strong); }
+.cv-target::after { content: ""; position: absolute; left: 24px; top: 50%; transform: translateY(-50%); border-top: 4px solid transparent; border-bottom: 4px solid transparent; border-left: 6px solid var(--rule-strong); }
+.cv-target > .ip-box { border: 1px solid var(--ink); background: var(--ink); }
+.cv-target > .ip-box b { color: var(--ground); }
+.cv-target > .ip-box .ip-d { color: var(--ground); opacity: .72; }
+
+/* LIFECYCLE. A chain of states rather than of code: each state after the first carries its
+   INCOMING transition as the same .ip-rel connector, named for the domain action, with the
+   line that performs it as a locator inside the connector. A new state is drawn in ink; a
+   state that already existed in the plain step box. A transition back to an earlier state is
+   a line of text, not a curve — the one thing a vertical list cannot draw, said in words. */
+.lc-states { list-style: none; margin: 0; padding: 0; }
+.lc-s > .ip-box { border: 1px solid var(--rule-strong); background: var(--surface-3); }
+.lc-s.lc-new > .ip-box { border-color: var(--ink); background: var(--ground); }
+.lc-states .ip-rel .ip-loc, .st-rel .ip-loc { text-transform: none; letter-spacing: 0; align-self: center; }
+.st-rel .ip-loc { align-self: start; }
+.lc-back { margin-top: 12px; padding-top: 10px; border-top: 1px dotted var(--rule-dash); font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; color: var(--muted); }
+.lc-back .ip-loc { margin-left: 8px; }
+
+/* THE SHIFT — figure.lifecycle.lc-shift, Context's one figure. The same states drawn twice, a
+   BEFORE column and an AFTER column, so that the one state that moved (lc-moved: the request
+   that creates the account, now one step later) is seen moving by alignment rather than read.
+   The pair is one grid and each column is a subgrid over its rows, so state n of one column sits
+   level with state n of the other however long a locator wraps — which is the comparison the
+   figure exists to make. Six tracks: the column label plus the lifecycle's cap of five states;
+   an unused track is auto and collapses to nothing.
+   The moved state is FILLED in ink in both columns, like the outcome a chain ends at, and that
+   is what keeps the shift readable on a phone, where the columns stack and alignment is gone:
+   the filled box is found in each column on its own. Not ochre — nothing is missing — and not a
+   new hue, because "moved" is a fact about the sequence, not a meaning. */
+.lc-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: repeat(6, auto); column-gap: 28px; }
+.lc-row { display: grid; grid-row: 1 / span 6; grid-template-rows: subgrid; align-content: start; min-width: 0; }
+.lc-row > .lc-states { display: contents; }
+.lc-when { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding-bottom: 8px; border-bottom: 1px solid var(--rule); margin-bottom: 4px; }
+.lc-s.lc-moved > .ip-box { border-color: var(--ink); background: var(--ink); }
+.lc-s.lc-moved > .ip-box b { color: var(--ground); }
+.lc-cases { list-style: none; margin: 14px 0 0; padding: 10px 0 0; border-top: 1px dotted var(--rule-dash); font-size: 13.5px; line-height: 1.55; color: var(--ink-2); }
+.lc-cases > li + li { margin-top: 4px; }
+.lc-cases .path { margin-left: 6px; }
+
+/* STRUCTURE. The entity the change is about on top, and a spine down from it with one
+   relationship per row: the relation and its cardinality, then the entity at the other end.
+   Hub and spoke rather than a grid of tables, because the question is what this entity is now
+   attached to — a full schema is the ERD this figure exists to refuse. An ABSENT relationship
+   is drawn where the absence is the point, in ochre, the page's colour for "missing". */
+.st-fields { list-style: none; margin: 2px 0 0; padding: 0; font-family: var(--mono); font-size: 11px; line-height: 1.5; color: var(--muted); }
+.st-fields > li::before { content: "\00B7\00A0"; }
+.st-edges { list-style: none; margin: 0 0 0 11px; padding: 0 0 0 22px; }
+.st-e { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 14px; align-items: center; padding-top: 12px; }
+figure.structure .st-e > * { grid-column: auto; }
+.st-e::before { content: ""; position: absolute; left: -22px; top: 0; bottom: 0; width: 1px; background: var(--rule-strong); }
+.st-e:last-child::before { bottom: auto; height: calc(50% + 6px); }
+.st-e::after { content: ""; position: absolute; left: -22px; top: calc(50% + 6px); width: 18px; height: 1px; background: var(--rule-strong); }
+.st-rel { display: flex; flex-direction: column; gap: 3px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.st-card { font-size: 10px; letter-spacing: .04em; text-transform: none; color: var(--ink-3); }
+.st-none > .st-rel { color: var(--gap-ink); }
+.st-none::after { background: none; border-top: 1px dashed var(--gap-rule); }
+
+@media (max-width: 780px) {
+  figure.converge, figure.lifecycle, figure.structure { padding: 18px 16px 20px; }
+  /* One column: the bracket moves to the left edge and the target sits under it. */
+  .cv-grid { grid-template-columns: minmax(0, 1fr); }
+  .cv-paths > li { padding: 5px 0 5px 22px; }
+  .cv-paths > li::after, .cv-paths > li::before { right: auto; left: 0; }
+  .cv-paths > li:last-child::before { bottom: 0; }
+  .cv-target { padding: 22px 0 0 22px; }
+  .cv-target::before { left: 0; top: 0; width: 1px; height: 16px; }
+  .cv-target::after { left: 0; top: 16px; transform: translateX(-50%); border: 4px solid transparent; border-top: 6px solid var(--rule-strong); border-bottom: 0; }
+  .st-e { grid-template-columns: minmax(0, 1fr); row-gap: 6px; }
+  /* The shift stacks: Before above After, and the filled box carries the comparison alone. */
+  .lc-pair { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; row-gap: 22px; }
+  .lc-row { display: block; grid-row: auto; }
+  .lc-row > .lc-states { display: block; }
+}
+
+/* PRINT. Browsers drop backgrounds when printing, and the filled outcome and target boxes are
+   ground-coloured text on an ink fill — so without this they print as white on white, and the
+   one box that names what the figure is FOR disappears. And a figure split across a page break
+   is two half-figures, neither of which says what it shows. */
+@media print {
+  figure.chain, figure.converge, figure.lifecycle, figure.structure, .ip-card { break-inside: avoid; }
+  .ip-box, .cv-target, .ip-rel > i, .key-out { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
 
 /* ============================================================
    Grid tables. gap:1px over --rule, so every seam is a rule at
@@ -1266,7 +1327,7 @@ figure.chain > figcaption { margin-top: 14px; }
 }
 
 /* ============================================================
-   The evidence foot — section 05, and not a section: no number,
+   The evidence foot — section 06, and not a section: no number,
    no rail entry, shut. It holds the diff inventory, what was
    grepped, and the affected code no checkpoint turns on.
 
@@ -1288,7 +1349,7 @@ details.evidence[open] .chev { transform: rotate(90deg); }
 .evidence .gt { margin-top: 20px; }
 .evidence .eyebrow { margin: 30px 0 14px; }
 /* NOT scoped to .evidence: this list appears twice, once beside the impact panel
-   in section 04 and once in the foot, and the scoped version left the first one
+   in section 05 and once in the foot, and the scoped version left the first one
    unstyled. The teal rule is the third place the page says "not in the diff", and
    it is the same hue as the .ip-aff node the entry is often standing in for. */
 .ev-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
@@ -1303,10 +1364,10 @@ details.evidence[open] .chev { transform: rotate(90deg); }
    leaving a .pending behind is worse than publishing late.
 
    .pending attaches at two granularities: a whole <section>, and a
-   CHECKPOINT, since section 02 is delivered one checkpoint at a
+   CHECKPOINT, since section 03 is delivered one checkpoint at a
    time. The second needs no markup of its own — a checkpoint is
    already its own <section class="cp" id="cp-x">, so the generic
-   pending section IS the checkpoint stub with the question on it,
+   pending section IS the checkpoint stub with its question on it,
    and the rail carries a per-checkpoint marker below.
    ============================================================ */
 .buildstate {
@@ -1334,16 +1395,895 @@ details.evidence[open] .chev { transform: rotate(90deg); }
 .rail-links .pending { font-size: 8.5px; padding: 0 4px; letter-spacing: .08em; }
 
 /* ============================================================
-   Figures. There are two, and neither is a drawing: figure.chain
-   inside a checkpoint and figure.impact in section 04, both built
-   out of the same .ip-* chain. Nothing on this page is an <svg>.
+   Figures. None of them is a drawing: figure.chain, .converge,
+   .lifecycle and .structure inside a checkpoint, figure.impact in
+   section 05, all built out of the same .ip-* boxes. Nothing on
+   this page is an <svg>.
    ============================================================ */
 figure { margin: 0; }
 figcaption { font-size: 14px; line-height: 1.6; color: var(--muted); margin-top: 10px; max-width: 70ch; }
 figcaption strong { color: var(--ink-3); }
 
+/* ============================================================
+   The appearance menu. Built by the tail script into the masthead's
+   first line, never typed by a run: a reader's control over how
+   the page looks — which theme, and light, dark or the system's
+   choice. It changes no content, and it is not a badge: it names
+   the three looks because it offers them, the way a font menu names
+   fonts. Hidden in print, absent without JavaScript.
+
+   The swatches are the one place colour literals sit outside a
+   theme file, and deliberately: each previews ONE theme and must
+   look the same whichever theme is active and in either mode, so a
+   token — which changes with both — is exactly the wrong tool.
+   ============================================================ */
+.rc { margin-left: auto; position: relative; text-transform: none; letter-spacing: 0; }
+.rc-btn { display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px; font-family: var(--body); font-size: 13px; line-height: 1; color: var(--ink); background: var(--surface-hi); border: 1px solid var(--rule-strong); border-radius: var(--r); cursor: pointer; }
+.rc-btn b { font-weight: 700; }
+.rc-btn .rc-i { color: var(--ink-3); font-size: 12px; }
+.rc-btn:hover { background: var(--surface-2); }
+.rc-pop { position: absolute; right: 0; top: calc(100% + 8px); z-index: 90; width: 260px; max-width: calc(100vw - 32px); padding: 12px; display: none; flex-direction: column; gap: 10px; background: var(--surface-hi); border: 1px solid var(--rule-strong); border-radius: var(--r); box-shadow: 0 12px 32px rgba(0,0,0,.16); }
+.rc.rc-on .rc-pop { display: flex; }
+.rc-h { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+.rc-styles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.rc-styles button { display: flex; flex-direction: column; gap: 6px; padding: 6px; font-family: var(--body); font-size: 12px; line-height: 1.2; text-align: left; color: var(--ink-3); background: none; border: 1px solid var(--rule); border-radius: var(--r); cursor: pointer; }
+.rc-styles button:hover { border-color: var(--ink-3); color: var(--ink); }
+.rc-styles button.on { border: 2px solid var(--ink); padding: 5px; color: var(--ink); font-weight: 600; }
+.rc-sw { display: block; height: 30px; }
+.rc-sw[data-sw="daylight"] { background: linear-gradient(135deg, #f7f8fa 50%, #3b6ef5 50%); border-radius: 5px; box-shadow: inset 0 0 0 1px #d3d9e2; }
+.rc-sw[data-sw="workshop"] { background: linear-gradient(135deg, #fdfdfb 50%, oklch(0.91 0.15 95) 50%); box-shadow: inset 0 0 0 1.5px #0a0a0a; }
+.rc-sw[data-sw="field-notes"] { background: linear-gradient(135deg, #f5efe0 50%, oklch(0.84 0.09 340) 50%); border-radius: 3px; box-shadow: inset 0 0 0 1px #cfc3a6; }
+.rc-seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--rule-strong); border-radius: var(--r); overflow: hidden; }
+.rc-seg button { padding: 8px 0; font-family: var(--body); font-size: 12px; line-height: 1; color: var(--ink-3); background: none; border: 0; cursor: pointer; }
+.rc-seg button + button { border-left: 1px solid var(--rule); }
+.rc-seg button:hover { color: var(--ink); background: var(--surface-2); }
+.rc-seg button[aria-pressed="true"] { background: var(--ink); color: var(--ground); }
+@media print { .rc { display: none; } }
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
+
+<!--
+  THE THEMES. The next line is replaced by every file in references/themes/:
+  each a font link and one style block holding its tokens and its overrides.
+  They sit AFTER the base styles because an override has to win the cascade,
+  and tokens resolve wherever they are declared. ONE is active — the
+  repository's choice: --theme, else ACCOUNTABLE_REVIEW_THEME, else
+  review_map.theme in its .accountable-review.yml, else daylight — and the
+  others arrive with media="not all", which keeps their bytes on the page and
+  their rules off it. The appearance menu switches the attribute, so a reader
+  can change the look without a second file. A theme file must keep every rule
+  above: each colour on bare :root and in both dark blocks, the five families
+  meaning what this file says they mean, and no hue, glyph or label treatment
+  that reads as a grade. A theme changes how the page looks, never what is on it.
+-->
+<!-- Theme · Daylight. Emitted into the page by page-skeleton.sh in place of the template's
+     theme marker line; never read by a run, never typed. Fonts, tokens in all three theme
+     states, then the overrides that give the direction its shape. Every page carries all
+     three; the ones not chosen arrive switched off (media="not all") and the appearance menu
+     switches them. data-style names this file, data-style-label is what the menu calls it.
+     The rules every theme keeps are written beside that line in page-template.html. -->
+<link rel="stylesheet" data-style="daylight" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style data-style="daylight" data-style-label="Daylight">
+/* Tokens · Daylight direction. Same five ramps and the same rule about what each
+   may mean (nav = clickable, gap = stated absence, unchanged = not in the diff,
+   prov = how it is known, primer = the framework's own frame); only hue, ramp
+   lightness and the neutrals change. Declared in all three theme states. */
+:root {
+  --display: 'Instrument Sans', system-ui, sans-serif;
+  --body: 'Instrument Sans', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --r: 12px;
+  --r-sm: 5px;
+  --r-tag: 999px;
+  --r-box: 10px;
+  --ground: #f7f8fa;
+  --surface: #fbfbfc;
+  --surface-hi: #ffffff;
+  --surface-2: #f0f2f5;
+  --surface-3: #fafbfc;
+  --chip: #eceff3;
+  --ink: #161a22;
+  --ink-2: #232833;
+  --ink-3: #3a404c;
+  --muted: #6a7180;
+  --faint: #858b97;
+  --fainter: #a6abb5;
+  --on-ink: #f7f8fa;
+  --on-ink-code: #d5d9e0;
+  --rule: #e3e6ec;
+  --rule-soft: #eceef2;
+  --rule-strong: #c9ced8;
+  --rule-dash: #b3b9c4;
+  --rule-card: #d6dae2;
+  --ex-add: oklch(0.96 0.04 150);
+  --add-sig: oklch(0.45 0.12 150);
+  --ex-del: oklch(0.96 0.03 25);
+  --del-sig: oklch(0.50 0.15 25);
+  --syn-key: oklch(0.45 0.13 330);
+  --syn-str: oklch(0.46 0.10 150);
+  --syn-com: oklch(0.62 0.02 260);
+  --syn-name: oklch(0.47 0.12 262);
+  --syn-num: oklch(0.52 0.11 55);
+  --nav-bg: oklch(0.975 0.018 262);
+  --nav-bg-2: oklch(0.955 0.035 262);
+  --nav-rule: oklch(0.885 0.055 262);
+  --nav-rule-2: oklch(0.78 0.08 262);
+  --nav-ink: oklch(0.47 0.13 262);
+  --nav-ink-hi: oklch(0.38 0.14 262);
+  --gap-bg: oklch(0.975 0.018 70);
+  --gap-bg-2: oklch(0.955 0.035 70);
+  --gap-rule: oklch(0.885 0.055 70);
+  --gap-rule-2: oklch(0.78 0.08 70);
+  --gap-ink: oklch(0.47 0.13 70);
+  --gap-ink-hi: oklch(0.38 0.14 70);
+  --unchanged-bg: oklch(0.975 0.018 195);
+  --unchanged-bg-2: oklch(0.955 0.035 195);
+  --unchanged-rule: oklch(0.885 0.055 195);
+  --unchanged-rule-2: oklch(0.78 0.08 195);
+  --unchanged-ink: oklch(0.47 0.13 195);
+  --unchanged-ink-hi: oklch(0.38 0.14 195);
+  --prov-bg: oklch(0.975 0.018 330);
+  --prov-bg-2: oklch(0.955 0.035 330);
+  --prov-rule: oklch(0.885 0.055 330);
+  --prov-rule-2: oklch(0.78 0.08 330);
+  --prov-ink: oklch(0.47 0.13 330);
+  --prov-ink-hi: oklch(0.38 0.14 330);
+  --primer-bg: oklch(0.975 0.018 25);
+  --primer-bg-2: oklch(0.955 0.035 25);
+  --primer-rule: oklch(0.885 0.055 25);
+  --primer-rule-2: oklch(0.78 0.08 25);
+  --primer-ink: oklch(0.47 0.13 25);
+  --primer-ink-hi: oklch(0.38 0.14 25);
+  --primer-rust-bg: oklch(0.975 0.004 60);
+  --primer-rust-bg-2: oklch(0.955 0.007 60);
+  --primer-rust-rule: oklch(0.885 0.012 60);
+  --primer-rust-rule-2: oklch(0.36 0.018 60);
+  --primer-rust-ink: oklch(0.47 0.022 60);
+  --primer-rust-ink-hi: oklch(0.38 0.022 60);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  --ground: #0f1217;
+  --surface: #13171d;
+  --surface-hi: #161a21;
+  --surface-2: #1b2029;
+  --surface-3: #12161c;
+  --chip: #222833;
+  --ink: #e8ebf0;
+  --ink-2: #d2d7df;
+  --ink-3: #b9c0cc;
+  --muted: #8f98a7;
+  --faint: #79828f;
+  --fainter: #5c6472;
+  --on-ink: #0f1217;
+  --on-ink-code: #3a404c;
+  --rule: #262c36;
+  --rule-soft: #1f242d;
+  --rule-strong: #363d49;
+  --rule-dash: #475060;
+  --rule-card: #2c333e;
+  --ex-add: oklch(0.26 0.05 150);
+  --add-sig: oklch(0.80 0.12 150);
+  --ex-del: oklch(0.26 0.05 25);
+  --del-sig: oklch(0.80 0.11 25);
+  --syn-key: oklch(0.80 0.11 330);
+  --syn-str: oklch(0.80 0.10 150);
+  --syn-com: oklch(0.62 0.02 260);
+  --syn-name: oklch(0.80 0.09 262);
+  --syn-num: oklch(0.80 0.10 55);
+  --nav-bg: oklch(0.23 0.035 262);
+  --nav-bg-2: oklch(0.27 0.05 262);
+  --nav-rule: oklch(0.4 0.07 262);
+  --nav-rule-2: oklch(0.52 0.09 262);
+  --nav-ink: oklch(0.82 0.1 262);
+  --nav-ink-hi: oklch(0.88 0.08 262);
+  --gap-bg: oklch(0.23 0.035 70);
+  --gap-bg-2: oklch(0.27 0.05 70);
+  --gap-rule: oklch(0.4 0.07 70);
+  --gap-rule-2: oklch(0.52 0.09 70);
+  --gap-ink: oklch(0.82 0.1 70);
+  --gap-ink-hi: oklch(0.88 0.08 70);
+  --unchanged-bg: oklch(0.23 0.035 195);
+  --unchanged-bg-2: oklch(0.27 0.05 195);
+  --unchanged-rule: oklch(0.4 0.07 195);
+  --unchanged-rule-2: oklch(0.52 0.09 195);
+  --unchanged-ink: oklch(0.82 0.1 195);
+  --unchanged-ink-hi: oklch(0.88 0.08 195);
+  --prov-bg: oklch(0.23 0.035 330);
+  --prov-bg-2: oklch(0.27 0.05 330);
+  --prov-rule: oklch(0.4 0.07 330);
+  --prov-rule-2: oklch(0.52 0.09 330);
+  --prov-ink: oklch(0.82 0.1 330);
+  --prov-ink-hi: oklch(0.88 0.08 330);
+  --primer-bg: oklch(0.23 0.035 25);
+  --primer-bg-2: oklch(0.27 0.05 25);
+  --primer-rule: oklch(0.4 0.07 25);
+  --primer-rule-2: oklch(0.52 0.09 25);
+  --primer-ink: oklch(0.82 0.1 25);
+  --primer-ink-hi: oklch(0.88 0.08 25);
+  --primer-rust-bg: oklch(0.23 0.006 60);
+  --primer-rust-bg-2: oklch(0.27 0.008 60);
+  --primer-rust-rule: oklch(0.4 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.82 0.014 60);
+  --primer-rust-ink-hi: oklch(0.88 0.012 60);
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0f1217;
+  --surface: #13171d;
+  --surface-hi: #161a21;
+  --surface-2: #1b2029;
+  --surface-3: #12161c;
+  --chip: #222833;
+  --ink: #e8ebf0;
+  --ink-2: #d2d7df;
+  --ink-3: #b9c0cc;
+  --muted: #8f98a7;
+  --faint: #79828f;
+  --fainter: #5c6472;
+  --on-ink: #0f1217;
+  --on-ink-code: #3a404c;
+  --rule: #262c36;
+  --rule-soft: #1f242d;
+  --rule-strong: #363d49;
+  --rule-dash: #475060;
+  --rule-card: #2c333e;
+  --ex-add: oklch(0.26 0.05 150);
+  --add-sig: oklch(0.80 0.12 150);
+  --ex-del: oklch(0.26 0.05 25);
+  --del-sig: oklch(0.80 0.11 25);
+  --syn-key: oklch(0.80 0.11 330);
+  --syn-str: oklch(0.80 0.10 150);
+  --syn-com: oklch(0.62 0.02 260);
+  --syn-name: oklch(0.80 0.09 262);
+  --syn-num: oklch(0.80 0.10 55);
+  --nav-bg: oklch(0.23 0.035 262);
+  --nav-bg-2: oklch(0.27 0.05 262);
+  --nav-rule: oklch(0.4 0.07 262);
+  --nav-rule-2: oklch(0.52 0.09 262);
+  --nav-ink: oklch(0.82 0.1 262);
+  --nav-ink-hi: oklch(0.88 0.08 262);
+  --gap-bg: oklch(0.23 0.035 70);
+  --gap-bg-2: oklch(0.27 0.05 70);
+  --gap-rule: oklch(0.4 0.07 70);
+  --gap-rule-2: oklch(0.52 0.09 70);
+  --gap-ink: oklch(0.82 0.1 70);
+  --gap-ink-hi: oklch(0.88 0.08 70);
+  --unchanged-bg: oklch(0.23 0.035 195);
+  --unchanged-bg-2: oklch(0.27 0.05 195);
+  --unchanged-rule: oklch(0.4 0.07 195);
+  --unchanged-rule-2: oklch(0.52 0.09 195);
+  --unchanged-ink: oklch(0.82 0.1 195);
+  --unchanged-ink-hi: oklch(0.88 0.08 195);
+  --prov-bg: oklch(0.23 0.035 330);
+  --prov-bg-2: oklch(0.27 0.05 330);
+  --prov-rule: oklch(0.4 0.07 330);
+  --prov-rule-2: oklch(0.52 0.09 330);
+  --prov-ink: oklch(0.82 0.1 330);
+  --prov-ink-hi: oklch(0.88 0.08 330);
+  --primer-bg: oklch(0.23 0.035 25);
+  --primer-bg-2: oklch(0.27 0.05 25);
+  --primer-rule: oklch(0.4 0.07 25);
+  --primer-rule-2: oklch(0.52 0.09 25);
+  --primer-ink: oklch(0.82 0.1 25);
+  --primer-ink-hi: oklch(0.88 0.08 25);
+  --primer-rust-bg: oklch(0.23 0.006 60);
+  --primer-rust-bg-2: oklch(0.27 0.008 60);
+  --primer-rust-rule: oklch(0.4 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.82 0.014 60);
+  --primer-rust-ink-hi: oklch(0.88 0.012 60);
+}
+
+/* ---- Daylight overrides ---- */
+.tier,.tag,.pending{border-radius:var(--r-tag)}
+code{border-radius:var(--r-sm)}
+.open,details.searched,details.excerpt,.ip-card,figure.chain,.gt,pre.probe,.buildstate,.primer{border-radius:var(--r)}
+.ip-box{border-radius:var(--r-box)}
+.key-chg,.key-aff,.key-out{border-radius:3px}
+
+h1,h2,h3,h4{font-weight:600;letter-spacing:-0.022em;font-variation-settings:normal}
+h1{letter-spacing:-0.032em;max-width:20ch}
+.rail-id .tick{font-weight:600;letter-spacing:-0.01em}
+.tier,.tag{font-family:var(--body);font-size:11.5px;font-weight:500;letter-spacing:0;text-transform:none;padding:2px 10px;border-color:transparent;vertical-align:1px}
+.open{border:1px solid var(--gap-rule)}
+.open>b{font-family:var(--body);font-weight:600;font-size:12.5px;letter-spacing:0}
+.gap>b{font-family:var(--body);font-weight:600;font-size:11.5px;letter-spacing:0}
+details.searched>summary,details.evidence>summary{font-weight:500}
+</style>
+<!-- Theme · Workshop. Emitted into the page by page-skeleton.sh in place of the template's
+     theme marker line; never read by a run, never typed. Fonts, tokens in all three theme
+     states, then the overrides that give the direction its shape. Every page carries all
+     three; the ones not chosen arrive switched off (media="not all") and the appearance menu
+     switches them. data-style names this file, data-style-label is what the menu calls it.
+     The rules every theme keeps are written beside that line in page-template.html. -->
+<link rel="stylesheet" data-style="workshop" media="not all" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" data-style="workshop" media="not all" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style data-style="workshop" media="not all" data-style-label="Workshop">
+/* Tokens · Workshop direction. Same five ramps and the same rule about what each
+   may mean (nav = clickable, gap = stated absence, unchanged = not in the diff,
+   prov = how it is known, primer = the framework's own frame); only hue, ramp
+   lightness and the neutrals change. Declared in all three theme states. */
+:root {
+  --display: 'Geist', system-ui, sans-serif;
+  --body: 'Geist', system-ui, sans-serif;
+  --mono: 'Geist Mono', ui-monospace, Menlo, monospace;
+  --r: 12px;
+  --r-sm: 4px;
+  --r-tag: 6px;
+  --r-box: 8px;
+  --ground: #fafafa;
+  --surface: #fcfcfc;
+  --surface-hi: #ffffff;
+  --surface-2: #f4f4f4;
+  --surface-3: #fbfbfb;
+  --chip: #f0f0f0;
+  --ink: #0a0a0a;
+  --ink-2: #1f1f1f;
+  --ink-3: #404040;
+  --muted: #666666;
+  --faint: #808080;
+  --fainter: #a3a3a3;
+  --on-ink: #fafafa;
+  --on-ink-code: #d4d4d4;
+  --rule: #e6e6e6;
+  --rule-soft: #efefef;
+  --rule-strong: #cfcfcf;
+  --rule-dash: #b5b5b5;
+  --rule-card: #dcdcdc;
+  --badge: oklch(0.80 0.14 75);
+  --ex-add: oklch(0.97 0.035 150);
+  --add-sig: oklch(0.46 0.13 150);
+  --ex-del: oklch(0.97 0.025 25);
+  --del-sig: oklch(0.50 0.16 25);
+  --syn-key: oklch(0.47 0.15 300);
+  --syn-str: oklch(0.47 0.11 150);
+  --syn-com: oklch(0.62 0 0);
+  --syn-name: oklch(0.50 0.15 255);
+  --syn-num: oklch(0.53 0.13 55);
+  --nav-bg: oklch(0.98 0.015 255);
+  --nav-bg-2: oklch(0.97 0.03 255);
+  --nav-rule: oklch(0.89 0.06 255);
+  --nav-rule-2: oklch(0.78 0.1 255);
+  --nav-ink: oklch(0.48 0.15 255);
+  --nav-ink-hi: oklch(0.4 0.17 255);
+  --gap-bg: oklch(0.98 0.015 75);
+  --gap-bg-2: oklch(0.97 0.03 75);
+  --gap-rule: oklch(0.89 0.06 75);
+  --gap-rule-2: oklch(0.78 0.1 75);
+  --gap-ink: oklch(0.48 0.15 75);
+  --gap-ink-hi: oklch(0.4 0.17 75);
+  --unchanged-bg: oklch(0.98 0.015 190);
+  --unchanged-bg-2: oklch(0.97 0.03 190);
+  --unchanged-rule: oklch(0.89 0.06 190);
+  --unchanged-rule-2: oklch(0.78 0.1 190);
+  --unchanged-ink: oklch(0.48 0.15 190);
+  --unchanged-ink-hi: oklch(0.4 0.17 190);
+  --prov-bg: oklch(0.98 0.015 300);
+  --prov-bg-2: oklch(0.97 0.03 300);
+  --prov-rule: oklch(0.89 0.06 300);
+  --prov-rule-2: oklch(0.78 0.1 300);
+  --prov-ink: oklch(0.48 0.15 300);
+  --prov-ink-hi: oklch(0.4 0.17 300);
+  --primer-bg: oklch(0.98 0.015 25);
+  --primer-bg-2: oklch(0.97 0.03 25);
+  --primer-rule: oklch(0.89 0.06 25);
+  --primer-rule-2: oklch(0.78 0.1 25);
+  --primer-ink: oklch(0.48 0.15 25);
+  --primer-ink-hi: oklch(0.4 0.17 25);
+  --primer-rust-bg: oklch(0.98 0.004 60);
+  --primer-rust-bg-2: oklch(0.97 0.007 60);
+  --primer-rust-rule: oklch(0.89 0.012 60);
+  --primer-rust-rule-2: oklch(0.36 0.018 60);
+  --primer-rust-ink: oklch(0.48 0.022 60);
+  --primer-rust-ink-hi: oklch(0.4 0.022 60);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  --ground: #0a0a0a;
+  --surface: #0e0e0e;
+  --surface-hi: #111111;
+  --surface-2: #171717;
+  --surface-3: #0d0d0d;
+  --chip: #1c1c1c;
+  --ink: #ededed;
+  --ink-2: #d4d4d4;
+  --ink-3: #a8a8a8;
+  --muted: #8f8f8f;
+  --faint: #777777;
+  --fainter: #5a5a5a;
+  --on-ink: #0a0a0a;
+  --on-ink-code: #404040;
+  --rule: #262626;
+  --rule-soft: #1c1c1c;
+  --rule-strong: #3a3a3a;
+  --rule-dash: #4a4a4a;
+  --rule-card: #2e2e2e;
+  --badge: oklch(0.80 0.14 75);
+  --ex-add: oklch(0.25 0.06 150);
+  --add-sig: oklch(0.84 0.12 150);
+  --ex-del: oklch(0.25 0.06 25);
+  --del-sig: oklch(0.82 0.11 25);
+  --syn-key: oklch(0.80 0.12 300);
+  --syn-str: oklch(0.82 0.11 150);
+  --syn-com: oklch(0.60 0 0);
+  --syn-name: oklch(0.80 0.10 255);
+  --syn-num: oklch(0.82 0.11 60);
+  --nav-bg: oklch(0.22 0.03 255);
+  --nav-bg-2: oklch(0.24 0.045 255);
+  --nav-rule: oklch(0.38 0.07 255);
+  --nav-rule-2: oklch(0.52 0.1 255);
+  --nav-ink: oklch(0.83 0.11 255);
+  --nav-ink-hi: oklch(0.9 0.08 255);
+  --gap-bg: oklch(0.22 0.03 75);
+  --gap-bg-2: oklch(0.24 0.045 75);
+  --gap-rule: oklch(0.38 0.07 75);
+  --gap-rule-2: oklch(0.52 0.1 75);
+  --gap-ink: oklch(0.83 0.11 75);
+  --gap-ink-hi: oklch(0.9 0.08 75);
+  --unchanged-bg: oklch(0.22 0.03 190);
+  --unchanged-bg-2: oklch(0.24 0.045 190);
+  --unchanged-rule: oklch(0.38 0.07 190);
+  --unchanged-rule-2: oklch(0.52 0.1 190);
+  --unchanged-ink: oklch(0.83 0.11 190);
+  --unchanged-ink-hi: oklch(0.9 0.08 190);
+  --prov-bg: oklch(0.22 0.03 300);
+  --prov-bg-2: oklch(0.24 0.045 300);
+  --prov-rule: oklch(0.38 0.07 300);
+  --prov-rule-2: oklch(0.52 0.1 300);
+  --prov-ink: oklch(0.83 0.11 300);
+  --prov-ink-hi: oklch(0.9 0.08 300);
+  --primer-bg: oklch(0.22 0.03 25);
+  --primer-bg-2: oklch(0.24 0.045 25);
+  --primer-rule: oklch(0.38 0.07 25);
+  --primer-rule-2: oklch(0.52 0.1 25);
+  --primer-ink: oklch(0.83 0.11 25);
+  --primer-ink-hi: oklch(0.9 0.08 25);
+  --primer-rust-bg: oklch(0.22 0.006 60);
+  --primer-rust-bg-2: oklch(0.24 0.008 60);
+  --primer-rust-rule: oklch(0.38 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.83 0.014 60);
+  --primer-rust-ink-hi: oklch(0.9 0.012 60);
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0a0a0a;
+  --surface: #0e0e0e;
+  --surface-hi: #111111;
+  --surface-2: #171717;
+  --surface-3: #0d0d0d;
+  --chip: #1c1c1c;
+  --ink: #ededed;
+  --ink-2: #d4d4d4;
+  --ink-3: #a8a8a8;
+  --muted: #8f8f8f;
+  --faint: #777777;
+  --fainter: #5a5a5a;
+  --on-ink: #0a0a0a;
+  --on-ink-code: #404040;
+  --rule: #262626;
+  --rule-soft: #1c1c1c;
+  --rule-strong: #3a3a3a;
+  --rule-dash: #4a4a4a;
+  --rule-card: #2e2e2e;
+  --badge: oklch(0.80 0.14 75);
+  --ex-add: oklch(0.25 0.06 150);
+  --add-sig: oklch(0.84 0.12 150);
+  --ex-del: oklch(0.25 0.06 25);
+  --del-sig: oklch(0.82 0.11 25);
+  --syn-key: oklch(0.80 0.12 300);
+  --syn-str: oklch(0.82 0.11 150);
+  --syn-com: oklch(0.60 0 0);
+  --syn-name: oklch(0.80 0.10 255);
+  --syn-num: oklch(0.82 0.11 60);
+  --nav-bg: oklch(0.22 0.03 255);
+  --nav-bg-2: oklch(0.24 0.045 255);
+  --nav-rule: oklch(0.38 0.07 255);
+  --nav-rule-2: oklch(0.52 0.1 255);
+  --nav-ink: oklch(0.83 0.11 255);
+  --nav-ink-hi: oklch(0.9 0.08 255);
+  --gap-bg: oklch(0.22 0.03 75);
+  --gap-bg-2: oklch(0.24 0.045 75);
+  --gap-rule: oklch(0.38 0.07 75);
+  --gap-rule-2: oklch(0.52 0.1 75);
+  --gap-ink: oklch(0.83 0.11 75);
+  --gap-ink-hi: oklch(0.9 0.08 75);
+  --unchanged-bg: oklch(0.22 0.03 190);
+  --unchanged-bg-2: oklch(0.24 0.045 190);
+  --unchanged-rule: oklch(0.38 0.07 190);
+  --unchanged-rule-2: oklch(0.52 0.1 190);
+  --unchanged-ink: oklch(0.83 0.11 190);
+  --unchanged-ink-hi: oklch(0.9 0.08 190);
+  --prov-bg: oklch(0.22 0.03 300);
+  --prov-bg-2: oklch(0.24 0.045 300);
+  --prov-rule: oklch(0.38 0.07 300);
+  --prov-rule-2: oklch(0.52 0.1 300);
+  --prov-ink: oklch(0.83 0.11 300);
+  --prov-ink-hi: oklch(0.9 0.08 300);
+  --primer-bg: oklch(0.22 0.03 25);
+  --primer-bg-2: oklch(0.24 0.045 25);
+  --primer-rule: oklch(0.38 0.07 25);
+  --primer-rule-2: oklch(0.52 0.1 25);
+  --primer-ink: oklch(0.83 0.11 25);
+  --primer-ink-hi: oklch(0.9 0.08 25);
+  --primer-rust-bg: oklch(0.22 0.006 60);
+  --primer-rust-bg-2: oklch(0.24 0.008 60);
+  --primer-rust-rule: oklch(0.38 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.83 0.014 60);
+  --primer-rust-ink-hi: oklch(0.9 0.012 60);
+}
+
+/* ---- Workshop overrides ---- */
+.tier,.tag,.pending{border-radius:var(--r-tag)}
+code{border-radius:var(--r-sm)}
+.open,details.searched,details.excerpt,.ip-card,figure.chain,.gt,pre.probe,.buildstate,.primer{border-radius:var(--r)}
+.ip-box{border-radius:var(--r-box)}
+.key-chg,.key-aff,.key-out{border-radius:3px}
+
+h1,h2,h3,h4{font-weight:600;letter-spacing:-0.03em;font-variation-settings:normal}
+h1{letter-spacing:-0.045em;line-height:1.02}
+.rail-id .tick{font-weight:600;letter-spacing:-0.02em}
+.tier,.tag{font-size:10.5px;letter-spacing:0;text-transform:none;border-color:transparent;padding:2px 8px}
+.open{position:relative;margin:40px 0 32px 16px;border:1px solid var(--gap-rule);padding:16px 18px 16px 28px}
+.open::before{content:"?";position:absolute;left:-16px;top:-14px;width:32px;height:32px;box-sizing:border-box;border-radius:50%;background:var(--badge);border:3px solid var(--ground);display:flex;align-items:center;justify-content:center;font:700 15px/1 var(--body);color:#0a0a0a}
+.open>b{font-family:var(--body);font-weight:600;font-size:13.5px;letter-spacing:0}
+details.searched>summary,details.evidence>summary{font-weight:500}
+
+/* ---- Highlighter accents. Tints for the two labelled tiers and the excerpt tag, never a grade ---- */
+:root{--hl-yellow:oklch(0.91 0.15 95);--hl-sky:oklch(0.91 0.08 205);--hl-pink:oklch(0.91 0.07 340);--hl-lime:oklch(0.92 0.13 130);--hl-ink:#0a0a0a;--hl-soft:oklch(0.95 0.08 95);--badge:oklch(0.88 0.16 95);--nav-ink:oklch(0.50 0.20 265);--nav-ink-hi:oklch(0.42 0.21 265);--nav-rule-2:oklch(0.80 0.10 265);--unchanged-bg:oklch(0.96 0.035 205);--unchanged-rule-2:oklch(0.62 0.09 205);--gap-bg-2:oklch(0.97 0.05 95);--gap-rule:oklch(0.86 0.12 95);--prov-ink:oklch(0.48 0.15 340);--prov-bg:oklch(0.975 0.02 340);--prov-rule:oklch(0.88 0.06 340);--prov-rule-2:oklch(0.75 0.10 340);--primer-ink:oklch(0.50 0.17 25);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hl-yellow:oklch(0.88 0.16 95);--hl-sky:oklch(0.84 0.09 205);--hl-pink:oklch(0.84 0.09 340);--hl-lime:oklch(0.88 0.15 130);--hl-ink:#0a0a0a;--hl-soft:oklch(0.40 0.08 95);--badge:oklch(0.88 0.16 95);--nav-ink:oklch(0.80 0.13 265);--nav-ink-hi:oklch(0.88 0.09 265);--nav-rule-2:oklch(0.45 0.10 265);--unchanged-bg:oklch(0.22 0.04 205);--unchanged-rule-2:oklch(0.60 0.09 205);--gap-bg-2:oklch(0.24 0.05 95);--gap-rule:oklch(0.55 0.12 95);--prov-ink:oklch(0.84 0.09 340);--prov-bg:oklch(0.21 0.03 340);--prov-rule:oklch(0.38 0.06 340);--prov-rule-2:oklch(0.55 0.09 340);}}
+:root[data-theme="dark"]{--hl-yellow:oklch(0.88 0.16 95);--hl-sky:oklch(0.84 0.09 205);--hl-pink:oklch(0.84 0.09 340);--hl-lime:oklch(0.88 0.15 130);--hl-ink:#0a0a0a;--hl-soft:oklch(0.40 0.08 95);--badge:oklch(0.88 0.16 95);--nav-ink:oklch(0.80 0.13 265);--nav-ink-hi:oklch(0.88 0.09 265);--nav-rule-2:oklch(0.45 0.10 265);--unchanged-bg:oklch(0.22 0.04 205);--unchanged-rule-2:oklch(0.60 0.09 205);--gap-bg-2:oklch(0.24 0.05 95);--gap-rule:oklch(0.55 0.12 95);--prov-ink:oklch(0.84 0.09 340);--prov-bg:oklch(0.21 0.03 340);--prov-rule:oklch(0.38 0.06 340);--prov-rule-2:oklch(0.55 0.09 340);}
+
+.tier{background:var(--chip);color:var(--ink-2)}
+.tier-unc{background:var(--hl-sky);color:var(--hl-ink)}
+.tier-inf{background:var(--hl-yellow);color:var(--hl-ink)}
+.tag{background:var(--hl-pink);color:var(--hl-ink);border-color:transparent}
+.ip-aff>.ip-box{border-color:var(--unchanged-rule-2)}
+main section > p strong{background:linear-gradient(transparent 58%,var(--hl-soft) 58%)}
+::selection{background:var(--hl-yellow);color:var(--hl-ink)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tier-unc,:root:not([data-theme="light"]) .tier-inf,:root:not([data-theme="light"]) .tag{background:transparent;border:1px solid currentColor}
+:root:not([data-theme="light"]) .tier-unc{color:var(--hl-sky)}:root:not([data-theme="light"]) .tier-inf{color:var(--hl-yellow)}:root:not([data-theme="light"]) .tag{color:var(--hl-pink)}}
+:root[data-theme="dark"] .tier-unc,:root[data-theme="dark"] .tier-inf,:root[data-theme="dark"] .tag{background:transparent;border:1px solid currentColor}
+:root[data-theme="dark"] .tier-unc{color:var(--hl-sky)}:root[data-theme="dark"] .tier-inf{color:var(--hl-yellow)}:root[data-theme="dark"] .tag{color:var(--hl-pink)}
+
+/* ---- Square frames and hard shadows: what reads Workshop apart from Daylight ---- */
+:root{--display:'Bricolage Grotesque', 'Geist', sans-serif;--r:0px;--r-box:0px;--r-tag:0px;--r-sm:2px;--frame:#0a0a0a;--shadow:#0a0a0a;--ground:#fdfdfb;--surface:#fdfdfb;--surface-3:#fbfbf8;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--frame:#3d3d3d;--shadow:#3d3d3d;}}
+:root[data-theme="dark"]{--frame:#3d3d3d;--shadow:#3d3d3d;}
+
+h1,h2,h3,h4{font-family:var(--display);font-weight:800;letter-spacing:-0.03em;font-variation-settings:normal}
+h1{letter-spacing:-0.04em;line-height:1}
+.rail-id .tick{font-family:var(--display);font-weight:800}
+.rail{border-right:2px solid var(--frame)}
+.eyebrow > i{height:2px;background:var(--frame)}
+.lbl-a{background:var(--hl-yellow);color:var(--hl-ink);padding:3px 7px}
+.cp + .cp{border-top:2px dashed var(--rule-strong)}
+.ip-card,figure.chain{border:2px solid var(--frame);box-shadow:5px 5px 0 var(--shadow)}
+details.excerpt,details.searched,.gt,.primer{border:2px solid var(--frame)}
+.gt{background:var(--frame)}
+.open{border:2px solid var(--frame);box-shadow:4px 4px 0 var(--shadow)}
+.open::before{border-radius:0;border:2px solid var(--frame);width:30px;height:30px}
+.tier,.tag{border:1.5px solid var(--frame)}
+.ip-box{border-width:2px !important}
+
+/* ---- The appearance menu, framed like everything else here ---- */
+.rc-btn{border:2px solid var(--frame);box-shadow:3px 3px 0 var(--shadow);font-weight:600}
+.rc-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shadow)}
+.rc-pop{border:2px solid var(--frame);box-shadow:5px 5px 0 var(--shadow)}
+.rc-h{display:inline-block;align-self:flex-start;background:var(--hl-yellow);color:var(--hl-ink);padding:3px 6px;font-weight:600}
+.rc-styles button.on{border-color:var(--frame)}
+.rc-seg{border:2px solid var(--frame)}
+.rc-seg button[aria-pressed="true"]{background:var(--hl-yellow);color:var(--hl-ink);font-weight:600}
+</style>
+<!-- Theme · Field Notes. Emitted into the page by page-skeleton.sh in place of the template's
+     theme marker line; never read by a run, never typed. Fonts, tokens in all three theme
+     states, then the overrides that give the direction its shape. Every page carries all
+     three; the ones not chosen arrive switched off (media="not all") and the appearance menu
+     switches them. data-style names this file, data-style-label is what the menu calls it.
+     The rules every theme keeps are written beside that line in page-template.html. -->
+<link rel="stylesheet" data-style="field-notes" media="not all" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&family=Fira+Code:wght@400;500;600&family=Kalam:wght@400;700&display=swap">
+<style data-style="field-notes" media="not all" data-style-label="Field Notes">
+/* Tokens · Field Notes direction. Same five ramps and the same rule about what each
+   may mean (nav = clickable, gap = stated absence, unchanged = not in the diff,
+   prov = how it is known, primer = the framework's own frame); only hue, ramp
+   lightness and the neutrals change. Declared in all three theme states. */
+:root {
+  --display: 'Young Serif', Georgia, serif;
+  --body: 'Nunito Sans', system-ui, sans-serif;
+  --mono: 'Fira Code', ui-monospace, Menlo, monospace;
+  --hand: 'Kalam', cursive;
+  --r: 6px;
+  --r-sm: 4px;
+  --r-tag: 0;
+  --r-box: 16px;
+  --ground: #fbf8f1;
+  --surface: #fcfaf4;
+  --surface-hi: #fffdf8;
+  --surface-2: #f4eee2;
+  --surface-3: #fdfbf6;
+  --chip: #f1eadb;
+  --ink: #2a2420;
+  --ink-2: #352e29;
+  --ink-3: #4a423a;
+  --muted: #73695f;
+  --faint: #8a7f72;
+  --fainter: #aaa092;
+  --on-ink: #fbf8f1;
+  --on-ink-code: #ddd3c3;
+  --rule: #e8e0cf;
+  --rule-soft: #efe9dc;
+  --rule-strong: #d3c8b2;
+  --rule-dash: #bfb39c;
+  --rule-card: #ddd3bf;
+  --note-bg: #fff6d9;
+  --note-border: #2a2420;
+  --note-shadow: #2a2420;
+  --hand-ink: oklch(0.53 0.14 40);
+  --highlight: oklch(0.91 0.10 90);
+  --ex-add: oklch(0.95 0.04 150);
+  --add-sig: oklch(0.46 0.11 150);
+  --ex-del: oklch(0.95 0.03 30);
+  --del-sig: oklch(0.50 0.14 30);
+  --syn-key: oklch(0.48 0.11 295);
+  --syn-str: oklch(0.47 0.09 150);
+  --syn-com: oklch(0.62 0.03 70);
+  --syn-name: oklch(0.48 0.10 245);
+  --syn-num: oklch(0.53 0.12 45);
+  --nav-bg: oklch(0.965 0.025 245);
+  --nav-bg-2: oklch(0.95 0.04 245);
+  --nav-rule: oklch(0.87 0.06 245);
+  --nav-rule-2: oklch(0.62 0.08 245);
+  --nav-ink: oklch(0.45 0.1 245);
+  --nav-ink-hi: oklch(0.37 0.11 245);
+  --gap-bg: oklch(0.965 0.025 85);
+  --gap-bg-2: oklch(0.95 0.04 85);
+  --gap-rule: oklch(0.87 0.06 85);
+  --gap-rule-2: oklch(0.62 0.08 85);
+  --gap-ink: oklch(0.45 0.1 85);
+  --gap-ink-hi: oklch(0.37 0.11 85);
+  --unchanged-bg: oklch(0.965 0.025 160);
+  --unchanged-bg-2: oklch(0.95 0.04 160);
+  --unchanged-rule: oklch(0.87 0.06 160);
+  --unchanged-rule-2: oklch(0.62 0.08 160);
+  --unchanged-ink: oklch(0.45 0.1 160);
+  --unchanged-ink-hi: oklch(0.37 0.11 160);
+  --prov-bg: oklch(0.965 0.025 295);
+  --prov-bg-2: oklch(0.95 0.04 295);
+  --prov-rule: oklch(0.87 0.06 295);
+  --prov-rule-2: oklch(0.62 0.08 295);
+  --prov-ink: oklch(0.45 0.1 295);
+  --prov-ink-hi: oklch(0.37 0.11 295);
+  --primer-bg: oklch(0.965 0.025 30);
+  --primer-bg-2: oklch(0.95 0.04 30);
+  --primer-rule: oklch(0.87 0.06 30);
+  --primer-rule-2: oklch(0.62 0.08 30);
+  --primer-ink: oklch(0.45 0.1 30);
+  --primer-ink-hi: oklch(0.37 0.11 30);
+  --primer-rust-bg: oklch(0.965 0.004 60);
+  --primer-rust-bg-2: oklch(0.95 0.007 60);
+  --primer-rust-rule: oklch(0.87 0.012 60);
+  --primer-rust-rule-2: oklch(0.36 0.018 60);
+  --primer-rust-ink: oklch(0.45 0.022 60);
+  --primer-rust-ink-hi: oklch(0.37 0.022 60);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  --ground: #1d1a17;
+  --surface: #201d19;
+  --surface-hi: #24201c;
+  --surface-2: #2a2621;
+  --surface-3: #211e1a;
+  --chip: #2e2924;
+  --ink: #f1ebe1;
+  --ink-2: #e2dbcf;
+  --ink-3: #d0c7b9;
+  --muted: #a89d8b;
+  --faint: #8f8474;
+  --fainter: #6f665a;
+  --on-ink: #1d1a17;
+  --on-ink-code: #4a423a;
+  --rule: #3a342d;
+  --rule-soft: #2f2a24;
+  --rule-strong: #4a433a;
+  --rule-dash: #5a5247;
+  --rule-card: #403a32;
+  --note-bg: #3a3220;
+  --note-border: #e9d9a8;
+  --note-shadow: #0f0d0b;
+  --hand-ink: oklch(0.78 0.11 45);
+  --highlight: oklch(0.42 0.08 90);
+  --ex-add: oklch(0.27 0.05 150);
+  --add-sig: oklch(0.82 0.11 150);
+  --ex-del: oklch(0.27 0.05 30);
+  --del-sig: oklch(0.82 0.11 30);
+  --syn-key: oklch(0.80 0.09 295);
+  --syn-str: oklch(0.80 0.09 150);
+  --syn-com: oklch(0.62 0.03 70);
+  --syn-name: oklch(0.80 0.08 245);
+  --syn-num: oklch(0.80 0.10 50);
+  --nav-bg: oklch(0.26 0.03 245);
+  --nav-bg-2: oklch(0.29 0.045 245);
+  --nav-rule: oklch(0.42 0.06 245);
+  --nav-rule-2: oklch(0.65 0.08 245);
+  --nav-ink: oklch(0.82 0.09 245);
+  --nav-ink-hi: oklch(0.88 0.07 245);
+  --gap-bg: oklch(0.26 0.03 85);
+  --gap-bg-2: oklch(0.29 0.045 85);
+  --gap-rule: oklch(0.42 0.06 85);
+  --gap-rule-2: oklch(0.65 0.08 85);
+  --gap-ink: oklch(0.82 0.09 85);
+  --gap-ink-hi: oklch(0.88 0.07 85);
+  --unchanged-bg: oklch(0.26 0.03 160);
+  --unchanged-bg-2: oklch(0.29 0.045 160);
+  --unchanged-rule: oklch(0.42 0.06 160);
+  --unchanged-rule-2: oklch(0.65 0.08 160);
+  --unchanged-ink: oklch(0.82 0.09 160);
+  --unchanged-ink-hi: oklch(0.88 0.07 160);
+  --prov-bg: oklch(0.26 0.03 295);
+  --prov-bg-2: oklch(0.29 0.045 295);
+  --prov-rule: oklch(0.42 0.06 295);
+  --prov-rule-2: oklch(0.65 0.08 295);
+  --prov-ink: oklch(0.82 0.09 295);
+  --prov-ink-hi: oklch(0.88 0.07 295);
+  --primer-bg: oklch(0.26 0.03 30);
+  --primer-bg-2: oklch(0.29 0.045 30);
+  --primer-rule: oklch(0.42 0.06 30);
+  --primer-rule-2: oklch(0.65 0.08 30);
+  --primer-ink: oklch(0.82 0.09 30);
+  --primer-ink-hi: oklch(0.88 0.07 30);
+  --primer-rust-bg: oklch(0.26 0.006 60);
+  --primer-rust-bg-2: oklch(0.29 0.008 60);
+  --primer-rust-rule: oklch(0.42 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.82 0.014 60);
+  --primer-rust-ink-hi: oklch(0.88 0.012 60);
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #1d1a17;
+  --surface: #201d19;
+  --surface-hi: #24201c;
+  --surface-2: #2a2621;
+  --surface-3: #211e1a;
+  --chip: #2e2924;
+  --ink: #f1ebe1;
+  --ink-2: #e2dbcf;
+  --ink-3: #d0c7b9;
+  --muted: #a89d8b;
+  --faint: #8f8474;
+  --fainter: #6f665a;
+  --on-ink: #1d1a17;
+  --on-ink-code: #4a423a;
+  --rule: #3a342d;
+  --rule-soft: #2f2a24;
+  --rule-strong: #4a433a;
+  --rule-dash: #5a5247;
+  --rule-card: #403a32;
+  --note-bg: #3a3220;
+  --note-border: #e9d9a8;
+  --note-shadow: #0f0d0b;
+  --hand-ink: oklch(0.78 0.11 45);
+  --highlight: oklch(0.42 0.08 90);
+  --ex-add: oklch(0.27 0.05 150);
+  --add-sig: oklch(0.82 0.11 150);
+  --ex-del: oklch(0.27 0.05 30);
+  --del-sig: oklch(0.82 0.11 30);
+  --syn-key: oklch(0.80 0.09 295);
+  --syn-str: oklch(0.80 0.09 150);
+  --syn-com: oklch(0.62 0.03 70);
+  --syn-name: oklch(0.80 0.08 245);
+  --syn-num: oklch(0.80 0.10 50);
+  --nav-bg: oklch(0.26 0.03 245);
+  --nav-bg-2: oklch(0.29 0.045 245);
+  --nav-rule: oklch(0.42 0.06 245);
+  --nav-rule-2: oklch(0.65 0.08 245);
+  --nav-ink: oklch(0.82 0.09 245);
+  --nav-ink-hi: oklch(0.88 0.07 245);
+  --gap-bg: oklch(0.26 0.03 85);
+  --gap-bg-2: oklch(0.29 0.045 85);
+  --gap-rule: oklch(0.42 0.06 85);
+  --gap-rule-2: oklch(0.65 0.08 85);
+  --gap-ink: oklch(0.82 0.09 85);
+  --gap-ink-hi: oklch(0.88 0.07 85);
+  --unchanged-bg: oklch(0.26 0.03 160);
+  --unchanged-bg-2: oklch(0.29 0.045 160);
+  --unchanged-rule: oklch(0.42 0.06 160);
+  --unchanged-rule-2: oklch(0.65 0.08 160);
+  --unchanged-ink: oklch(0.82 0.09 160);
+  --unchanged-ink-hi: oklch(0.88 0.07 160);
+  --prov-bg: oklch(0.26 0.03 295);
+  --prov-bg-2: oklch(0.29 0.045 295);
+  --prov-rule: oklch(0.42 0.06 295);
+  --prov-rule-2: oklch(0.65 0.08 295);
+  --prov-ink: oklch(0.82 0.09 295);
+  --prov-ink-hi: oklch(0.88 0.07 295);
+  --primer-bg: oklch(0.26 0.03 30);
+  --primer-bg-2: oklch(0.29 0.045 30);
+  --primer-rule: oklch(0.42 0.06 30);
+  --primer-rule-2: oklch(0.65 0.08 30);
+  --primer-ink: oklch(0.82 0.09 30);
+  --primer-ink-hi: oklch(0.88 0.07 30);
+  --primer-rust-bg: oklch(0.26 0.006 60);
+  --primer-rust-bg-2: oklch(0.29 0.008 60);
+  --primer-rust-rule: oklch(0.42 0.012 60);
+  --primer-rust-rule-2: oklch(0.74 0.016 60);
+  --primer-rust-ink: oklch(0.82 0.014 60);
+  --primer-rust-ink-hi: oklch(0.88 0.012 60);
+}
+
+/* ---- Field Notes overrides ---- */
+.tier,.tag,.pending{border-radius:var(--r-tag)}
+code{border-radius:var(--r-sm)}
+.open,details.searched,details.excerpt,.ip-card,figure.chain,.gt,pre.probe,.buildstate,.primer{border-radius:var(--r)}
+.ip-box{border-radius:var(--r-box)}
+.key-chg,.key-aff,.key-out{border-radius:3px}
+
+h1,h2,h3,h4{font-weight:400;letter-spacing:-0.005em;font-variation-settings:normal}
+h1{line-height:1.1}
+.tier{font-family:var(--body);font-size:12.5px;font-weight:700;letter-spacing:0;text-transform:none;border:0;background:none;padding:0 2px;gap:6px;color:var(--muted);vertical-align:0}
+.tier::before{content:"";flex:0 0 auto;width:10px;height:10px;box-sizing:border-box;border-radius:50%;border:2px solid currentColor}
+.tier-unc{background:none;color:var(--unchanged-ink)}
+.tier-unc::before{border-style:dashed}
+.tier-inf{background:none;color:var(--gap-ink)}
+.tier-inf::before{background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
+.tag{font-family:var(--body);font-size:12px;font-weight:600;letter-spacing:0;text-transform:none;border-radius:999px;padding:1px 9px}
+.open{background:var(--note-bg);border:1.5px solid var(--note-border);border-radius:4px;box-shadow:3px 3px 0 var(--note-shadow);transform:rotate(-0.3deg);color:var(--ink)}
+.open>b{font-family:var(--hand);font-weight:700;font-size:18px;letter-spacing:0;color:var(--gap-ink);margin-bottom:2px}
+.gap>b{font-family:var(--hand);font-size:14px;letter-spacing:0;font-weight:700}
+.lbl-a{font-family:var(--hand);font-size:19px;letter-spacing:0;text-transform:none;color:var(--hand-ink);font-weight:700}
+.cp > .lbl{font-family:var(--hand);font-size:17px;letter-spacing:0;text-transform:none;color:var(--hand-ink)}
+.ip-rel{font-family:var(--hand);font-size:15px;letter-spacing:0;text-transform:none;color:var(--hand-ink)}
+.ip-chg>.ip-box,.ip-out>.ip-box,.ip-aff>.ip-box{border-width:1.5px}
+main p a:not(.doc){text-decoration-style:wavy;text-underline-offset:4px}
+main section > p strong{background:linear-gradient(transparent 58%,var(--highlight) 58%)}
+details.searched>summary,details.evidence>summary{font-weight:700}
+
+/* ---- Highlighter accents. Tints for the two labelled tiers and the excerpt tag, never a grade ---- */
+:root{--hl-yellow:oklch(0.91 0.15 95);--hl-sky:oklch(0.90 0.08 205);--hl-pink:oklch(0.90 0.08 345);--highlight:oklch(0.91 0.15 95);--note-bg:oklch(0.96 0.09 95);--hand-ink:oklch(0.55 0.17 350);--nav-ink:oklch(0.48 0.16 260);--nav-ink-hi:oklch(0.40 0.17 260);--nav-rule-2:oklch(0.78 0.08 260);--unchanged-ink:oklch(0.42 0.09 205);--unchanged-rule-2:oklch(0.58 0.09 205);--unchanged-bg:oklch(0.95 0.035 205);--prov-ink:oklch(0.48 0.13 345);--prov-bg:oklch(0.97 0.02 345);--prov-rule:oklch(0.88 0.05 345);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hl-yellow:oklch(0.50 0.10 95);--hl-sky:oklch(0.45 0.07 205);--hl-pink:oklch(0.45 0.08 345);--highlight:oklch(0.50 0.10 95);--note-bg:#3d3418;--hand-ink:oklch(0.80 0.12 350);--nav-ink:oklch(0.80 0.11 260);--nav-ink-hi:oklch(0.88 0.08 260);--nav-rule-2:oklch(0.50 0.08 260);--unchanged-ink:oklch(0.84 0.08 205);--unchanged-rule-2:oklch(0.65 0.08 205);--unchanged-bg:oklch(0.27 0.035 205);--prov-ink:oklch(0.84 0.08 345);--prov-bg:oklch(0.26 0.03 345);--prov-rule:oklch(0.42 0.06 345);}}
+:root[data-theme="dark"]{--hl-yellow:oklch(0.50 0.10 95);--hl-sky:oklch(0.45 0.07 205);--hl-pink:oklch(0.45 0.08 345);--highlight:oklch(0.50 0.10 95);--note-bg:#3d3418;--hand-ink:oklch(0.80 0.12 350);--nav-ink:oklch(0.80 0.11 260);--nav-ink-hi:oklch(0.88 0.08 260);--nav-rule-2:oklch(0.50 0.08 260);--unchanged-ink:oklch(0.84 0.08 205);--unchanged-rule-2:oklch(0.65 0.08 205);--unchanged-bg:oklch(0.27 0.035 205);--prov-ink:oklch(0.84 0.08 345);--prov-bg:oklch(0.26 0.03 345);--prov-rule:oklch(0.42 0.06 345);}
+
+.tier-unc{background:linear-gradient(transparent 45%,var(--hl-sky) 45%);color:var(--ink)}
+.tier-inf{background:linear-gradient(transparent 45%,var(--hl-yellow) 45%);color:var(--ink)}
+.tier-unc::before{border-color:var(--unchanged-rule-2)}
+.tier-inf::before{color:var(--gap-ink)}
+.tag{background:linear-gradient(transparent 40%,var(--hl-pink) 40%);color:var(--ink);border-color:transparent;border-radius:0}
+.cp > h3{text-decoration:underline;text-decoration-color:var(--hl-yellow);text-decoration-thickness:.32em;text-underline-offset:-.12em;text-decoration-skip-ink:none}
+::selection{background:var(--hl-yellow);color:var(--ink)}
+
+/* ---- The appearance menu, in this theme's hand ---- */
+.rc-h{font-family:var(--hand);font-size:15px;letter-spacing:0;text-transform:none;color:var(--ink-3)}
+.rc-btn b{font-family:var(--hand);font-size:15px}
+.rc-pop{transform:rotate(-.4deg)}
+.rc-seg button[aria-pressed="true"]{background:var(--hl-yellow);color:#2a2620;font-weight:600}
+</style>
+<!--
+  The reader's saved appearance, applied here rather than in the tail script
+  so the page never paints in one look and then jumps to another. Two keys,
+  both a viewer's own convenience: which theme (only if this page carries a
+  file of that name) and light or dark (absent means follow the system).
+  Every storage call is guarded — a private window or blocked site data
+  throws, and then the page is simply the repository's choice.
+-->
+<script>
+(function () {
+  function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  var s = get('review-style'), els = document.querySelectorAll('[data-style]'), i, known = false;
+  for (i = 0; i < els.length; i++) { if (els[i].getAttribute('data-style') === s) { known = true; } }
+  if (known) {
+    for (i = 0; i < els.length; i++) {
+      if (els[i].getAttribute('data-style') === s) { els[i].removeAttribute('media'); }
+      else { els[i].setAttribute('media', 'not all'); }
+    }
+  }
+  var t = get('review-theme');
+  if (t === 'light' || t === 'dark') { document.documentElement.setAttribute('data-theme', t); }
+})();
+</script>
 
 <!-- Scroll progress. The only decoration on the page that moves. -->
 <div class="progress"><i id="bar"></i></div>
@@ -1358,13 +2298,15 @@ figcaption strong { color: var(--ink-3); }
 
     <div class="rail-links">
       <a data-rail="changed" href="#changed"><span class="n">01</span>What changed</a>
-      <a data-rail="attention" href="#attention"><span class="n">02</span>Needs your attention</a>
-      <a class="sub" data-rail="cp-a" href="#cp-a">Does Manage reports keep sizes?</a>
-      <a class="sub" data-rail="cp-b" href="#cp-b">Is this.cards the right source for the next PUT?</a>
-      <a class="sub" data-rail="cp-c" href="#cp-c">Which layer enforces the size rule?</a>
-      <a class="sub" data-rail="cp-d" href="#cp-d">Should a click collapse a tall card?</a>
-      <a data-rail="start" href="#start"><span class="n">03</span>Read in this order</a>
-      <a data-rail="impact" href="#impact"><span class="n">04</span>Impact outside the diff</a>
+      <a data-rail="context" href="#context"><span class="n">02</span>Context</a>
+      <a data-rail="attention" href="#attention"><span class="n">03</span>Needs your attention</a>
+      <a class="sub" data-rail="cp-a" href="#cp-a">Saving the report list from the Manage reports modal</a>
+      <a class="sub" data-rail="cp-b" href="#cp-b">Saving one card&#39;s size by rewriting the whole layout</a>
+      <a class="sub" data-rail="cp-c" href="#cp-c">Where the card-size rules are enforced</a>
+      <a class="sub" data-rail="cp-d" href="#cp-d">What a click on a resize handle does</a>
+      <a class="sub" data-rail="cp-e" href="#cp-e">Animation and pointer-following written inside the dashboard component</a>
+      <a data-rail="start" href="#start"><span class="n">04</span>Read in this order</a>
+      <a data-rail="impact" href="#impact"><span class="n">05</span>Impact outside the diff</a>
     </div>
   </nav>
 
@@ -1375,72 +2317,79 @@ figcaption strong { color: var(--ink-3); }
         <span>discourse</span><span style="color:var(--rule-strong)">/</span><span>discourse</span><span style="color:var(--rule-strong)">&middot;</span><a style="color:var(--nav-ink)" href="https://github.com/discourse/discourse/pull/43002">PR #43002</a><span style="color:var(--rule-strong)">&middot;</span><span>OsamaSayegh</span>
       </div>
 
-      <h1>Admins can resize report cards on the admin dashboard, and the size is saved</h1>
+      <h1>FEATURE: resizable report cards on the admin dashboard</h1>
 
-      <p style="margin-top:24px;font-size:16.5px;color:var(--ink-3)">Each report card gets a corner handle.
-        Dragging it sets a width of one or two columns and a height of one to four rows. A card taller than
-        one row always takes the full width. A plain click switches a card between its normal size and full
-        width. The size is saved in two new columns on <code>admin_dashboard_reports</code> and sent back
-        with the dashboard section.</p>
+      <p style="margin-top:24px;font-size:16.5px;color:var(--ink-3)">Each pinned report card on the
+        redesigned admin dashboard gets a stored size, one to four rows tall and one or two columns
+        wide, which admins change by dragging or clicking a corner of the card.</p>
 
       <div class="gt gt-meta" style="margin-top:44px">
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Revision</div><div class="path" style="font-size:12px">resizable-dashboard-report-cards <span style="color:var(--fainter)">&rarr;</span> main</div><div class="path" style="font-size:11px;color:var(--fainter);margin-top:3px">4f7ccd0 <span>&rarr;</span> 07211c3</div></div>
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">feature</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Shape</div><div class="path" style="font-size:12px">behavioural</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Commits</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">3</div></div>
         <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Files</div><div style="font-family:var(--display);font-size:22px;line-height:1;color:var(--ink-2)">14</div></div>
-        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">Prod / test / generated</div><div class="path" style="font-size:12px">9 / 4 / 1</div></div>
+        <div class="c"><div class="lbl" style="font-size:9.5px;margin-bottom:7px">By kind</div><div class="path" style="font-size:12px">9 prod &middot; 4 test &middot; 1 generated</div></div>
       </div>
     </header>
 
     <section id="changed">
       <div class="eyebrow"><span class="lbl lbl-a">What changed</span><i></i></div>
-      <h2 style="max-width:30ch;margin-bottom:18px">A report card's size is now part of the saved dashboard layout</h2>
+      <h2 style="max-width:30ch;margin-bottom:18px">Admins can resize report cards, and each card keeps its size</h2>
 
-      <p>Before this change, the reports layout was an ordered list of reports. Every card was the same size.
-        Now each entry also has <code>rows</code> (1&ndash;4) and <code>cols</code> (1&ndash;2), and a card
-        taller than one row must span both columns. The layout endpoint still replaces the whole list on every
-        save. As a result, any request that leaves out a card's size now resets that card to one cell. Only
-        admins see the handle, and only after the card's data has loaded. The handle is hidden on narrow
-        viewports. The commits also add reduced-motion handling and right-to-left handle placement. The
-        description says cards &ldquo;remember their size&rdquo;. Checkpoint A tests that claim against the
-        one writer the diff did not touch.</p>
+      <p>The redesigned admin dashboard shows the reports an admin has pinned as a grid of cards, two
+        columns wide. Admins already choose which reports appear and in what order. Every card was the
+        same size, though, one fixed-height cell, so a report with more to show had to fit in it.</p>
+      <p><strong>Each pinned report now carries a stored size: one to four rows tall and one or two
+        columns wide.</strong> Two new columns on the dashboard&#39;s layout table hold it, and
+        <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-59d620a03a4ddb1d01b1811c3a1217d2d6621dd785563941c64536fe1d21e112R5">both default to 1</a>.
+        The layout endpoint accepts a size with each report, and it
+        <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R246">rejects a size out of range, or a card taller than one row that does not span both columns</a>.
+        The dashboard returns each card&#39;s size alongside its other fields. In the browser, an admin
+        drags a card&#39;s lower corner to grow or shrink it, watches it reflow live, and the size is
+        saved on release. A click on the corner without dragging toggles the card&#39;s width instead.
+        The handles appear only for admins, and not while a card is still loading.</p>
+      <p>Admins get layouts that survive a reload, and anyone else who can open the dashboard sees the
+        sizes admins chose. A dashboard where no card has been resized looks as it did: every existing
+        row reads one row by one column, which is how every card rendered before.</p>
+    </section>
+
+    <section id="context">
+      <div class="eyebrow"><span class="lbl lbl-a">Context</span><i></i></div>
+      <h2 style="margin-bottom:18px">What the judgments below rely on</h2>
+      <dl class="ctx">
+        <dt>Dashboard report layout</dt>
+        <dd>The list of reports pinned to the redesigned dashboard: one row per report in
+          <code>admin_dashboard_reports</code>, naming the report&#39;s source and identifier, its
+          position, and its size. A source is a report provider, either core&#39;s or one a plugin
+          registers through the plugin registry. Every save of the layout replaces the whole table with
+          the list it is given, and the dashboard shows only the newest ten rows whose source still has
+          a provider.
+          <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR18-R33">lib/admin_dashboard/reports/layout_updater.rb:18-33</a>
+          <span class="ctx-used">Used by <a href="#cp-a">Checkpoint A</a>, <a href="#cp-b">Checkpoint B</a>, <a href="#cp-c">Checkpoint C</a></span></dd>
+      </dl>
     </section>
 
     <section id="attention" style="padding-top:48px">
       <div class="eyebrow"><span class="lbl lbl-a">Attention</span><i></i></div>
       <h2 style="margin-bottom:18px">What needs your attention</h2>
-      <p>Each of these asks whether a size gets saved correctly or read back correctly. They are ordered by
-        what would cost most to misread.</p>
+      <p>Every judgment below is about where a card&#39;s size is written, kept and checked, and what the
+        corner handle does with it. They are in the order to think about them.</p>
 
       <section class="cp" id="cp-a">
         <span class="lbl lbl-wide">Checkpoint A</span>
-        <h3>Does applying the Manage reports modal keep the sizes admins have set?</h3>
-
-        <p>The controller now treats a missing <code>rows</code> or <code>cols</code> as 1, at
-          <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R240">app/controllers/admin/dashboard_controller.rb:235-240</a>.
-          <code>LayoutUpdater</code> deletes every row before it re-inserts the list. The modal's Apply button
-          still sends only <code>source</code> and <code>identifier</code>. So reordering or adding a report
-          there resets every card to 1&times;1, including cards the admin never touched
-          <span class="tier tier-unc">from unchanged code</span>. The drawing is Impact path A. Decide whether
-          this reset is intended, or whether the modal should carry the sizes through.</p>
-
-        <ul class="lookat">
-          <li>
-            <b>Modal Apply request body</b>
-            <span>maps each row to <code>{source, identifier}</code> and drops any size</span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L194-L213">frontend/discourse/admin/components/modal/manage-reports.gjs:194-213</a>
-<details class="excerpt excerpt--source">
-  <summary>
-    <span class="chev">&#9656;</span>
-    <span class="ex-loc">frontend/discourse/admin/components/modal/manage-reports.gjs:194-213</span>
-    <span class="tag">Unchanged</span>
-    <span class="ex-why">the body this PUT sends: source and identifier, nothing else</span>
-  </summary>
+        <h3>Saving the report list from the Manage reports modal</h3>
+        <p>The dashboard now has two ways to change its list of pinned reports. The gear on the
+          reports section opens a Manage reports modal, where an admin adds, removes and reorders
+          reports and then saves. The cards themselves offer the second way: the corner handle that
+          sets a card&#39;s size. Both save through the same layout endpoint, and that endpoint stores
+          whatever list it receives as the complete layout, replacing every row it held before.</p>
+        <p>So a card&#39;s size survives a save only if that save sends it. The resize handler sends
+          every card with its current size. <strong>The modal, which this change does not touch, still
+          sends each report&#39;s source and identifier and nothing else:</strong></p>
+<div class="excerpt excerpt--source ex-inline">
+  <p class="ex-cap"><span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L197-L205">frontend/discourse/admin/components/modal/manage-reports.gjs:197-205</a></span> <span class="tag">Unchanged</span></p>
   <div class="ex-body">
-<pre data-src="frontend/discourse/admin/components/modal/manage-reports.gjs" style="counter-reset: exl 193"><span class="l">  async apply() {</span>
-<span class="l">    this.applying = true;</span>
-<span class="l">    try {</span>
-<span class="l">      await ajax("/admin/dashboard/reports/layout", {</span>
+<pre data-src="frontend/discourse/admin/components/modal/manage-reports.gjs" style="counter-reset: exl 196"><span class="l">      await ajax("/admin/dashboard/reports/layout", {</span>
 <span class="l">        type: "PUT",</span>
 <span class="l">        contentType: "application/json",</span>
 <span class="l">        data: JSON.stringify({</span>
@@ -1449,212 +2398,290 @@ figcaption strong { color: var(--ink-3); }
 <span class="l">            identifier,</span>
 <span class="l">          })),</span>
 <span class="l">        }),</span>
-<span class="l">      });</span>
-<span class="l">      this.args.closeModal?.();</span>
-<span class="l">      this.args.model?.onApplied?.();</span>
-<span class="l">    } catch (e) {</span>
-<span class="l">      popupAjaxError(e);</span>
-<span class="l">    } finally {</span>
-<span class="l">      this.applying = false;</span>
-<span class="l">    }</span>
 </pre>
-    <p class="ex-src">Unchanged at <a class="cite" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L194-L213">frontend/discourse/admin/components/modal/manage-reports.gjs:194-213</a></p>
+  </div>
+</div>
+        <p>The endpoint treats a missing size as the smallest one:
+          <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R241">an absent row count or column span becomes 1</a>, and the
+          layout is then <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR19-R33">deleted and re-inserted from the list as
+          received</a>. After any save from
+          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L197-L205">the
+          modal</a>, even one that only reorders two reports, every
+          card on the dashboard is back to one row by one column
+          <span class="tier tier-unc">from unchanged code</span>.</p>
+        <p>The modal does hold the sizes. It loads its enabled reports from
+          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/app/controllers/admin/dashboard_controller.rb#L133-L136">the same
+          section builder the dashboard uses</a>, which now returns each report&#39;s size; its save
+          maps them away. The path is drawn in <a href="#impact">Impact outside the diff</a>.</p>
+        <div class="gap"><b>GAP</b><span>Nothing tests that a save from the Manage reports modal keeps the sizes the cards already had.</span></div>
+        <p class="open"><b>Review question</b>Should saving the Manage reports modal keep the sizes cards already have?</p>
+        <details class="cp-ev">
+          <summary><span class="chev">&#9656;</span><span class="cp-ev-lbl">Supporting evidence</span></summary>
+        <ul class="lookat">
+          <li>
+            <b>The modal&#39;s save request</b>
+            <span>maps each enabled report to its source and identifier only; these are the lines quoted above <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L197-L205">frontend/discourse/admin/components/modal/manage-reports.gjs:197-205</a>
+          </li>
+          <li>
+            <b>Defaults for a missing size</b>
+            <span>both counts fall back to 1 before the range checks run, so an item without a size passes them</span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R233-R241">app/controllers/admin/dashboard_controller.rb:233-241</a></span>
+    <span class="tag">At head</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/controllers/admin/dashboard_controller.rb" data-lang="ruby" style="counter-reset: exl 232"><span class="l">        raise Discourse::InvalidParameters.new(:items) if source.blank? || identifier.blank?</span>
+<span class="l"></span>
+<span class="l">        rows = Integer(entry[:rows].presence || 1, exception: false)</span>
+<span class="l">        if rows.nil? || rows &lt; 1 || rows &gt; AdminDashboardReport::MAX_ROWS</span>
+<span class="l">          raise Discourse::InvalidParameters.new(:items)</span>
+<span class="l">        end</span>
+<span class="l"></span>
+<span class="l">        cols = Integer(entry[:cols].presence || 1, exception: false)</span>
+<span class="l">        if cols.nil? || cols &lt; 1 || cols &gt; AdminDashboardReport::MAX_COLS</span>
+</pre>
   </div>
 </details>
           </li>
           <li>
-            <b>Delete-then-insert write</b>
-            <span>the <code>delete_all</code> at <code>:19</code> is older than this PR. It means leaving a size
-              out resets it, because nothing keeps the old value</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR18-R35">lib/admin_dashboard/reports/layout_updater.rb:18-35</a>
+            <b>The wholesale rewrite</b>
+            <span>every stored row is deleted, then the received list is inserted with its sizes</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR18-R33">lib/admin_dashboard/reports/layout_updater.rb:18-33</a>
           </li>
           <li>
-            <b>Default-to-1 request spec</b>
-            <span>tests the default when a size is omitted. That default is what causes the reset</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-944d3162ab0371dfd9113fb935b2e3216446d4841565b194a446d44ee97dea64R2378-R2392">spec/requests/admin/dashboard_controller_spec.rb:2378-2392</a>
+            <b>Where the modal&#39;s list comes from</b>
+            <span>the available-reports action builds the enabled list from the section builder, which now carries each size</span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/app/controllers/admin/dashboard_controller.rb#L133-L136">app/controllers/admin/dashboard_controller.rb:133-136</a>
           </li>
         </ul>
-
-        <div class="gap"><b>GAP</b><span>No test resizes a card and then applies the modal. No frontend test
-          covers the modal's Apply at all.</span></div>
+        </details>
       </section>
 
       <section class="cp" id="cp-b">
         <span class="lbl lbl-wide">Checkpoint B</span>
-        <h3>Is <code>this.cards</code> a safe source for the sizes the next PUT sends?</h3>
-
-        <p><code>layoutItems</code> used to map <code>@data.items</code>, the server's copy. It now maps
-          <code>this.cards</code>, at
-          <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L162-L169">frontend/discourse/admin/components/dashboard/reports.gjs:162-169</a>.
-          <code>setSize</code> updates <code>this.cards</code> only after its PUT resolves, and it never refreshes
-          <code>@data</code>. Two consequences follow. If a second resize starts before the first PUT returns, it
-          sends the first card's old size <span class="tier tier-inf">inferred</span>. And
-          <code>loadPayloads</code> rebuilds the cards from <code>@data.items</code>. After a date change that data
-          is refetched and correct, but when the dashboard re-serves its cached copy it still holds the sizes from
-          before the resize. Decide whether local state can safely stand in for the server's copy on both
-          paths.</p>
-
+        <h3>Saving one card&#39;s size by rewriting the whole layout</h3>
+        <p>The dashboard stores its pinned reports as one list, and the only way to change any part of
+          it is to send the whole list again: the layout endpoint deletes every stored row and inserts
+          the list it was given. Removing a report from the dashboard already worked this way.</p>
+        <p>Resizing now works this way too, and an admin does it far more often. When a resize ends,
+          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L390-L409">the
+          handler builds the full list from the cards this browser holds</a>, with the new size swapped
+          in for one card, and sends it. When the request succeeds it updates its own copy of the cards,
+          without reloading the dashboard. <strong>The list sent is a snapshot of this browser&#39;s
+          view, so anything missing from that view is missing from the stored layout
+          afterwards.</strong></p>
+        <p>Two things can be missing from it. The first is another resize still in flight. Each save
+          builds its list from the cards as they stood when it began, and a card only takes its new
+          size once its own request returns. Two overlapping saves, such as clicks on two cards&#39;
+          handles in quick succession, would each send a list without the other&#39;s change. The one
+          the server handles last wins, while the browser shows both sizes
+          <span class="tier tier-inf">inferred</span>. The test that a second resize carries the
+          first one&#39;s size runs them one after the other.</p>
+        <p>The second is a stored report the dashboard never shows. The section shows only reports whose
+          source still has a registered provider and, of those,
+          <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-7746fec8454dfbbb711ddef80bc797cac7b3de6d1925f55ac19d3e939418cab7R26-R37">the ten most recently created</a>. A row whose source has no
+          provider is dropped by <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/admin_dashboard/reports/registry.rb#L16-L25">the
+          provider lookup</a> <span class="tier tier-unc">from unchanged code</span>, never reaches the
+          browser, and is deleted by the next resize. Removing a report or saving the modal already did
+          this; resizing adds a trigger that fires much more often.</p>
+        <p class="open"><b>Review question</b>Is it acceptable that each resize replaces the stored layout with what this browser currently shows?</p>
+        <details class="cp-ev">
+          <summary><span class="chev">&#9656;</span><span class="cp-ev-lbl">Supporting evidence</span></summary>
         <ul class="lookat">
           <li>
-            <b>The PUT built before the await</b>
-            <span><code>nextItems</code> reads <code>this.layoutItems</code>, and <code>this.cards</code> is only
-              reassigned on success</span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L389-L409">frontend/discourse/admin/components/dashboard/reports.gjs:389-409</a>
+            <b>The resize save</b>
+            <span>builds the request from every card the browser holds, then updates the cards only after the request returns</span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L390-L409">frontend/discourse/admin/components/dashboard/reports.gjs:390-409</a>
+          </li>
+          <li>
+            <b>What the section shows</b>
+            <span>only rows that resolve, clipped to the newest ten before sorting by position</span>
 <details class="excerpt excerpt--source">
   <summary>
     <span class="chev">&#9656;</span>
-    <span class="ex-loc">frontend/discourse/admin/components/dashboard/reports.gjs:389-409</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/pull/43002/files#diff-7746fec8454dfbbb711ddef80bc797cac7b3de6d1925f55ac19d3e939418cab7R26-R37">lib/admin_dashboard/reports/section.rb:26-37</a></span>
     <span class="tag">At head</span>
-    <span class="ex-why">nextItems is read before the await; this.cards is updated only after it</span>
   </summary>
   <div class="ex-body">
-<pre data-src="frontend/discourse/admin/components/dashboard/reports.gjs" style="counter-reset: exl 388"><span class="l">  @action</span>
-<span class="l">  async setSize(item, { rows, cols }) {</span>
-<span class="l">    const nextItems = this.layoutItems.map((i) =&gt;</span>
-<span class="l">      i.source === item.source &amp;&amp; i.identifier === item.identifier</span>
-<span class="l">        ? { ...i, rows, cols }</span>
-<span class="l">        : i</span>
-<span class="l">    );</span>
+<pre data-src="lib/admin_dashboard/reports/section.rb" data-lang="ruby" style="counter-reset: exl 25"><span class="l">      def visible_items</span>
+<span class="l">        records = AdminDashboardReport.order(created_at: :desc).to_a</span>
+<span class="l">        resolved_by_record_id = resolve_records(records)</span>
 <span class="l"></span>
-<span class="l">    try {</span>
-<span class="l">      await ajax("/admin/dashboard/reports/layout", {</span>
-<span class="l">        type: "PUT",</span>
-<span class="l">        contentType: "application/json",</span>
-<span class="l">        data: JSON.stringify({ items: nextItems }),</span>
-<span class="l">      });</span>
-<span class="l">      this.cards = this.cards.map((card) =&gt;</span>
-<span class="l">        card.key === item.key ? { ...card, rows, cols } : card</span>
-<span class="l">      );</span>
-<span class="l">    } catch (e) {</span>
-<span class="l">      popupAjaxError(e);</span>
-<span class="l">    }</span>
-<span class="l">  }</span>
+<span class="l">        # When more records resolve than VISIBLE_CAP allows, the older overflow</span>
+<span class="l">        # is hidden — clip by created_at recency first, then re-sort the</span>
+<span class="l">        # survivors by the admin's chosen position.</span>
+<span class="l">        records</span>
+<span class="l">          .filter_map { |record| (obj = resolved_by_record_id[record.id]) &amp;&amp; [record, obj] }</span>
+<span class="l">          .first(AdminDashboardReport::VISIBLE_CAP)</span>
+<span class="l">          .sort_by { |record, _obj| record.position }</span>
+<span class="l">      end</span>
 </pre>
-    <p class="ex-src">At head, <a class="cite" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L389-L409">frontend/discourse/admin/components/dashboard/reports.gjs:389-409</a></p>
   </div>
 </details>
           </li>
           <li>
-            <b>Where cards are rebuilt</b>
-            <span>every run copies <code>this.items</code>, which is <code>@data.items</code>, back over any local
-              resize</span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L213-L251">frontend/discourse/admin/components/dashboard/reports.gjs:213-251</a>
+            <b>Sources with no provider</b>
+            <span>a source whose provider is not registered is skipped, so its rows resolve to nothing <span class="tier tier-unc">from unchanged code</span></span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/admin_dashboard/reports/registry.rb#L16-L25">lib/admin_dashboard/reports/registry.rb:16-25</a></span>
+    <span class="tag">Unchanged</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="lib/admin_dashboard/reports/registry.rb" data-lang="ruby" style="counter-reset: exl 15"><span class="l">      def self.dispatch_per_source(items)</span>
+<span class="l">        items</span>
+<span class="l">          .group_by { |item| item[:source] }</span>
+<span class="l">          .each_with_object({}) do |(source, group), result|</span>
+<span class="l">            provider = provider_for(source)</span>
+<span class="l">            next if provider.nil?</span>
+<span class="l"></span>
+<span class="l">            result[source] = yield(provider, group)</span>
+<span class="l">          end</span>
+<span class="l">      end</span>
+</pre>
+  </div>
+</details>
           </li>
           <li>
-            <b>Sequential-resize test</b>
-            <span>checks that a second resize carries the first card's new size. It waits between the two
-              gestures, so it does not cover overlapping PUTs</span>
+            <b>Two resizes, one after the other</b>
+            <span>the second press starts after the first request has returned; no test overlaps them</span>
             <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/tests/integration/components/dashboard/reports-test.gjs#L414-L494">frontend/discourse/tests/integration/components/dashboard/reports-test.gjs:414-494</a>
           </li>
         </ul>
-
-        <p class="open"><b>Open question</b> Does hiding and re-showing the Reports section rebuild the
-          component from cached, pre-resize data? If it does, the next resize or remove would send the old size
-          back to the server <span class="tier tier-inf">inferred</span>. Impact path B shows where that would
-          happen. Trying it in the browser would settle it.</p>
+        </details>
       </section>
 
       <section class="cp" id="cp-c">
         <span class="lbl lbl-wide">Checkpoint C</span>
-        <h3>Which layer actually enforces &ldquo;a multi-row card is full width&rdquo;?</h3>
-
-        <p>The rule is written three times: in the controller at
-          <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R244-R246">app/controllers/admin/dashboard_controller.rb:244-246</a>,
-          in model validations at
-          <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-58ca16515b2125210a1f375ec00ec4eb34b246e28ee79611313dd1ce649aa724R40-R43">app/models/admin_dashboard_report.rb:40-43</a>,
-          and in the client's clamps. The only production write goes through <code>insert_all</code>, which
-          <a class="doc" href="https://api.rubyonrails.org/v8.0/classes/ActiveRecord/Relation.html#method-i-insert_all">never instantiates a model</a> and so runs no validations,
-          and the table has no <code>CHECK</code>. So the model validations run only in seeds and specs, and
-          the controller's parser is the real guard. That parser is also shared with the bulk-fetch endpoint.
-          Decide whether that is enough, given that <code>computeColumns</code> ignores <code>rows</code> and relies
-          on the rule <span class="tier tier-inf">inferred</span>.</p>
-
+        <h3>Where the card-size rules are enforced</h3>
+        <p>A card&#39;s size has three rules: one to four rows, one or two columns, and a card more than
+          one row tall must span both columns. The last rule keeps the grid free of gaps that the
+          browser&#39;s own placement arithmetic does not expect <span class="tier tier-inf">inferred</span>. The change writes these rules down
+          three times.</p>
+        <p>The browser does not produce a size that breaks them: while dragging, it clamps the row count
+          and switches a card to full width as soon as it is taller than one row. The layout endpoint
+          checks them again before saving and rejects the whole request if any item fails. And the
+          model gains matching validations, including
+          <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-58ca16515b2125210a1f375ec00ec4eb34b246e28ee79611313dd1ce649aa724R40-R43">one for the full-width rule</a>.</p>
+        <p><strong>The model&#39;s validations do not run when the layout is saved.</strong> The endpoint
+          hands its list to the layout updater, which writes it
+          <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR33">with a bulk insert</a>, and
+          <a class="doc" href="https://api.rubyonrails.org/v8.0/classes/ActiveRecord/Relation.html#method-i-insert_all">insert_all</a>
+          builds no model objects, so no validation runs on that write. The model&#39;s rules are
+          reached only by <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/seed_data/admin_dashboard_reports.rb#L11-L14">the
+          seeders that create the default reports</a>, which never pass a size
+          <span class="tier tier-unc">from unchanged code</span>. The database adds
+          <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-1dd5a8f580b9615769ddc19a64a98f455d9d20eb149c443f41d9d3c797d39b12R311-R312">a default of 1 and a not-null constraint, and no
+          check</a>. In practice the endpoint&#39;s check is the one in force.</p>
+        <p>The same check also guards a request that only reads. Each card&#39;s chart data is fetched
+          through <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/app/controllers/admin/dashboard_controller.rb#L148-L160">a bulk
+          endpoint that parses its items with the same method</a>, and the browser now sends each
+          card&#39;s size with that request. A stored size the check refuses would fail the request,
+          and the dashboard then
+          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L241-L249">marks
+          every card as errored</a>, not just the one. Neither the endpoint nor
+          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/seed_data/admin_dashboard_reports.rb#L11-L14">the default-report
+          seeders</a>, the only other writers, can store such a size
+          <span class="tier tier-unc">from unchanged code</span>; a later writer that skips the endpoint
+          could.</p>
+        <p class="open"><b>Review question</b>Is the layout endpoint&#39;s check meant to be the only guard on stored sizes?</p>
+        <details class="cp-ev">
+          <summary><span class="chev">&#9656;</span><span class="cp-ev-lbl">Supporting evidence</span></summary>
         <ul class="lookat">
           <li>
-            <b>Validation-free bulk insert</b>
-            <span>the rows and cols written here never pass through <code>validates :rows</code></span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR27-R33">lib/admin_dashboard/reports/layout_updater.rb:27-33</a>
-<details class="excerpt excerpt--diff">
+            <b>The endpoint&#39;s size checks</b>
+            <span>range checks on both counts, then the full-width rule, each rejecting the whole request</span>
+<details class="excerpt excerpt--source">
   <summary>
     <span class="chev">&#9656;</span>
-    <span class="ex-loc">lib/admin_dashboard/reports/layout_updater.rb:18-36</span>
-    <span class="tag">Changed</span>
-    <span class="ex-why">the only production write of rows and cols is insert_all</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R246">app/controllers/admin/dashboard_controller.rb:235-246</a></span>
+    <span class="tag">At head</span>
   </summary>
   <div class="ex-body">
-<pre data-src="lib/admin_dashboard/reports/layout_updater.rb" style="counter-reset: exl 17"><span class="l"><span class="sig"> </span>        AdminDashboardReport.transaction do</span>
-<span class="l"><span class="sig"> </span>          AdminDashboardReport.delete_all</span>
-<span class="l"><span class="sig"> </span>          now = Time.current</span>
-<span class="l del"><span class="sig">-</span>          rows =</span>
-<span class="l add"><span class="sig">+</span>          records =</span>
-<span class="l"><span class="sig"> </span>            items.each_with_index.map do |item, index|</span>
-<span class="l"><span class="sig"> </span>              {</span>
-<span class="l"><span class="sig"> </span>                source: item[:source],</span>
-<span class="l"><span class="sig"> </span>                identifier: item[:identifier],</span>
-<span class="l"><span class="sig"> </span>                position: index,</span>
-<span class="l add"><span class="sig">+</span>                rows: item[:rows] || 1,</span>
-<span class="l add"><span class="sig">+</span>                cols: item[:cols] || 1,</span>
-<span class="l"><span class="sig"> </span>                created_at: now,</span>
-<span class="l"><span class="sig"> </span>                updated_at: now,</span>
-<span class="l"><span class="sig"> </span>              }</span>
-<span class="l"><span class="sig"> </span>            end</span>
-<span class="l del"><span class="sig">-</span>          AdminDashboardReport.insert_all(rows) if rows.any?</span>
-<span class="l add"><span class="sig">+</span>          AdminDashboardReport.insert_all(records) if records.any?</span>
-<span class="l"><span class="sig"> </span>        end</span>
-<span class="l"><span class="sig"> </span>      end</span>
-<span class="l"><span class="sig"> </span>    end</span>
+<pre data-src="app/controllers/admin/dashboard_controller.rb" data-lang="ruby" style="counter-reset: exl 234"><span class="l">        rows = Integer(entry[:rows].presence || 1, exception: false)</span>
+<span class="l">        if rows.nil? || rows &lt; 1 || rows &gt; AdminDashboardReport::MAX_ROWS</span>
+<span class="l">          raise Discourse::InvalidParameters.new(:items)</span>
+<span class="l">        end</span>
+<span class="l"></span>
+<span class="l">        cols = Integer(entry[:cols].presence || 1, exception: false)</span>
+<span class="l">        if cols.nil? || cols &lt; 1 || cols &gt; AdminDashboardReport::MAX_COLS</span>
+<span class="l">          raise Discourse::InvalidParameters.new(:items)</span>
+<span class="l">        end</span>
+<span class="l">        if rows &gt; 1 &amp;&amp; cols != AdminDashboardReport::MAX_COLS</span>
+<span class="l">          raise Discourse::InvalidParameters.new(:items)</span>
+<span class="l">        end</span>
 </pre>
-    <p class="ex-src">Changed at <a class="cite" href="https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723a">lib/admin_dashboard/reports/layout_updater.rb:18-36</a></p>
   </div>
 </details>
           </li>
           <li>
-            <b>Columns with no constraint</b>
-            <span><code>integer DEFAULT 1 NOT NULL</code>, with no range check</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-1dd5a8f580b9615769ddc19a64a98f455d9d20eb149c443f41d9d3c797d39b12R311-R312">db/structure.sql:311-312</a>
+            <b>The model&#39;s full-width rule</b>
+            <span>the same rule as a validation, which the bulk insert never runs</span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/pull/43002/files#diff-58ca16515b2125210a1f375ec00ec4eb34b246e28ee79611313dd1ce649aa724R40-R43">app/models/admin_dashboard_report.rb:40-43</a></span>
+    <span class="tag">At head</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/models/admin_dashboard_report.rb" data-lang="ruby" style="counter-reset: exl 39"><span class="l">  def multi_row_cards_must_be_full_width</span>
+<span class="l">    return if rows.to_i &lt;= 1 || cols.to_i == MAX_COLS</span>
+<span class="l">    errors.add(:cols, :invalid)</span>
+<span class="l">  end</span>
+</pre>
+  </div>
+</details>
           </li>
           <li>
-            <b>Model-level rule spec</b>
-            <span>tests the rule through <code>valid?</code>, which the production path never calls</span>
-            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-d96ce3c88fff00285ee4c0b0557e150f616c11a6a6b364d5478b81234cb9bf3dR86-R96">spec/models/admin_dashboard_report_spec.rb:86-96</a>
+            <b>The chart-data endpoint</b>
+            <span>parses its items with the method that now checks sizes</span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/app/controllers/admin/dashboard_controller.rb#L148-L160">app/controllers/admin/dashboard_controller.rb:148-160</a></span>
+    <span class="tag">At head</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="app/controllers/admin/dashboard_controller.rb" data-lang="ruby" style="counter-reset: exl 147"><span class="l">  def bulk_reports</span>
+<span class="l">    permitted_filters = params.permit(filters: BULK_REPORTS_FILTER_KEYS).fetch(:filters, nil)</span>
+<span class="l">    filters = permitted_filters.present? ? permitted_filters.to_h.symbolize_keys : {}</span>
+<span class="l"></span>
+<span class="l">    hijack do</span>
+<span class="l">      render_json_dump(</span>
+<span class="l">        AdminDashboard::Reports::BulkFetch.call(</span>
+<span class="l">          items: parse_reports_items_payload,</span>
+<span class="l">          filters: filters,</span>
+<span class="l">          guardian: guardian,</span>
+<span class="l">        ),</span>
+<span class="l">      )</span>
+<span class="l">    end</span>
+</pre>
+  </div>
+</details>
+          </li>
+          <li>
+            <b>Default-report seeder</b>
+            <span>creates rows through the model without a size, so the defaults apply and pass <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/seed_data/admin_dashboard_reports.rb#L11-L14">lib/seed_data/admin_dashboard_reports.rb:11-14</a>
           </li>
         </ul>
-
-        <p class="open"><b>Open question</b> Should the rule also be enforced by a database constraint, or by a
-          validation run before the insert, given that the model validations never see a production write?</p>
+        </details>
       </section>
 
       <section class="cp" id="cp-d">
         <span class="lbl lbl-wide">Checkpoint D</span>
-        <h3>Should a plain click on a tall card's handle collapse it to one cell?</h3>
-
-        <p>A press that never passes the 8&nbsp;px threshold counts as a click. A 1&times;1 card goes to full
-          width. Every other size, including a four-row card, goes straight to 1&times;1 and is saved. The
-          handle's own contract says to commit only when <code>moved</code> is set
-          <span class="tier tier-unc">from unchanged code</span>. This component commits on a click on purpose.
-          Decide whether collapsing a tall card on an accidental click is the intended behaviour. On narrow
-          viewports the handles are hidden but <code>--rows-N</code> still spans rows, so a phone shows a tall card
-          that cannot be shrunk there.</p>
-
-        <ul class="lookat">
-          <li>
-            <b>Click branch of resize end</b>
-            <span><code>isNormal</code> is true only for 1&times;1. Every other card becomes 1&times;1</span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L356-L370">frontend/discourse/admin/components/dashboard/reports.gjs:356-370</a>
-<details class="excerpt excerpt--source">
-  <summary>
-    <span class="chev">&#9656;</span>
-    <span class="ex-loc">frontend/discourse/admin/components/dashboard/reports.gjs:356-370</span>
-    <span class="tag">At head</span>
-    <span class="ex-why">the not-moved branch: 1x1 goes wide, every other size goes to 1x1</span>
-  </summary>
+        <h3>What a click on a resize handle does</h3>
+        <p>The corner handle does two jobs. Dragged, it sets any size the rules allow, a row or a
+          column at a time. Pressed and released without moving, it reports a gesture that never moved,
+          and the handler treats that as a shortcut:</p>
+<div class="excerpt excerpt--source ex-inline">
+  <p class="ex-cap"><span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L361-L368">frontend/discourse/admin/components/dashboard/reports.gjs:361-368</a></span> <span class="tag">At head</span></p>
   <div class="ex-body">
-<pre data-src="frontend/discourse/admin/components/dashboard/reports.gjs" style="counter-reset: exl 355"><span class="l">  async onCardResizeEnd(item, _payload, dragInfo) {</span>
-<span class="l">    const live = this.liveResize?.key === item.key ? this.liveResize : null;</span>
-<span class="l">    this.freeFollow = null;</span>
-<span class="l">    this.activeResizeKey = null;</span>
-<span class="l"></span>
-<span class="l">    if (!dragInfo.moved) {</span>
+<pre data-src="frontend/discourse/admin/components/dashboard/reports.gjs" style="counter-reset: exl 360"><span class="l">    if (!dragInfo.moved) {</span>
 <span class="l">      this.liveResize = null;</span>
 <span class="l">      const isNormal = item.rows === 1 &amp;&amp; item.cols === 1;</span>
 <span class="l">      await this.setSize(</span>
@@ -1662,24 +2689,125 @@ figcaption strong { color: var(--ink-3); }
 <span class="l">        isNormal ? { rows: 1, cols: MAX_COLS } : { rows: 1, cols: 1 }</span>
 <span class="l">      );</span>
 <span class="l">      return;</span>
-<span class="l">    }</span>
 </pre>
-    <p class="ex-src">At head, <a class="cite" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L356-L370">frontend/discourse/admin/components/dashboard/reports.gjs:356-370</a></p>
+  </div>
+</div>
+        <p>A card at the smallest size becomes one row at full width. <strong>Every other size,
+          including a card two, three or four rows tall, goes straight back to the smallest.</strong>
+          The shortcut is a toggle between two sizes over a range of eight, and the result is saved at
+          once. An admin who presses a tall card&#39;s corner meaning to start a drag, and lets go,
+          loses the height and has to drag it back. A press only becomes a drag after
+          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L531">eight
+          pixels of travel</a>, so a short, hesitant drag counts as a click too.</p>
+        <div class="gap"><b>GAP</b><span>Nothing tests a click on a card that is already larger than the smallest size.</span></div>
+        <p class="open"><b>Review question</b>Should a click on a tall card&#39;s handle take it all the way back to the smallest size?</p>
+        <details class="cp-ev">
+          <summary><span class="chev">&#9656;</span><span class="cp-ev-lbl">Supporting evidence</span></summary>
+        <ul class="lookat">
+          <li>
+            <b>What counts as a drag</b>
+            <span>the shared resize handles set this only once a move has been reported, which the threshold delays <span class="tier tier-unc">from unchanged code</span></span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/app/ui-kit/d-resize-handles.gts#L101-L106">frontend/discourse/app/ui-kit/d-resize-handles.gts:101-106</a></span>
+    <span class="tag">Unchanged</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="frontend/discourse/app/ui-kit/d-resize-handles.gts" style="counter-reset: exl 100"><span class="l">  /**</span>
+<span class="l">   * Whether `@onResize` has fired at least once for THIS gesture. It tells a</span>
+<span class="l">   * resize apart from a click that landed on a handle. Commit on `@onResizeEnd`</span>
+<span class="l">   * only when it is set, or a bare click records a no-op change.</span>
+<span class="l">   */</span>
+<span class="l">  readonly moved: boolean;</span>
+</pre>
   </div>
 </details>
           </li>
           <li>
-            <b>Handle contract for <code>moved</code></b>
-            <span>says a bare click should not be committed as a change</span>
-            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/app/ui-kit/d-resize-handles.gts#L101-L106">frontend/discourse/app/ui-kit/d-resize-handles.gts:101-106</a>
-          </li>
-          <li>
-            <b>Click-toggle test</b>
-            <span>covers only 1&times;1 to full width. No test clicks a multi-row card, and none runs in
-              right-to-left</span>
+            <b>The one click test</b>
+            <span>clicks a one-by-one card and expects one row at full width; no test clicks a larger card</span>
             <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/tests/integration/components/dashboard/reports-test.gjs#L284-L338">frontend/discourse/tests/integration/components/dashboard/reports-test.gjs:284-338</a>
           </li>
         </ul>
+        </details>
+      </section>
+
+      <section class="cp" id="cp-e">
+        <span class="lbl lbl-wide">Checkpoint E</span>
+        <h3>Animation and pointer-following written inside the dashboard component</h3>
+        <p>Two pieces of the resize experience have nothing to do with reports. One animates the other
+          cards sliding into their new grid positions as a card grows; the other pins the dragged card
+          to a rectangle that follows the pointer. The change writes both as modifier classes at the
+          top of the dashboard component:
+          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L54-L105">a
+          layout-change animation</a> and
+          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L108-L122">a
+          modifier that places an element at a given rectangle</a>. Both take an element and plain
+          values, with no reference to reports.</p>
+        <p>The repository&#39;s agent guide says UI is built from the ui-kit primitives rather than
+          hand-rolled behaviour, and that
+          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/AI-AGENTS.md#L18">new shared, domain-free primitives go there</a>
+          <span class="tier tier-unc">from unchanged code</span>.
+          <a class="ref" href="https://github.com/discourse/discourse/tree/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/app/ui-kit/modifiers">The ui-kit&#39;s modifiers directory</a> holds twenty, among them drag, pointer-drag and
+          resize-observer modifiers, and none animates a layout change or places an element at a
+          rectangle <span class="tier tier-unc">from unchanged code</span>. So nothing existing was
+          bypassed; what is open is where these two new ones belong.</p>
+        <p class="open"><b>Review question</b>Is it deliberate that these two general-purpose modifiers live in the dashboard component rather than in the ui-kit?</p>
+        <details class="cp-ev">
+          <summary><span class="chev">&#9656;</span><span class="cp-ev-lbl">Supporting evidence</span></summary>
+        <ul class="lookat">
+          <li>
+            <b>The repository&#39;s ui-kit rule</b>
+            <span>domain-free behaviour is built from, or added to, the ui-kit <span class="tier tier-unc">from unchanged code</span></span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/AI-AGENTS.md#L18-L18">AI-AGENTS.md:18-18</a></span>
+    <span class="tag">Unchanged</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="AI-AGENTS.md" style="counter-reset: exl 17"><span class="l">- Build UI from the ui-kit primitives (`frontend/discourse/app/ui-kit`: `d-*` components, `helpers/`, `modifiers/`) rather than hand-rolling controls, layout, or behaviour; new shared, domain-free primitives go there. See ./docs/developer-guides/docs/03-code-internals/02-ui-kit.md</span>
+</pre>
+  </div>
+</details>
+          </li>
+          <li>
+            <b>The pointer-following modifier</b>
+            <span>sets an element&#39;s position and size from a rectangle, or clears them</span>
+<details class="excerpt excerpt--source">
+  <summary>
+    <span class="chev">&#9656;</span>
+    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L108-L122">frontend/discourse/admin/components/dashboard/reports.gjs:108-122</a></span>
+    <span class="tag">At head</span>
+  </summary>
+  <div class="ex-body">
+<pre data-src="frontend/discourse/admin/components/dashboard/reports.gjs" style="counter-reset: exl 107"><span class="l">class FollowPointer extends Modifier {</span>
+<span class="l">  modify(element, [rect]) {</span>
+<span class="l">    if (!rect) {</span>
+<span class="l">      element.style.left = "";</span>
+<span class="l">      element.style.top = "";</span>
+<span class="l">      element.style.width = "";</span>
+<span class="l">      element.style.height = "";</span>
+<span class="l">      return;</span>
+<span class="l">    }</span>
+<span class="l"></span>
+<span class="l">    element.style.left = `${rect.left}px`;</span>
+<span class="l">    element.style.top = `${rect.top}px`;</span>
+<span class="l">    element.style.width = `${rect.width}px`;</span>
+<span class="l">    element.style.height = `${rect.height}px`;</span>
+<span class="l">  }</span>
+</pre>
+  </div>
+</details>
+          </li>
+          <li>
+            <b>The existing ui-kit modifiers</b>
+            <span>twenty entries; none animates a layout change or positions an element at a rectangle <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/discourse/discourse/tree/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/app/ui-kit/modifiers">frontend/discourse/app/ui-kit/modifiers/</a>
+          </li>
+        </ul>
+        </details>
       </section>
     </section>
 
@@ -1690,56 +2818,50 @@ figcaption strong { color: var(--ink-3); }
         <li>
           <span class="n">01</span>
           <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-1dd5a8f580b9615769ddc19a64a98f455d9d20eb149c443f41d9d3c797d39b12R307-R315">db/structure.sql:307-315</a>
-            <span class="why">Start with the two new columns and their default, so you know what an omitted size
-              turns into. Each migration is one <code>add_column</code>.</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-58ca16515b2125210a1f375ec00ec4eb34b246e28ee79611313dd1ce649aa724R5-R24">app/models/admin_dashboard_report.rb:5-24</a>
+            <span class="why">The size limits and the full-width rule as the model states them, before the code that checks them elsewhere.</span>
           </span>
           <a class="ptr" href="#cp-c">Checkpoint C &rarr;</a>
         </li>
         <li>
           <span class="n">02</span>
           <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R228-R249">app/controllers/admin/dashboard_controller.rb:228-249</a>
-            <span class="why">The parser holds both the default-to-1 and the only enforced size rule. Both the
-              layout and bulk endpoints call it.</span>
-          </span>
-          <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
-        </li>
-        <li>
-          <span class="n">03</span>
-          <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR18-R35">lib/admin_dashboard/reports/layout_updater.rb:18-35</a>
-            <span class="why">Every save replaces the whole list, which is why a missing size becomes a reset.
-              <code>section.rb:50-52</code> is how the saved size gets back to the client.</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R228-R248">app/controllers/admin/dashboard_controller.rb:228-248</a>
+            <span class="why">How the layout endpoint reads, defaults and checks each size before saving; the default of 1 is what Checkpoint A turns on.</span>
           </span>
           <a class="ptr" href="#cp-c">Checkpoint C &rarr;</a>
         </li>
         <li>
-          <span class="n">04</span>
+          <span class="n">03</span>
           <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L194-L213">frontend/discourse/admin/components/modal/manage-reports.gjs:194-213</a>
-            <span class="why">This unchanged file is the third writer of the layout, and the only one that leaves
-              sizes out <span class="tier tier-unc">from unchanged code</span></span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L197-L205">frontend/discourse/admin/components/modal/manage-reports.gjs:197-205</a>
+            <span class="why">A second sender to that endpoint, outside the diff, that sends no size <span class="tier tier-unc">from unchanged code</span>.</span>
           </span>
           <a class="ptr" href="#cp-a">Checkpoint A &rarr;</a>
         </li>
         <li>
-          <span class="n">05</span>
+          <span class="n">04</span>
           <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L162-L251">frontend/discourse/admin/components/dashboard/reports.gjs:162-251</a>
-            <span class="why">Read <code>layoutItems</code> and <code>loadPayloads</code> together to see which copy
-              of a size each one trusts. Then read <code>setSize</code> at <code>:389</code>.</span>
+            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR18-R33">lib/admin_dashboard/reports/layout_updater.rb:18-33</a>
+            <span class="why">Where a received list replaces the stored layout, and where the bulk insert writes the sizes.</span>
           </span>
           <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
         </li>
         <li>
-          <span class="n">06</span>
+          <span class="n">05</span>
           <span class="t">
-            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L290-L386">frontend/discourse/admin/components/dashboard/reports.gjs:290-386</a>
-            <span class="why">The drag handlers come last. They are the largest part of the diff and depend on
-              everything above, and the click branch is at the end.</span>
+            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L356-L409">frontend/discourse/admin/components/dashboard/reports.gjs:356-409</a>
+            <span class="why">The end of a resize gesture: the click shortcut Checkpoint D asks about, then the whole-layout save Checkpoint B asks about.</span>
           </span>
           <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
+        </li>
+        <li>
+          <span class="n">06</span>
+          <span class="t">
+            <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L54-L122">frontend/discourse/admin/components/dashboard/reports.gjs:54-122</a>
+            <span class="why">The two modifier classes the live resize uses for its animation and its floating card.</span>
+          </span>
+          <a class="ptr" href="#cp-e">Checkpoint E &rarr;</a>
         </li>
       </ol>
     </section>
@@ -1752,51 +2874,35 @@ figcaption strong { color: var(--ink-3); }
         <span class="lbl">Impact paths</span>
 
         <div class="ip-card">
-          <span class="ip-hd">A &middot; Applying Manage reports resets every card size</span>
-          <p class="ip-why">An admin who resized cards and then reorders or adds a report in the modal finds
-            every card back at one cell. <a href="#cp-a">Checkpoint A</a></p>
-          <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
+          <span class="ip-hd">A &middot; Card sizes after a Manage reports save</span>
+          <p class="ip-why">An admin who saves the Manage reports modal, for any reason, loses every
+            size set on the dashboard, because the modal sends no size and a missing one is stored as 1
+            <span class="tier tier-unc">from unchanged code</span>. <a href="#cp-a">Checkpoint A</a></p>
+          <div class="ip-lanes"><span>In this PR's files</span><span>Outside the diff</span></div>
           <div class="ip-body">
             <ol class="ip-path">
-              <li class="ip-n ip-chg"><span class="ip-box"><b>parse_reports_items_payload</b><span class="ip-d">missing size &rarr; 1&times;1</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R240">app/controllers/admin/dashboard_controller.rb:235-240</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>ManageReports#apply</b><span class="ip-d">sends source + identifier only</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L201-L204">frontend/discourse/admin/components/modal/manage-reports.gjs:201-204</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>causes</span><span class="ip-box"><b>AdminDashboardReport.delete_all</b><span class="ip-d">no old size survives</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/admin_dashboard/reports/layout_updater.rb#L19">lib/admin_dashboard/reports/layout_updater.rb:19</a></span></li>
-              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Every card back to 1&times;1</b><span class="ip-d">observable behaviour</span></span></li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="ip-card">
-          <span class="ip-hd">B &middot; A resized card may revert when the Reports section is shown again</span>
-          <p class="ip-why">A resize updates only local state. Section data that the dashboard serves from its
-            cache still has the old size <span class="tier tier-inf">inferred</span>.
-            <a href="#cp-b">Checkpoint B</a></p>
-          <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
-          <div class="ip-body">
-            <ol class="ip-path">
-              <li class="ip-n ip-chg"><span class="ip-box"><b>setSize</b><span class="ip-d">updates this.cards, not @data</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L389-L409">frontend/discourse/admin/components/dashboard/reports.gjs:389-409</a></span></li>
-              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>ignored by</span><span class="ip-box"><b>#applyConfigOptimistically</b><span class="ip-d">re-serves cached section data</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/controllers/admin/dashboard.js#L116-L127">frontend/discourse/admin/controllers/admin/dashboard.js:116-127</a></span></li>
-              <li class="ip-n ip-chg"><span class="ip-rel"><i></i>read by</span><span class="ip-box"><b>loadPayloads</b><span class="ip-d">rebuilds cards from @data.items</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L213-L251">frontend/discourse/admin/components/dashboard/reports.gjs:213-251</a></span></li>
-              <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Card shows its old size</b><span class="ip-d">observable behaviour</span></span></li>
+              <li class="ip-n ip-chg"><span class="ip-box"><b>parse_reports_items_payload</b><span class="ip-d">a missing size becomes 1</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R241">app/controllers/admin/dashboard_controller.rb:235-241</a></span></li>
+              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>ManageReports#apply</b><span class="ip-d">sends source and identifier only</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L197-L205">frontend/discourse/admin/components/modal/manage-reports.gjs:197-205</a></span></li>
+              <li class="ip-n ip-out"><span class="ip-rel"><i></i>causes</span><span class="ip-box"><b>every card back to one row, one column</b><span class="ip-d">observable behaviour</span></span></li>
             </ol>
           </div>
         </div>
 
         <div class="legend">
-          <span><i class="key-chg"></i>Changed by this PR</span>
+          <span><i class="key-chg"></i>In this PR's files</span>
           <span><i class="key-aff"></i>Affected, not changed</span>
           <span><i class="key-out"></i>Behaviour</span>
         </div>
 
-        <p class="note" style="margin-top:16px">Searching by name finds the three places that PUT to the layout
-          endpoint. It cannot find a theme or plugin that builds the same request some other way.</p>
+        <p class="note" style="margin-top:16px">Callers were found by the endpoint&#39;s path and the
+          updater&#39;s name. A theme or plugin outside this repository that saves the layout would not
+          appear in either search.</p>
       </figure>
 
       <p class="eyebrow" style="margin:34px 0 14px">Affected, not changed<i></i></p>
       <ul class="ev-list">
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L201-L204">frontend/discourse/admin/components/modal/manage-reports.gjs:201-204</a> &mdash; the one layout writer that sends no size. <a href="#cp-a">Checkpoint A</a></li>
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/controllers/admin/dashboard.js#L96-L127">frontend/discourse/admin/controllers/admin/dashboard.js:96-127</a> &mdash; showing the section again reuses cached data when the cache has it. <a href="#cp-b">Checkpoint B</a></li>
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/admin_dashboard/reports/bulk_fetch.rb#L10-L28">lib/admin_dashboard/reports/bulk_fetch.rb:10-28</a> &mdash; ignores rows and cols, but the shared parser now returns 400 for the whole bulk request if any size is out of range. <a href="#cp-c">Checkpoint C</a></li>
+        <li><a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L197-L205">frontend/discourse/admin/components/modal/manage-reports.gjs:197-205</a> &mdash; saves the layout with no sizes, so each save resets them. <a href="#cp-a">Checkpoint A</a></li>
+        <li><a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/admin_dashboard/reports/registry.rb#L16-L25">lib/admin_dashboard/reports/registry.rb:16-25</a> &mdash; skips rows whose source has no provider, so the next resize now deletes them. <a href="#cp-b">Checkpoint B</a></li>
       </ul>
     </section>
 
@@ -1839,46 +2945,43 @@ figcaption strong { color: var(--ink-3); }
         <summary><span class="chev">&#9656;</span> Searches run, and what they could not reach</summary>
         <div class="sr-body">
           <ul class="sr-list">
-            <li><code>git grep -n 'reports/layout' -- frontend app lib plugins spec</code> <span class="sr-r">three frontend writers: <code>setSize</code>, <code>removeReport</code>, <code>ManageReports#apply</code>; the rest are tests</span></li>
-            <li><code>git grep -n 'AdminDashboardReport\b' -- app lib plugins db/migrate config</code> <span class="sr-r">writes are <code>insert_all</code> in LayoutUpdater and two <code>find_or_create_by!</code> seeds</span></li>
-            <li><code>git grep -n 'CHECK' db/structure.sql | grep -i dashboard_report</code> <span class="sr-r">no hits</span></li>
-            <li><code>git grep -n 'DashboardReports\b' -- frontend/discourse/admin</code> <span class="sr-r">one consumer, <code>redesigned-admin-dashboard.gjs:106</code></span></li>
-            <li><code>git grep -n '@layout=' -- frontend plugins</code> <span class="sr-r">only <code>reports.gjs</code> uses <code>"grid"</code> outside tests; <code>section-test.gjs</code> also matches</span></li>
-            <li><code>git grep -n -i 'rtl' -- frontend/discourse/tests/integration/components/dashboard/reports-test.gjs</code> <span class="sr-r">no hits</span></li>
-            <li><code>git grep -n 'cancelCommits\|onResizeCancel?.(' -- frontend/discourse/app/ui-kit/d-resize-handles.gts</code> <span class="sr-r">teardown at <code>:472-475</code> calls <code>onResizeCancel</code> unless <code>cancelCommits</code> is set, and reports.gjs never sets it</span></li>
-            <li><code>git grep -n 'grid-auto-rows' -- app/assets/stylesheets/admin</code> <span class="sr-r">one hit, <code>admin_dashboard.scss:489</code>, on the shared <code>.--grid</code> layout</span></li>
+            <li><code>rg -n 'reports/layout|LayoutUpdater' app lib frontend plugins config spec</code> <span class="sr-r">three senders of the layout: <code>setSize</code> and <code>removeReport</code> in reports.gjs, <code>apply</code> in manage-reports.gjs; one Ruby caller, <code>update_reports_section</code></span></li>
+            <li><code>rg -n 'rows|cols' frontend/discourse/admin/components/modal/manage-reports.gjs</code> <span class="sr-r">no hits</span></li>
+            <li><code>rg -n 'AdminDashboardReport\b' app lib plugins</code> <span class="sr-r">writers: the layout updater and two seeders, <code>lib/seed_data/admin_dashboard_reports.rb</code> and discourse-solved&#39;s</span></li>
+            <li><code>rg -n 'update_all|insert_all|upsert_all|update_column|delete_all' lib/admin_dashboard app/models/admin_dashboard_report.rb</code> <span class="sr-r">layout_updater.rb:19 <code>delete_all</code> and :33 <code>insert_all</code></span></li>
+            <li><code>rg -n 'parse_reports_items_payload' app/controllers/admin/dashboard_controller.rb</code> <span class="sr-r"><code>update_reports_section</code>, <code>bulk_reports</code>, and the definition</span></li>
+            <li><code>rg -n -A9 'def self.dispatch_per_source' lib/admin_dashboard/reports/registry.rb</code> <span class="sr-r">skips a source with no provider at :21</span></li>
+            <li><code>rg -n 'available.json' frontend/discourse/admin/components/modal/manage-reports.gjs</code> <span class="sr-r">the modal loads from the available-reports action, :137</span></li>
+            <li><code>rg -n 'rows: [2-4]' frontend/discourse/tests/integration/components/dashboard/reports-test.gjs</code> <span class="sr-r">one hit, a drag at :622</span></li>
+            <li><code>rg -n 'extends Modifier' frontend/discourse/admin --glob '*.gjs'</code> <span class="sr-r">reports.gjs:54 and :108 only</span></li>
+            <li><code>ls frontend/discourse/app/ui-kit/modifiers/</code> <span class="sr-r">twenty entries, none animating a layout change</span></li>
+            <li><code>git grep -n -P 'layoutItems' 07211c3b4aca4d7126cc7c5cabb03936575e5694 -- frontend/discourse/admin/components/dashboard/reports.gjs</code> <span class="sr-r">at the base, the layout list was built from the section data rather than from the cards</span></li>
           </ul>
-          <p class="sr-limit"><strong>Out of reach.</strong> Themes and plugins outside this repository that call
-            the layout endpoint, and any <code>--grid</code> class applied dynamically rather than through
-            <code>@layout</code>.</p>
+          <p class="sr-limit"><strong>Out of reach.</strong> A theme or plugin outside this repository
+            that saves the layout or reads a card&#39;s size; and where the browser actually places each
+            card, which decides which corner gets a handle and which no text search can show.</p>
         </div>
       </details>
-
-      <p class="eyebrow" style="margin:30px 0 14px">Affected, not changed<i></i></p>
-      <ul class="ev-list">
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/seed_data/admin_dashboard_reports.rb#L11-L14">lib/seed_data/admin_dashboard_reports.rb:11-14</a> &mdash; seeded cards rely on the column defaults of 1&times;1.</li>
-        <li><a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/app/ui-kit/d-resize-handles.gts#L445-L478">frontend/discourse/app/ui-kit/d-resize-handles.gts:445-478</a> &mdash; if a handle is removed mid-drag (the card starts loading), this calls <code>onResizeCancel</code>, which clears the live preview.</li>
-        <li><a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-35807e3f075a8c1fbb902e87020dbf0982d206585c14170247fb6844277dbda5R489">app/assets/stylesheets/admin/admin_dashboard.scss:489</a> &mdash; <code>grid-auto-rows: 320px</code> applies to every <code>.--grid</code> section, and in core only Reports uses one.</li>
-      </ul>
     </details>
-
-  </main>
 
   </main>
 </div>
 
-<!-- Scroll progress, rail scroll-spy, opening off-page links in a new tab, and
-     the syntax tint on unchanged excerpts.
-     This is the ONLY script the page carries: no state, no localStorage, no
-     counters. All four are presentation, and the page reads correctly with the
-     whole block removed — the excerpts simply render in one ink, as they did
+<!-- Scroll progress, rail scroll-spy, opening off-page links in a new tab, the
+     appearance menu, and the syntax tint on unchanged excerpts.
+     Apart from the few lines in the head that apply a saved appearance before
+     first paint, this is the ONLY script the page carries, and its one piece of
+     state is that appearance: two localStorage keys, a viewer's own convenience,
+     never anything about the change. No counters. All five jobs are presentation,
+     and the page reads correctly with the whole block removed — the excerpts simply render in one ink, as they did
      before the tint existed, and a citation lands in the tab it was clicked from.
 
      highlight.js comes from cdnjs because that is the one script host a published
      artifact may load; its stylesheets are NOT loadable, which is why the theme
-     for it lives in our token block above. Two grammars are loaded beside the
+     for it lives in the theme's token block above. Two grammars are loaded beside the
      core bundle because neither is in it and both are code this page quotes:
      erb for Rails views, elixir for Elixir modules. Carry all three lines.
+     Rust needs no fourth: rust is in the core bundle, and TOML tints as ini.
      There is deliberately no heex grammar — highlight.js ships none, and
      excerpt.sh emits no data-lang for .heex for that reason. Loaded plainly, before the inline
      script, so it is defined by the time that runs. If it 404s or is blocked,
@@ -1956,6 +3059,112 @@ figcaption strong { color: var(--ink-3); }
     a.setAttribute('target', '_blank');
     a.setAttribute('rel', 'noopener noreferrer');
   });
+
+  /* ---- The appearance menu ------------------------------------------------
+     Built here, into the right end of the masthead's first line, so the markup
+     half carries no control for a run to copy. Its styles are the style
+     elements page-skeleton.sh emitted, read off the page rather than listed
+     here, so a theme added under references/themes/ appears without touching
+     this block. Choosing one switches media between "all" and "not all"; the
+     light/dark/auto segment sets or clears data-theme, which every theme's
+     tokens already answer. Both choices are saved for the next visit by the
+     head script's two keys. With one theme or no masthead there is nothing to
+     offer, and nothing is drawn. */
+  (function () {
+    var line = document.querySelector('main > header > .lbl-wide');
+    var sheets = document.querySelectorAll('style[data-style]');
+    if (!line || sheets.length < 2) { return; }
+    var root = document.documentElement;
+    function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    function el(tag, cls, text) {
+      var e = document.createElement(tag);
+      if (cls) { e.className = cls; }
+      if (text) { e.textContent = text; }
+      return e;
+    }
+
+    var rc = el('div', 'rc'), btn = el('button', 'rc-btn'), icon = el('span', 'rc-i');
+    btn.type = 'button';
+    btn.title = 'Appearance';
+    btn.setAttribute('aria-haspopup', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-controls', 'rc-pop');
+    btn.appendChild(el('b', '', 'Aa'));
+    icon.setAttribute('aria-hidden', 'true');
+    btn.appendChild(icon);
+    var pop = el('div', 'rc-pop');
+    pop.id = 'rc-pop';
+    pop.setAttribute('role', 'dialog');
+    pop.setAttribute('aria-label', 'Appearance');
+
+    pop.appendChild(el('div', 'rc-h', 'Style'));
+    var list = el('div', 'rc-styles'), choices = [];
+    function active() {
+      for (var i = 0; i < sheets.length; i++) {
+        if (sheets[i].getAttribute('media') !== 'not all') { return sheets[i].getAttribute('data-style'); }
+      }
+      return '';
+    }
+    function useStyle(name) {
+      var all = document.querySelectorAll('[data-style]');
+      for (var i = 0; i < all.length; i++) {
+        if (all[i].getAttribute('data-style') === name) { all[i].removeAttribute('media'); }
+        else { all[i].setAttribute('media', 'not all'); }
+      }
+      choices.forEach(function (c) {
+        var on = c.getAttribute('data-s') === name;
+        c.classList.toggle('on', on);
+        c.setAttribute('aria-pressed', String(on));
+      });
+    }
+    Array.prototype.forEach.call(sheets, function (sh) {
+      var name = sh.getAttribute('data-style');
+      var b = el('button'), sw = el('span', 'rc-sw');
+      b.type = 'button';
+      b.setAttribute('data-s', name);
+      sw.setAttribute('data-sw', name);
+      b.appendChild(sw);
+      b.appendChild(document.createTextNode(sh.getAttribute('data-style-label') || name));
+      b.onclick = function () { useStyle(name); save('review-style', name); };
+      list.appendChild(b);
+      choices.push(b);
+    });
+    pop.appendChild(list);
+
+    pop.appendChild(el('div', 'rc-h', 'Theme'));
+    var seg = el('div', 'rc-seg'), modes = [];
+    seg.setAttribute('role', 'group');
+    seg.setAttribute('aria-label', 'Theme');
+    var glyph = { light: '\u2600', auto: '\u25D0', dark: '\u263E' };
+    function useMode(m) {
+      if (m === 'auto') { root.removeAttribute('data-theme'); } else { root.setAttribute('data-theme', m); }
+      icon.textContent = glyph[m];
+      modes.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-t') === m)); });
+    }
+    [['light', 'Light'], ['auto', 'Auto'], ['dark', 'Dark']].forEach(function (m) {
+      var b = el('button', '', glyph[m[0]] + ' ' + m[1]);
+      b.type = 'button';
+      b.setAttribute('data-t', m[0]);
+      b.onclick = function () { useMode(m[0]); save('review-theme', m[0]); };
+      seg.appendChild(b);
+      modes.push(b);
+    });
+    pop.appendChild(seg);
+
+    rc.appendChild(btn);
+    rc.appendChild(pop);
+    line.appendChild(rc);
+    useStyle(active());
+    var t = root.getAttribute('data-theme');
+    useMode(t === 'light' || t === 'dark' ? t : 'auto');
+
+    function close() { rc.classList.remove('rc-on'); btn.setAttribute('aria-expanded', 'false'); }
+    btn.onclick = function () { btn.setAttribute('aria-expanded', String(rc.classList.toggle('rc-on'))); };
+    document.addEventListener('click', function (e) { if (!rc.contains(e.target)) { close(); } });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && rc.classList.contains('rc-on')) { close(); btn.focus(); }
+    });
+  })();
 
   /* ---- Syntax tint, .excerpt--source only -------------------------------
      The rule this obeys: an excerpt is a quotation, so the script may change

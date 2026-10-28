@@ -218,7 +218,7 @@ end
 # never read. golden/impact-why-variant-class.html is that bypass.
 whys = panel.lines.join(" ").scan(%r{<p class="ip-why[^"]*"[^>]*>(.*?)</p>}m).flatten
 empty = whys.count { |w| ReviewMap.unescape(w.gsub(/<[^>]*>/, "")).strip.empty? }
-walked = whys.count { |w| w.match?(/class="(?:path|cite)/) || w.match?(/<li[ >]|<ol[ >]|<ul[ >]/) }
+walked = whys.count { |w| w.match?(/class="(?:path|cite|ref)/) || w.match?(/<li[ >]|<ol[ >]|<ul[ >]/) }
 if empty.zero? && walked.zero?
   check.ok("no ip-why is empty, and none carries a citation or a list")
 else

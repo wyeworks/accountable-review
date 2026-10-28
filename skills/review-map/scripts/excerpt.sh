@@ -1,8 +1,8 @@
 #!/bin/sh
 # excerpt.sh — emit a collapsed source excerpt for the review map.
 #
-#   Usage:  excerpt.sh --at PATH:START-END  [--rev REV]  [--why TEXT | --in-entry]
-#           excerpt.sh --diff PATH --base BASE [--head HEAD] [--hunk N] [--why TEXT | --in-entry]
+#   Usage:  excerpt.sh --at PATH:START-END  [--rev REV]  [--why TEXT | --in-entry | --inline]
+#           excerpt.sh --diff PATH --base BASE [--head HEAD] [--hunk N] [--why TEXT | --in-entry | --inline]
 #           …plus one link option: [--blob URL_WITHOUT_FRAGMENT] or [--link FULL_URL]
 #
 # Run it from inside the repository under review. --source is an alias for --at,
@@ -30,6 +30,13 @@
 # the entry's clause sits directly above it and says what to see, so a why in the
 # summary is the same sentence twice in slightly different words. Everywhere else the
 # why stays, because nothing else beside the block says why to open it.
+#
+# --inline emits the snippet a checkpoint's EXPLANATION shows, where the code says one
+# idea more clearly than a sentence would: a div.excerpt.ex-inline, open because there
+# is nothing to open, captioned with the linked location and the state tag and nothing
+# else — the sentence above it is its why. Still a quotation, so still generated. It
+# warns past INLINE_MAX lines: a snippet the reader has to scan is evidence, and its
+# place is a Look at entry.
 #
 #   --at    quotes the file as it stands at REV (default HEAD). This is the form
 #           for *affected but unchanged* code, which has no diff to show and is the
@@ -91,11 +98,13 @@ LINK=
 BLOB=
 SYNLANG=
 IN_ENTRY=
+INLINE=
 SOFT_MAX=24
+INLINE_MAX=10
 
 usage() {
-  echo "usage: excerpt.sh --at PATH:START-END --base BASE [--rev REV] [--head REF] [--why TEXT|--in-entry] [--lang L] [--blob URL|--link URL]" >&2
-  echo "       excerpt.sh --diff PATH --base BASE [--head HEAD] [--hunk N] [--why TEXT|--in-entry] [--blob URL|--link URL]" >&2
+  echo "usage: excerpt.sh --at PATH:START-END --base BASE [--rev REV] [--head REF] [--why TEXT|--in-entry|--inline] [--lang L] [--blob URL|--link URL]" >&2
+  echo "       excerpt.sh --diff PATH --base BASE [--head HEAD] [--hunk N] [--why TEXT|--in-entry|--inline] [--blob URL|--link URL]" >&2
   exit 2
 }
 
@@ -112,9 +121,17 @@ while [ $# -gt 0 ]; do
     --blob) BLOB=${2:-}; shift 2 ;;
     --lang) SYNLANG=${2:-}; shift 2 ;;
     --in-entry) IN_ENTRY=1; shift ;;
+    --inline) INLINE=1; shift ;;
     *) usage ;;
   esac
 done
+
+if [ -n "$INLINE" ] && { [ -n "$IN_ENTRY" ] || [ -n "$WHY" ]; }; then
+  echo "excerpt.sh: --inline takes neither --why nor --in-entry." >&2
+  echo "  An inline snippet sits in the explanation, and the sentence introducing it is its why." >&2
+  exit 2
+fi
+[ -z "$INLINE" ] || SOFT_MAX=$INLINE_MAX
 
 [ -n "$MODE" ] && [ -n "$TARGET" ] || usage
 if [ -n "$IN_ENTRY" ] && [ -n "$WHY" ]; then
@@ -145,6 +162,15 @@ loc_html() {
 # body: the page has to read complete with every excerpt closed, and a why the
 # reader has to open the block to see defeats the whole point of the component.
 open_block() {  # $1 variant, $2 path, $3 loc label, $4 counter seed, $5 state tag, $6 lang
+  if [ -n "$INLINE" ]; then
+    printf '<div class="excerpt excerpt--%s ex-inline">\n' "$1"
+    printf '  <p class="ex-cap"><span class="ex-loc">%s</span> <span class="tag">%s</span></p>\n' \
+      "$(loc_html "$3")" "$(esc1 "$5")"
+    printf '  <div class="ex-body">\n'
+    printf '<pre data-src="%s"%s style="counter-reset: exl %s">' \
+      "$(escattr "$2")" "$( [ -n "${6:-}" ] && printf ' data-lang="%s"' "$(escattr "$6")" )" "$4"
+    return
+  fi
   printf '<details class="excerpt excerpt--%s">\n' "$1"
   printf '  <summary>\n'
   printf '    <span class="chev">&#9656;</span>\n'
@@ -159,7 +185,7 @@ open_block() {  # $1 variant, $2 path, $3 loc label, $4 counter seed, $5 state t
 
 close_block() {
   printf '</pre>\n'
-  printf '  </div>\n</details>\n'
+  if [ -n "$INLINE" ]; then printf '  </div>\n</div>\n'; else printf '  </div>\n</details>\n'; fi
 }
 
 # Extension → highlight.js language. Only names in the library's common bundle,
@@ -207,6 +233,12 @@ guess_lang() {
 
 warn_long() {
   [ "$1" -gt "$SOFT_MAX" ] || return 0
+  if [ -n "$INLINE" ]; then
+    echo "excerpt.sh: $1 lines — past the $SOFT_MAX-line budget for an inline snippet." >&2
+    echo "  A snippet in the explanation shows one idea; code the reader has to scan is" >&2
+    echo "  evidence, and belongs in a Look at entry." >&2
+    return 0
+  fi
   echo "excerpt.sh: $1 lines — past the $SOFT_MAX-line budget." >&2
   echo "  An excerpt this long usually means the prose is not pointing precisely" >&2
   echo "  enough. Tighten the range rather than asking the reader to scan it." >&2
@@ -310,7 +342,7 @@ diff)
   # is what a reviewer looking at the file after the change will see.
   printf '%s\n' "$raw" | awk \
     -v path="$TARGET" -v why="$WHY_HTML" -v link="$LINK" \
-    -v want="$HUNK" -v softmax="$SOFT_MAX" -v blob="$BLOB" -v inentry="$IN_ENTRY" '
+    -v want="$HUNK" -v softmax="$SOFT_MAX" -v blob="$BLOB" -v inentry="$IN_ENTRY" -v inline="$INLINE" '
     function esc(s) {
       gsub(/&/, "\\&amp;", s); gsub(/</, "\\&lt;", s); gsub(/>/, "\\&gt;", s); return s
     }
@@ -336,22 +368,28 @@ diff)
             href = substr(link, 1, RSTART + RLENGTH - 1) "R" nstart "-R" (nstart + nspan - 1)
           }
         }
-        printf "<details class=\"excerpt excerpt--diff\">\n"
-        printf "  <summary>\n"
-        printf "    <span class=\"chev\">&#9656;</span>\n"
-        if (href != "")
-          printf "    <span class=\"ex-loc\"><a class=\"cite\" href=\"%s\">%s</a></span>\n", escattr(href), esc(loc)
-        else
-          printf "    <span class=\"ex-loc\">%s</span>\n", esc(loc)
-        printf "    <span class=\"tag\">Changed</span>\n"
-        if (inentry == "") printf "    <span class=\"ex-why\">%s</span>\n", why
-        printf "  </summary>\n"
+        if (href != "") locspan = sprintf("<span class=\"ex-loc\"><a class=\"cite\" href=\"%s\">%s</a></span>", escattr(href), esc(loc))
+        else locspan = sprintf("<span class=\"ex-loc\">%s</span>", esc(loc))
+        if (inline != "") {
+          printf "<div class=\"excerpt excerpt--diff ex-inline\">\n"
+          printf "  <p class=\"ex-cap\">%s <span class=\"tag\">Changed</span></p>\n", locspan
+        } else {
+          printf "<details class=\"excerpt excerpt--diff\">\n"
+          printf "  <summary>\n"
+          printf "    <span class=\"chev\">&#9656;</span>\n"
+          printf "    %s\n", locspan
+          printf "    <span class=\"tag\">Changed</span>\n"
+          if (inentry == "") printf "    <span class=\"ex-why\">%s</span>\n", why
+          printf "  </summary>\n"
+        }
         printf "  <div class=\"ex-body\">\n"
         printf "<pre data-src=\"%s\" style=\"counter-reset: exl %d\">", escattr(path), nstart - 1
         printf "%s", buf
         printf "</pre>\n"
-        printf "  </div>\n</details>\n"
-        if (rows > softmax)
+        printf "  </div>\n%s\n", (inline != "") ? "</div>" : "</details>"
+        if (rows > softmax && inline != "")
+          printf "excerpt.sh: hunk %d is %d lines — past the %d-line budget for an inline snippet; quote the lines that carry the idea with --at, or move it to a Look at entry.\n", idx, rows, softmax | "cat 1>&2"
+        else if (rows > softmax)
           printf "excerpt.sh: hunk %d is %d lines — past the %d-line budget; consider --at with a tighter range.\n", idx, rows, softmax | "cat 1>&2"
       }
       open = 0; buf = ""; rows = 0
@@ -377,7 +415,12 @@ diff)
       buf = buf sprintf("<span class=\"%s\"><span class=\"sig\">%s</span>%s</span>\n", cls, sign, esc(text))
       rows++
     }
-    END { flush(); if (idx == 0) print "excerpt.sh: no hunks found" | "cat 1>&2" }
+    END {
+      flush()
+      if (idx == 0) print "excerpt.sh: no hunks found" | "cat 1>&2"
+      else if (inline != "" && want == "" && idx > 1)
+        printf "excerpt.sh: %d hunks, so %d inline snippets — an explanation shows one; pick it with --hunk N.\n", idx, idx | "cat 1>&2"
+    }
   '
   ;;
 esac
