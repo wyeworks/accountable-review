@@ -730,8 +730,8 @@
     "model": "claude-opus-5-5",
     "k": 3,
     "need": 2,
-    "calibrated": false,
-    "date": "2026-10-28T15:15:46Z",
+    "calibrated": true,
+    "date": "2026-10-28T15:48:21Z",
     "prs": [
       "discourse-43002"
     ],
@@ -743,7 +743,8 @@
         "expected": "fail",
         "got": [
           "fail",
-          "fail"
+          "fail",
+          "pass"
         ],
         "gated": true,
         "held": true
@@ -754,6 +755,7 @@
         "criterion": 2,
         "expected": "pass",
         "got": [
+          "pass",
           "pass",
           "pass"
         ],
@@ -766,6 +768,7 @@
         "criterion": 3,
         "expected": "fail",
         "got": [
+          "pass",
           "fail",
           "fail"
         ],
@@ -779,6 +782,7 @@
         "expected": "pass",
         "got": [
           "pass",
+          "pass",
           "pass"
         ],
         "gated": true,
@@ -791,6 +795,7 @@
         "expected": "pass",
         "got": [
           "pass",
+          "pass",
           "pass"
         ],
         "gated": true,
@@ -802,7 +807,6 @@
         "criterion": 1,
         "expected": "pass",
         "got": [
-          "fail",
           "pass",
           "pass"
         ],
@@ -816,7 +820,6 @@
         "expected": "pass",
         "got": [
           "pass",
-          "pass",
           "pass"
         ],
         "gated": false,
@@ -828,12 +831,11 @@
         "criterion": 3,
         "expected": "pass",
         "got": [
-          "fail",
           "pass",
-          "fail"
+          "pass"
         ],
         "gated": true,
-        "held": false
+        "held": true
       },
       {
         "id": "discourse-43002",
@@ -841,7 +843,6 @@
         "criterion": 4,
         "expected": "pass",
         "got": [
-          "pass",
           "pass",
           "pass"
         ],
@@ -854,7 +855,6 @@
         "criterion": 5,
         "expected": "pass",
         "got": [
-          "pass",
           "pass",
           "pass"
         ],
@@ -868,7 +868,7 @@
         "expected": "fail",
         "got": [
           "fail",
-          "fail"
+          "pass"
         ],
         "gated": false,
         "held": true
@@ -927,8 +927,8 @@
         "criterion": 1,
         "expected": "fail",
         "got": [
-          "pass",
-          "pass"
+          "fail",
+          "fail"
         ],
         "gated": false,
         "held": true
@@ -951,7 +951,7 @@
         "criterion": 3,
         "expected": "fail",
         "got": [
-          "pass",
+          "fail",
           "fail"
         ],
         "gated": false,
@@ -1071,8 +1071,8 @@
         "criterion": 3,
         "expected": "fail",
         "got": [
-          "pass",
-          "fail"
+          "fail",
+          "pass"
         ],
         "gated": false,
         "held": true
@@ -1678,8 +1678,8 @@
     "model": "claude-opus-5-5",
     "k": 3,
     "need": 2,
-    "calibrated": false,
-    "date": "2026-10-28T14:30:33Z",
+    "calibrated": true,
+    "date": "2026-10-28T16:03:20Z",
     "prs": [
       "discourse-43002"
     ],
@@ -1688,12 +1688,13 @@
         "id": "discourse-43002",
         "variant": "gold",
         "criterion": 1,
-        "expected": null,
+        "expected": "fail",
         "got": [
           "fail",
-          "pass"
+          "pass",
+          "fail"
         ],
-        "gated": false,
+        "gated": true,
         "held": true
       },
       {
@@ -1702,6 +1703,7 @@
         "criterion": 2,
         "expected": "pass",
         "got": [
+          "pass",
           "pass",
           "pass"
         ],
@@ -1715,6 +1717,7 @@
         "expected": "pass",
         "got": [
           "pass",
+          "pass",
           "pass"
         ],
         "gated": true,
@@ -1727,6 +1730,7 @@
         "expected": "pass",
         "got": [
           "pass",
+          "pass",
           "pass"
         ],
         "gated": true,
@@ -1738,6 +1742,7 @@
         "criterion": 5,
         "expected": "pass",
         "got": [
+          "pass",
           "pass",
           "pass"
         ],
@@ -1751,11 +1756,10 @@
         "expected": "pass",
         "got": [
           "pass",
-          "fail",
-          "fail"
+          "pass"
         ],
         "gated": true,
-        "held": false
+        "held": true
       },
       {
         "id": "discourse-43002",
@@ -1763,7 +1767,6 @@
         "criterion": 2,
         "expected": "pass",
         "got": [
-          "pass",
           "pass",
           "pass"
         ],
@@ -1777,7 +1780,6 @@
         "expected": "pass",
         "got": [
           "pass",
-          "pass",
           "pass"
         ],
         "gated": false,
@@ -1790,7 +1792,6 @@
         "expected": "pass",
         "got": [
           "pass",
-          "pass",
           "pass"
         ],
         "gated": false,
@@ -1802,7 +1803,6 @@
         "criterion": 5,
         "expected": "pass",
         "got": [
-          "pass",
           "pass",
           "pass"
         ],
@@ -1813,7 +1813,7 @@
         "id": "discourse-43002",
         "variant": "what-changed-coverage",
         "criterion": 1,
-        "expected": null,
+        "expected": "fail",
         "got": [
           "pass",
           "fail"
@@ -1873,7 +1873,7 @@
         "id": "discourse-43002",
         "variant": "what-changed-false-limit",
         "criterion": 1,
-        "expected": null,
+        "expected": "fail",
         "got": [
           "pass",
           "pass"
@@ -1933,7 +1933,7 @@
         "id": "discourse-43002",
         "variant": "what-changed-grading",
         "criterion": 1,
-        "expected": null,
+        "expected": "fail",
         "got": [
           "fail",
           "fail"
@@ -2053,7 +2053,7 @@
         "id": "discourse-43002",
         "variant": "what-changed-steps-as-deltas",
         "criterion": 1,
-        "expected": null,
+        "expected": "fail",
         "got": [
           "fail",
           "fail"
@@ -2079,8 +2079,8 @@
         "criterion": 3,
         "expected": "pass",
         "got": [
-          "fail",
-          "fail"
+          "pass",
+          "pass"
         ],
         "gated": false,
         "held": true
@@ -2113,9 +2113,9 @@
         "id": "discourse-43002",
         "variant": "what-changed-unattributed-intent",
         "criterion": 1,
-        "expected": null,
+        "expected": "fail",
         "got": [
-          "pass",
+          "fail",
           "pass"
         ],
         "gated": false,
