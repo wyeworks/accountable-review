@@ -1,6 +1,21 @@
 --- gold.html
 +++ gold.html
-@@ -2347,7 +2347,9 @@
+@@ -2336,9 +2336,11 @@
+       <div class="eyebrow"><span class="lbl lbl-a">What changed</span><i></i></div>
+       <h2 style="max-width:30ch;margin-bottom:18px">Admins can resize report cards, and each card keeps its size</h2>
+ 
+-      <p>The redesigned admin dashboard shows the reports an admin has pinned as a grid of cards, two
+-        columns wide. Admins already choose which reports appear and in what order. Every card was the
+-        same size, though, one fixed-height cell, so a report with more to show had to fit in it.</p>
++      <p>The redesigned admin dashboard shows the reports an admin has pinned as a grid of cards,
++        <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/app/assets/stylesheets/admin/admin_dashboard.scss#L488">two columns wide</a>. Admins already
++        <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L197-L205">choose which reports appear and in what order</a>
++        <span class="tier tier-unc">from unchanged code</span>. Every card was the same size, though,
++        <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/app/assets/stylesheets/admin/dashboard/reports.scss#L11">one fixed-height cell</a>, so a report with more to show had to fit in it.</p>
+       <p><strong>Each pinned report now carries a stored size: one to four rows tall and one or two
+         columns wide.</strong> Two new columns on the dashboard&#39;s layout table hold it, and
+         <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-59d620a03a4ddb1d01b1811c3a1217d2d6621dd785563941c64536fe1d21e112R5">both default to 1</a>.
+@@ -2347,7 +2349,9 @@
          The dashboard returns each card&#39;s size alongside its other fields. In the browser, an admin
          drags a card&#39;s lower corner to grow or shrink it, watches it reflow live, and the size is
          saved on release. A click on the corner without dragging toggles the card&#39;s width instead.
@@ -11,8 +26,17 @@
        <p>Admins get layouts that survive a reload, and anyone else who can open the dashboard sees the
          sizes admins chose. A dashboard where no card has been resized looks as it did: every existing
          row reads one row by one column, which is how every card rendered before.</p>
-@@ -2384,7 +2386,8 @@
-           sets a card&#39;s size. Both save through the same layout endpoint, and that endpoint stores
+@@ -2380,11 +2384,15 @@
+         <h3>Saving the report list from the Manage reports modal</h3>
+         <p>The dashboard now has two ways to change its list of pinned reports. The gear on the
+           reports section opens a Manage reports modal, where an admin adds, removes and reorders
+-          reports and then saves. The cards themselves offer the second way: the corner handle that
+-          sets a card&#39;s size. Both save through the same layout endpoint, and that endpoint stores
++          reports and then
++          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L197-L205">saves</a>
++          <span class="tier tier-unc">from unchanged code</span>. The cards themselves offer the second way: the corner handle that
++          sets a card&#39;s size. Both save through
++          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/app/controllers/admin/dashboard_controller.rb#L125-L131">the same layout endpoint</a>, and that endpoint stores
            whatever list it receives as the complete layout, replacing every row it held before.</p>
          <p>So a card&#39;s size survives a save only if that save sends it. The resize handler sends
 -          every card with its current size. <strong>The modal, which this change does not touch, still
@@ -21,7 +45,7 @@
            sends each report&#39;s source and identifier and nothing else:</strong></p>
  <div class="excerpt excerpt--source ex-inline">
    <p class="ex-cap"><span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L197-L205">frontend/discourse/admin/components/modal/manage-reports.gjs:197-205</a></span> <span class="tag">Unchanged</span></p>
-@@ -2409,7 +2412,9 @@
+@@ -2409,7 +2417,9 @@
            modal</a>, even one that only reorders two reports, every
            card on the dashboard is back to one row by one column
            <span class="tier tier-unc">from unchanged code</span>.</p>
@@ -32,17 +56,20 @@
            <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/app/controllers/admin/dashboard_controller.rb#L133-L136">the same
            section builder the dashboard uses</a>, which now returns each report&#39;s size; its save
            maps them away. The path is drawn in <a href="#impact">Impact outside the diff</a>.</p>
-@@ -2465,7 +2470,8 @@
+@@ -2464,8 +2474,10 @@
+         <span class="lbl lbl-wide">Checkpoint B</span>
          <h3>Saving one card&#39;s size by rewriting the whole layout</h3>
          <p>The dashboard stores its pinned reports as one list, and the only way to change any part of
-           it is to send the whole list again: the layout endpoint deletes every stored row and inserts
+-          it is to send the whole list again: the layout endpoint deletes every stored row and inserts
 -          the list it was given. Removing a report from the dashboard already worked this way.</p>
-+          the list it was given. <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L411-L426">Removing
++          it is to send the whole list again: the layout endpoint
++          <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR18-R33">deletes every stored row and inserts
++          the list it was given</a>. <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L411-L426">Removing
 +          a report from the dashboard</a> already worked this way.</p>
          <p>Resizing now works this way too, and an admin does it far more often. When a resize ends,
            <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L390-L409">the
            handler builds the full list from the cards this browser holds</a>, with the new size swapped
-@@ -2477,15 +2483,19 @@
+@@ -2477,15 +2489,19 @@
            builds its list from the cards as they stood when it began, and a card only takes its new
            size once its own request returns. Two overlapping saves, such as clicks on two cards&#39;
            handles in quick succession, would each send a list without the other&#39;s change. The one
@@ -66,7 +93,48 @@
            this; resizing adds a trigger that fires much more often.</p>
          <p class="open"><b>Review question</b>Is it acceptable that each resize replaces the stored layout with what this browser currently shows?</p>
          <details class="cp-ev">
-@@ -2698,7 +2708,9 @@
+@@ -2568,12 +2584,13 @@
+           model gains matching validations, including
+           <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-58ca16515b2125210a1f375ec00ec4eb34b246e28ee79611313dd1ce649aa724R40-R43">one for the full-width rule</a>.</p>
+         <p><strong>The model&#39;s validations do not run when the layout is saved.</strong> The endpoint
+-          hands its list to the layout updater, which writes it
++          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/app/controllers/admin/dashboard_controller.rb#L125-L131">hands its list to the layout updater</a>, which writes it
+           <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR33">with a bulk insert</a>, and
+           <a class="doc" href="https://api.rubyonrails.org/v8.0/classes/ActiveRecord/Relation.html#method-i-insert_all">insert_all</a>
+           builds no model objects, so no validation runs on that write. The model&#39;s rules are
+           reached only by <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/seed_data/admin_dashboard_reports.rb#L11-L14">the
+-          seeders that create the default reports</a>, which never pass a size
++          seeders that create the default reports</a>, core&#39;s and
++          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/plugins/discourse-solved/lib/discourse_solved/seed_admin_dashboard_reports.rb#L11-L14">discourse-solved&#39;s</a>, which never pass a size
+           <span class="tier tier-unc">from unchanged code</span>. The database adds
+           <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-1dd5a8f580b9615769ddc19a64a98f455d9d20eb149c443f41d9d3c797d39b12R311-R312">a default of 1 and a not-null constraint, and no
+           check</a>. In practice the endpoint&#39;s check is the one in force.</p>
+@@ -2585,7 +2602,8 @@
+           <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L241-L249">marks
+           every card as errored</a>, not just the one. Neither the endpoint nor
+           <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/seed_data/admin_dashboard_reports.rb#L11-L14">the default-report
+-          seeders</a>, the only other writers, can store such a size
++          seeders</a>, core&#39;s and
++          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/plugins/discourse-solved/lib/discourse_solved/seed_admin_dashboard_reports.rb#L11-L14">discourse-solved&#39;s</a>, the only other writers, can store such a size
+           <span class="tier tier-unc">from unchanged code</span>; a later writer that skips the endpoint
+           could.</p>
+         <p class="open"><b>Review question</b>Is the layout endpoint&#39;s check meant to be the only guard on stored sizes?</p>
+@@ -2676,7 +2694,8 @@
+         <span class="lbl lbl-wide">Checkpoint D</span>
+         <h3>What a click on a resize handle does</h3>
+         <p>The corner handle does two jobs. Dragged, it sets any size the rules allow, a row or a
+-          column at a time. Pressed and released without moving, it reports a gesture that never moved,
++          column at a time. Pressed and released without moving, <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/app/ui-kit/d-resize-handles.gts#L101-L106">it reports
++          a gesture that never moved</a> <span class="tier tier-unc">from unchanged code</span>,
+           and the handler treats that as a shortcut:</p>
+ <div class="excerpt excerpt--source ex-inline">
+   <p class="ex-cap"><span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L361-L368">frontend/discourse/admin/components/dashboard/reports.gjs:361-368</a></span> <span class="tag">At head</span></p>
+@@ -2694,11 +2713,13 @@
+ </div>
+         <p>A card at the smallest size becomes one row at full width. <strong>Every other size,
+           including a card two, three or four rows tall, goes straight back to the smallest.</strong>
+-          The shortcut is a toggle between two sizes over a range of eight, and the result is saved at
++          The shortcut is a toggle between two sizes over a range of five, and the result is saved at
            once. An admin who presses a tall card&#39;s corner meaning to start a drag, and lets go,
            loses the height and has to drag it back. A press only becomes a drag after
            <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L531">eight

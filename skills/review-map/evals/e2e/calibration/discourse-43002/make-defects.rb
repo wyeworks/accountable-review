@@ -238,14 +238,16 @@ FIX = {
     ["The shortcut is a toggle between two sizes over a range of eight,",
      "The shortcut is a toggle between two sizes over a range of five,"],
   ],
-  # c1: two claims rest on files the diff does not touch and carry no tier — what the eight-pixel
-  # threshold means (d-pointer-drag.ts) and where the modal loads its reports from
-  # (manage-reports.gjs:137); the corrected copy cites and tiers both, and tiers the two
-  # untiered claims about what the modal sends (manage-reports.gjs:197-205), in A and B.
-  # c3: checkpoint B's two "removing a report already did this" rest on removeReport, and § 01's
-  # admins-only handles on canEdit, untouched lines of the changed reports.gjs; B's "ten" rests on
-  # VISIBLE_CAP, an untouched line of the changed admin_dashboard_report.rb. The corrected copy
-  # cites all four.
+  # The corrected copy comes from reading every sentence of § 01, § 03, § 04 and § 05 against the
+  # diff's added and removed lines, not from the judge's examples.
+  # c1: every claim resting on a file the diff does not touch is tiered and cited — the modal, in
+  # § 01 too (manage-reports.gjs:137, :197-205), the drag modifier and the handles
+  # (d-pointer-drag.ts, d-resize-handles.gts), and both default-report seeders, core's and
+  # discourse-solved's — and cp-d's "range of eight" is made five.
+  # c3: every claim resting on an untouched line of a changed file is cited at the claim — the
+  # grid's two columns and fixed cell in the two stylesheets, removeReport and canEdit in
+  # reports.gjs, VISIBLE_CAP in admin_dashboard_report.rb, the endpoint handing its list to the
+  # updater (dashboard_controller.rb:125-131), and the updater's delete.
   "evidence" => [
     ["pixels of travel</a>, so a short, hesitant drag counts as a click too.</p>",
      "pixels of travel</a>, because\n          <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/app/ui-kit/modifiers/d-pointer-drag.ts#L451-L461\">the drag modifier reports no move until the pointer passes it</a>\n          <span class=\"tier tier-unc\">from unchanged code</span>, so a short, hesitant drag counts as a click too.</p>"],
@@ -259,8 +261,27 @@ FIX = {
      "browser, and is deleted by the next resize.\n          <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/admin/components/dashboard/reports.gjs#L411-L426\">Removing\n          a report</a> or\n          <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/admin/components/modal/manage-reports.gjs#L197-L205\">saving\n          the modal</a> <span class=\"tier tier-unc\">from unchanged code</span> already did"],
     ["\">the ten most recently created</a>.",
      "\">the most recently created</a>, up to\n          <a class=\"ref\" href=\"#{BLOB}/app/models/admin_dashboard_report.rb#L4\">ten</a>."],
+    ["as a grid of cards, two\n        columns wide. Admins already choose which reports appear and in what order. Every card was the\n        same size, though, one fixed-height cell,",
+     "as a grid of cards,\n        <a class=\"ref\" href=\"#{BLOB}/app/assets/stylesheets/admin/admin_dashboard.scss#L488\">two columns wide</a>. Admins already\n        <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/admin/components/modal/manage-reports.gjs#L197-L205\">choose which reports appear and in what order</a>\n        <span class=\"tier tier-unc\">from unchanged code</span>. Every card was the same size, though,\n        <a class=\"ref\" href=\"#{BLOB}/app/assets/stylesheets/admin/dashboard/reports.scss#L11\">one fixed-height cell</a>,"],
+    # checkpoint-claims' gold defect, which this judge reads as a claim stated as more than it is
+    ["The shortcut is a toggle between two sizes over a range of eight,",
+     "The shortcut is a toggle between two sizes over a range of five,"],
     ["<strong>The modal, which this change does not touch, still",
      "<strong>The modal, which this change does not touch\n          <span class=\"tier tier-unc\">from unchanged code</span>, still"],
+    ["reorders\n          reports and then saves.",
+     "reorders\n          reports and then\n          <a class=\"ref\" href=\"#{BLOB}/frontend/discourse/admin/components/modal/manage-reports.gjs#L197-L205\">saves</a>\n          <span class=\"tier tier-unc\">from unchanged code</span>."],
+    ["Both save through the same layout endpoint, and",
+     "Both save through\n          <a class=\"ref\" href=\"#{BLOB}/app/controllers/admin/dashboard_controller.rb#L125-L131\">the same layout endpoint</a>, and"],
+    ["the layout endpoint deletes every stored row and inserts\n          the list it was given.",
+     "the layout endpoint\n          <a class=\"ref\" href=\"https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR18-R33\">deletes every stored row and inserts\n          the list it was given</a>."],
+    ["The endpoint\n          hands its list to the layout updater,",
+     "The endpoint\n          <a class=\"ref\" href=\"#{BLOB}/app/controllers/admin/dashboard_controller.rb#L125-L131\">hands its list to the layout updater</a>,"],
+    ["seeders that create the default reports</a>, which never pass a size",
+     "seeders that create the default reports</a>, core&#39;s and\n          <a class=\"ref\" href=\"#{BLOB}/plugins/discourse-solved/lib/discourse_solved/seed_admin_dashboard_reports.rb#L11-L14\">discourse-solved&#39;s</a>, which never pass a size"],
+    ["seeders</a>, the only other writers,",
+     "seeders</a>, core&#39;s and\n          <a class=\"ref\" href=\"#{BLOB}/plugins/discourse-solved/lib/discourse_solved/seed_admin_dashboard_reports.rb#L11-L14\">discourse-solved&#39;s</a>, the only other writers,"],
+    ["it reports a gesture that never moved,",
+     "<a class=\"ref\" href=\"#{BLOB}/frontend/discourse/app/ui-kit/d-resize-handles.gts#L101-L106\">it reports\n          a gesture that never moved</a> <span class=\"tier tier-unc\">from unchanged code</span>,"],
   ],
   # c1: the headline and the closing sentence say every size is kept, which a Manage reports save
   # undoes (checkpoint A); "both default to 1" links only the rows migration; and "a click … toggles

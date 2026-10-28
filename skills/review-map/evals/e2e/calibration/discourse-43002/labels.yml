@@ -37,11 +37,10 @@ gold:
   reading-path: [pass, pass, pass, pass]
   impact: [pass, pass, pass, pass]
   evidence: [fail, pass, fail, pass, pass]  # 1: cp-d's "eight pixels of travel" means what d-pointer-drag.ts does, and cp-a's
-                                            # "loads its enabled reports from" is manage-reports.gjs:137, and cp-a and cp-b say what the
-                                            # modal sends (manage-reports.gjs:197-205); all unchanged, none tiered.
-                                            # 3: cp-b's two "removing a report already did this" rest on removeReport, § 01's
-                                            # admins-only handles on canEdit (reports.gjs:411-426, :171-173), and cp-b's "ten" on
-                                            # VISIBLE_CAP (admin_dashboard_report.rb:4); untouched lines of changed files, uncited
+                                            # "loads its enabled reports from" is manage-reports.gjs:137, among other untiered claims
+                                            # on unchanged files. 3: cp-b's "removing a report already did this" rests on removeReport,
+                                            # reports.gjs:411-426, an untouched line of a changed file, uncited, as do several others;
+                                            # make-defects.rb's FIX comment lists every one the corrected copy fixes
 variants:
   what-changed-corrected:            # gold with § 01 saying where a size is lost, linking both migrations, and saying what a click chooses
     what-changed: {1: pass}
