@@ -1276,18 +1276,18 @@ Everything else about writing holds at every stage:
   figure's box captions, a primer's prose about `ActiveModel::Dirty` — is a claim about a file, and a
   claim copied out of a specimen is a false claim nothing catches. Type a topology figure only from
   its `agenda.md` block, and the shift from the one step 7k wrote.
-- **Prose reads as prose.** In an explanation, *What changed* and a GAP, a citation is the phrase
+- **Prose reads as prose.** In an explanation, *What changed* and a testing gap, a citation is the phrase
   that makes the claim, linked as `a.ref` — never `(path:line)` mid-sentence, which the reader
   decodes and skips. The paragraph's one `<strong>`, if it has one, is the sentence the judgment
   turns on, stated and never graded. `report-format.md` § *The review checkpoint* and § *A citation
   inside the narration* own both.
-- **Draft, revise for voice, then land it.** Write each checkpoint's explanation, GAP and review
-  question — and *What changed*'s prose at stage 1 — to `$W/voice/<section id>.html` first, from the
+- **Draft, revise for voice, then land it.** Write each checkpoint's explanation, review question
+  and testing gap — and *What changed*'s prose at stage 1 — to `$W/voice/<section id>.html` first, from the
   split 7g made, then
   revise the explanation once as `report-format.md` § *The voice pass* says, carrying the idea 7f
-  named; the revision is what the `Edit` replacing the stub lands. The GAP, the question and the
-  supporting evidence land as drafted, so draft the GAP and the question in the voice to begin with:
-  the behaviour's words rather than identifiers, one relationship, the qualifying fact left to the
+  named; the revision is what the `Edit` replacing the stub lands. The question, the testing gap and
+  the supporting evidence land as drafted, so draft the question and the gap in the voice to begin
+  with: the behaviour's words rather than identifiers, one relationship, the qualifying fact left to the
   prose (`report-format.md` § *The review checkpoint* owns both). The draft carries the figure and the inline snippet in their
   places, and the revision moves sentences around them, never them out. Draft every checkpoint that
   is ready in one turn and land their revisions together in the next, so the pass costs a turn per

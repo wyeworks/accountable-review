@@ -143,7 +143,8 @@
                             behaviour, prose that explains before it asks —
                             with the figure and an inline snippet where they
                             carry the argument — p.open, the review question,
-                            last in the explanation, then details.cp-ev, the
+                            last in the explanation, then any div.gap, the
+                            testing gap, then details.cp-ev, the
                             supporting evidence, shut: ul.lookat (1-4 places to
                             look, each a title, a clause and its citation, in
                             that order) and any probe
@@ -531,14 +532,18 @@ details.imp-fold > .impact > .lbl { display: none; }
    so it is plum, and it takes the border .tier already had so the two line up. */
 .tag { border: 1px solid var(--prov-rule); background: var(--prov-bg); color: var(--prov-ink); }
 
-/* A stated absence. Ochre, deliberately not the accent: a gap is
-   evidence, not a feature, and never a severity. It is SECONDARY to the review
-   question below it, and set as a note rather than a box: no fill, no frame, a
-   thin ochre rule on the left, smaller and quieter type. Two filled ochre boxes
-   in a row read as two equal calls to act, and only the question is one — the
-   gap is a fact the question takes into account. Every theme keeps it that way. */
+/* The testing gap: what the tests leave open, a stated absence. Ochre, deliberately
+   not the accent: a gap is evidence, not a feature, and never a severity. It is
+   SECONDARY to the review question, so it follows the question rather than leading
+   into it, and is set as a note rather than a box: no fill, no frame, a thin ochre
+   rule on the left, smaller and quieter type. Two filled ochre boxes in a row read
+   as two equal calls to act, and only the question is one — the gap is a fact the
+   reviewer weighs in answering it. The question leaves it less room above (22)
+   than the evidence label has below it (22 plus the summary's padding), so it
+   reads as the question's note rather than the evidence's heading. Every theme
+   keeps it that way. */
 .gap { display: flex; gap: 10px; margin-top: 14px; padding: 2px 0 2px 12px; background: none; border: 0; border-left: 2px solid var(--gap-rule); border-radius: 0; }
-.gap > b { flex: 0 0 auto; font-family: var(--mono); font-size: 10.5px; font-weight: 400; letter-spacing: .1em; color: var(--gap-ink); line-height: 2; }
+.gap > b { flex: 0 0 auto; font-family: var(--mono); font-size: 10.5px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; color: var(--gap-ink); line-height: 2; }
 .gap > span { font-size: 13.5px; line-height: 1.6; color: var(--muted); }
 /* What was grepped, including the searches that came up empty — collapsed, and the
    second component on the page that is. It is provenance, not a claim: the entries it
@@ -918,11 +923,15 @@ div.excerpt.ex-inline .ex-body > pre { margin: 0; }
 /* Full width, like the prose and the list above it: a question ending short of
    both read as an aside, where it is in fact the judgment the whole checkpoint
    was leading to. Room on both sides for the same reason: it is the one box in
-   the checkpoint, and set tight against the GAP note above or the evidence below
-   it reads as part of either. A theme that hangs a badge off its top edge adds
-   the badge's overhang to the space above. */
+   the checkpoint, and set tight against the explanation above or the testing gap
+   and the evidence below it reads as part of either. A theme that hangs a badge
+   off its top edge adds the badge's overhang to the space above.
+   The margins are set on .cp > .open because .cp > p and section > p would
+   otherwise win on specificity and set the box as tight as a paragraph. */
 .open { margin: 28px 0; padding: 14px 16px; background: var(--gap-bg-2); border-left: 2px solid var(--gap-rule); font-size: 16px; font-weight: 600; line-height: 1.55; color: var(--ink-2); }
 .open > b { display: block; margin-bottom: 5px; font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; color: var(--gap-ink); }
+.cp > .open { margin-top: 36px; margin-bottom: 30px; }
+.cp > .open:has(+ .gap) { margin-bottom: 22px; }
 
 /* Supporting evidence — the checkpoint's proof, after its question and shut by
    default. The explanation above is the narrative and reads complete without it;
@@ -933,10 +942,11 @@ div.excerpt.ex-inline .ex-body > pre { margin: 0; }
    checkpoint is a heft the reader would read as thoroughness.
    Every selector into the summary is a child combinator, because the excerpts
    inside are details with a .chev of their own, and opening this block must not
-   rotate theirs. */
-details.cp-ev { margin-top: 22px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
-/* The next checkpoint's top rule closes the block, so its own would draw a second line beside it. */
-.cp:has(+ .cp) > details.cp-ev:last-child { border-bottom: 0; }
+   rotate theirs.
+   No rule of its own, above or below: the one divider in section 03 is the rule
+   between two checkpoints, and a line around the evidence would cut a checkpoint
+   in two. */
+details.cp-ev { margin-top: 22px; }
 details.cp-ev > summary { display: flex; gap: 10px; align-items: baseline; padding: 12px 0; cursor: pointer; list-style: none; }
 details.cp-ev > summary::-webkit-details-marker { display: none; }
 details.cp-ev > summary::marker { content: ""; }
@@ -1947,6 +1957,7 @@ h1{letter-spacing:-0.045em;line-height:1.02}
 .rail-id .tick{font-weight:600;letter-spacing:-0.02em}
 .tier,.tag{font-size:10.5px;letter-spacing:0;text-transform:none;border-color:transparent;padding:2px 8px}
 .open{position:relative;margin:40px 0 32px 16px;border:1px solid var(--gap-rule);padding:16px 18px 16px 28px}
+.cp>.open{margin-top:48px}
 .open::before{content:"?";position:absolute;left:-16px;top:-14px;width:32px;height:32px;box-sizing:border-box;border-radius:50%;background:var(--badge);border:3px solid var(--ground);display:flex;align-items:center;justify-content:center;font:700 15px/1 var(--body);color:#0a0a0a}
 .open>b{font-family:var(--body);font-weight:700;font-size:12px;letter-spacing:.08em}
 details.searched>summary,details.evidence>summary{font-weight:500}
@@ -2437,8 +2448,8 @@ details.searched>summary,details.evidence>summary{font-weight:700}
           Each of them gets a closed stint for a gem they still manage through the organization, and the
           prior-owner lists the later slices plan would show them as former owners
           <span class="tier tier-inf">inferred</span>.</p>
-        <div class="gap"><b>GAP</b><span>Nothing tests a stint closing through disown, an organization move or account deletion; the tests cover removing an owner directly.</span></div>
         <p class="open"><b>Review question</b>Should someone whose ownership is replaced by organization membership be recorded as a former owner of that gem?</p>
+        <div class="gap"><b>Testing gap</b><span>Nothing tests a stint closing through disown, an organization move or account deletion; the tests cover removing an owner directly.</span></div>
         <details class="cp-ev">
           <summary><span class="chev">&#9656;</span><span class="cp-ev-lbl">Supporting evidence</span></summary>
         <ul class="lookat">
@@ -2561,8 +2572,8 @@ details.searched>summary,details.evidence>summary{font-weight:700}
           Each window lasts from a batch's load to that record's processing. Whether that matters at
           rubygems.org's rate of ownership changes is a question about production traffic, and no search of
           the code can answer it.</p>
-        <div class="gap"><b>GAP</b><span>No test loads an ownership, then removes or promotes it before the task processes it, which is the test shape the maintenance-task guide describes.</span></div>
         <p class="open"><b>Review question</b>Does the backfill need to re-check each ownership before it writes, or are these windows acceptable for this rollout?</p>
+        <div class="gap"><b>Testing gap</b><span>No test loads an ownership, then removes or promotes it before the task processes it, which is the test shape the maintenance-task guide describes.</span></div>
         <details class="cp-ev">
           <summary><span class="chev">&#9656;</span><span class="cp-ev-lbl">Supporting evidence</span></summary>
         <ul class="lookat">

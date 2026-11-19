@@ -295,11 +295,11 @@ Editing one of these means checking the others still agree.
   attention* **per independent semantic delta *What changed* names**, under a ceiling of seven, nine
   or eleven that the Production bucket sets, each **one judgment** the reviewer has to make: an `<h3>`
   naming the behaviour (the rail and the reading path name it by that heading), prose that explains
-  before it asks — with at most one figure and one inline snippet where they carry the argument — an
-  optional `div.gap` labelled *GAP*, `p.open` labelled *Review question*, always and last in the
-  explanation, the primer at `--mentor`, and then `details.cp-ev`, shut and labelled *Supporting
+  before it asks — with at most one figure and one inline snippet where they carry the argument — `p.open`
+  labelled *Review question*, always and last in the explanation, an optional `div.gap` labelled
+  *Testing gap* beneath it naming what the tests leave open, the primer at `--mentor`, and then `details.cp-ev`, shut and labelled *Supporting
   evidence*: a `ul.lookat` of one to four entries — each a short title, a clause and its deep-linked citation, in
-  that order — and an optional probe. Both GAP and the question's labels are fixed, because an
+  that order — and an optional probe. Both the testing gap's and the question's labels are fixed, because an
   absence and the question are the two places a severity word gets in.
   `report-format.md` § *The review checkpoint* owns all of it **alone**; `page-template.html`
   assembles one with every optional part, one without, and a pending stub carrying its heading and
@@ -436,7 +436,7 @@ pass*, § *A citation inside the narration*); the template, `excerpt.sh --inline
   earned only by a recorded writer search, and `carry-plan.sh`'s P6 replays that search so `--update`
   refuses to carry a converge a new writer has falsified.
 
-  **`.cv-note` is a free-text slot a severity word can enter**, beside `GAP` and *Review question*, and
+  **`.cv-note` is a free-text slot a severity word can enter**, beside *Testing gap* and *Review question*, and
   the only one without a fixed label. It says what a path skips, never how much that matters.
 
   These agree: `report-format.md` § *Topology figures* owns the shapes, gates and caps **alone**, and
@@ -917,7 +917,7 @@ pass*, § *A citation inside the narration*); the template, `excerpt.sh --inline
   page's content is identical in all three. A theme treatment (a highlighter, a glyph on `p.open`)
   **applies to every instance of its component alike** — a theme that marked one checkpoint
   differently from another, or used red on a claim, would be the severity chip as a palette — and no
-  theme boxes `.gap` like the question: the GAP is a quieter note beneath which only `p.open` is a box.
+  theme boxes `.gap` like the question: the testing gap is a quieter note beneath the question, which is the only box.
 
   These agree: the theme files; the template's marker and the comment beside it; `page-skeleton.sh`;
   the tail script's menu and the head script; `read-config.sh`'s theme list, which
