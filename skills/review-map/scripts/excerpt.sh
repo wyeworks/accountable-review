@@ -275,8 +275,12 @@ at)
 
   # Build the href from the range the script just read, so the link and the summary
   # cannot disagree. --link still wins when given, for a URL form this does not know.
+  # One line is cited as one line, in the label and the fragment alike: `:30-30` names a
+  # range, and link-form fails a range in the text over a single-line href.
+  if [ "$end" = "$start" ]; then span=$start; lspan="L$start"
+  else span="$start-$end"; lspan="L$start-L$end"; fi
   if [ -z "$LINK" ] && [ -n "$BLOB" ]; then
-    LINK="${BLOB%%#*}#L$start-L$end"
+    LINK="${BLOB%%#*}#$lspan"
   fi
 
   # --lang wins over the guess; --lang none is how a run says "leave this plain",
@@ -326,7 +330,7 @@ at)
     *)     if [ "$side" = head ]; then tag="At head"; else tag="Before the change"; fi ;;
   esac
 
-  loc="$path:$start-$end"
+  loc="$path:$span"
   open_block source "$path" "$loc" "$((start - 1))" "$tag" "$lang"
   printf '%s\n' "$body" | esc | awk '{ printf "<span class=\"l\">%s</span>\n", $0 }'
   close_block
@@ -347,25 +351,28 @@ diff)
       gsub(/&/, "\\&amp;", s); gsub(/</, "\\&lt;", s); gsub(/>/, "\\&gt;", s); return s
     }
     function escattr(s) { s = esc(s); gsub(/"/, "\\&quot;", s); return s }
+    # A one-line hunk is cited as one line: 30, L30, R30, never 30-30.
+    function span(side, s, e) { return (e == s) ? side s : side s "-" side e }
     function flush() {
       if (!open) return
       if (want == "" || want + 0 == idx) {
-        loc = path ":" nstart "-" (nstart + nspan - 1)
+        nend = nstart + nspan - 1
+        loc = path ":" span("", nstart, nend)
         # The hunk range belongs to the script, so the href has to come from it too. A --link
         # its own #L fragment is the one way to make the summary and the link contradict
         # each other silently, which a run hit: say so and use the computed range.
         href = ""
-        if (blob != "") { sub(/#.*/, "", blob); href = blob "#L" nstart "-L" (nstart + nspan - 1) }
+        if (blob != "") { sub(/#.*/, "", blob); href = blob "#" span("L", nstart, nend) }
         else if (link != "") {
           href = link
           if (link ~ /#L[0-9]/) {
             sub(/#L[0-9].*/, "", href)
-            href = href "#L" nstart "-L" (nstart + nspan - 1)
-            printf "excerpt.sh: --link carried its own line anchor; replaced with the hunk range %d-%d.\n", nstart, nstart + nspan - 1 | "cat 1>&2"
+            href = href "#" span("L", nstart, nend)
+            printf "excerpt.sh: --link carried its own line anchor; replaced with the hunk range %s.\n", span("", nstart, nend) | "cat 1>&2"
           } else if (match(link, /#diff-[0-9a-f]+/)) {
             # The diff-page anchor, which is the form a changed line takes at rungs 1 and 2.
             # The summary is the citation of the entry now, so its R-range is the hunk range, always.
-            href = substr(link, 1, RSTART + RLENGTH - 1) "R" nstart "-R" (nstart + nspan - 1)
+            href = substr(link, 1, RSTART + RLENGTH - 1) span("R", nstart, nend)
           }
         }
         if (href != "") locspan = sprintf("<span class=\"ex-loc\"><a class=\"cite\" href=\"%s\">%s</a></span>", escattr(href), esc(loc))

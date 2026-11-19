@@ -1102,20 +1102,22 @@ class ReviewMapSuite
     repo = new_repo(path("exrepo"))
     write(File.join(repo, "app/changed.rb"), "a\nb\nc\n")
     write(File.join(repo, "app/same.rb"), "keep\n")
+    write(File.join(repo, "app/one.rb"), "x\n")
     commit_all(repo, "base")
     write(File.join(repo, "app/changed.rb"), "a\nB\nc\n")
+    write(File.join(repo, "app/one.rb"), "y\n")
     git(repo, "commit", "-qam", "head")
     ex = ->(*args) { sh("sh", @excerpt, *args, chdir: repo) }
 
     out = ex.("--at", "app/same.rb:1-1", "--base", "HEAD~1", "--blob", "https://h/blob/s/app/same.rb", "--why", "w").out
-    assert_eq count(out, '<span class="ex-loc"><a class="cite" href="https://h/blob/s/app/same.rb#L1-L1">app/same.rb:1-1</a></span>'), 1,
+    assert_eq count(out, '<span class="ex-loc"><a class="cite" href="https://h/blob/s/app/same.rb#L1">app/same.rb:1</a></span>'), 1,
               "--at with a link puts it on the summary's location, with the range it read"
     assert_eq count(out, "ex-src"), 0, "and repeats it nowhere under the code"
     assert_eq count(out, '<span class="ex-why">w</span>'), 1, "and keeps the why outside an entry"
     assert_eq count(out, '<span class="tag">Unchanged</span>'), 1, "and tags a path outside the diff Unchanged"
 
     out = ex.("--at", "app/same.rb:1-1", "--base", "HEAD~1").out
-    assert_eq count(out, '<span class="ex-loc">app/same.rb:1-1</span>'), 1, "with no link the location is plain text, the rung-3/4 citation"
+    assert_eq count(out, '<span class="ex-loc">app/same.rb:1</span>'), 1, "with no link the location is plain text, the rung-3/4 citation"
 
     out = ex.("--at", "app/same.rb:1-1", "--base", "HEAD~1", "--in-entry", "--blob", "https://h/blob/s/app/same.rb").out
     assert_eq count(out, "ex-why"), 0, "--in-entry leaves the why to the entry's clause"
@@ -1133,6 +1135,9 @@ class ReviewMapSuite
     out = ex.("--diff", "app/changed.rb", "--base", "HEAD~1", "--in-entry", "--link", "https://h/pull/1/files#diff-#{d}R9").out
     assert_eq count(out, %(href="https://h/pull/1/files#diff-#{d}R1-R3")), 1,
               "--diff given a diff-page anchor links the hunk's own R-range, whatever range it carried"
+    out = ex.("--diff", "app/one.rb", "--base", "HEAD~1", "--in-entry", "--link", "https://h/pull/1/files#diff-#{d}R9").out
+    assert_eq count(out, %(href="https://h/pull/1/files#diff-#{d}R1">app/one.rb:1</a>)), 1,
+              "a one-line hunk is cited as one line, in the label and the anchor alike"
 
     out = ex.("--diff", "app/changed.rb", "--base", "HEAD~1").out
     assert_eq count(out, '<span class="ex-loc">app/changed.rb:1-3</span>'), 1, "--diff with no link leaves the location plain"
