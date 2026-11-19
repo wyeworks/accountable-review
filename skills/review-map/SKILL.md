@@ -74,7 +74,7 @@ rule one level up — yours, not the other host's.
 | `scripts/page-skeleton.sh` | step 9, once | Writes that head, token block and script straight into the page, so none of it is read and none of it is typed. `--markup` is how the rest of the template is read |
 | `references/themes/` | never | The three looks — Daylight (default), Workshop, Field Notes — each a font link, a token block and its overrides. `page-skeleton.sh` writes all three into the head with the repository's choice switched on, and the tail script builds the reader's *Aa* menu that switches them; a run never reads one, never chooses one, and never types the menu |
 | `scripts/diff-render.sh` | step 3, once | Says per path whether GitHub will render that file's diff, which is what decides the URL form for a line inside it |
-| `scripts/excerpt.sh` | step 9 | Generates the collapsed source excerpts — the quotation has to be the real bytes |
+| `scripts/excerpt.sh` | step 9 | Generates the source excerpts, collapsed in a *Look at* entry or `--inline` in an explanation — the quotation has to be the real bytes |
 | `scripts/ledger-rows.sh` | step 10 | Generates the diff inventory the evidence foot holds, and its deep links, from the diff |
 | `scripts/coverage-gate.sh` | step 10 | Runs the completeness check |
 | `scripts/page-lint.sh` | step 10 | Reads the finished page: placeholders are a FAIL to fix, a tier that disagrees with the diff is a WARN to read |
@@ -132,10 +132,11 @@ Copy this into your own notes and tick it as you go; a long run loses its place 
   that does not exist, and a setting read as nothing is a team's decision silently replaced by a
   default — the unknown-flag rule, one file over. The file read is the working tree's, which is the
   copy the person has checked out. Say in chat which settings came from it.
-- **The page has a word budget, stated as guidance, and you write to it rather than trimming to
-  it.** `references/report-format.md` § *The agenda budget* owns the numbers, and you read it with
-  the rest of that file at step 7, before a word of the page is drafted. It caps prose and nothing
-  else, and **the number it never touches is the checkpoint count.**
+- **The page has no word budget.** Length follows from what the reader needs to understand each
+  judgment, and you never compress an explanation to save words. `references/report-format.md`
+  § *The agenda budget* says what still bounds the page, and you read it with the rest of that file
+  at step 7, before a word of the page is drafted. **The number length never touches is the
+  checkpoint count.**
 - **Resolve the page settings — effort, mentor, context — flag first, then the file, then the
   default**, and hold them for the whole run. Every value not listed below is **reported, not
   guessed at**: a flag read wrongly is work that silently differs, with nothing on the page to tell
@@ -464,8 +465,9 @@ ProjectSettings → PATCH /api/projects/:id → ProjectsController#update
   → Projects::Archive → Project → projects.archived_at
 ```
 
-**That is analysis, and it is not the page.** *What changed* gets one paragraph and at most a handful
-of bullets — `references/report-format.md` § *Section 1* — and the paths feed step 6's clustering and
+**That is analysis, and it is not the page.** *What changed* gets a short narrative — the situation,
+the change as one named idea with its moves a sentence each, what is now true — written and revised
+like a checkpoint's explanation (`references/report-format.md` § *Section 1*), and the paths feed step 6's clustering and
 step 7's chains rather than being published as a list. A page that opened with five use cases and
 their execution paths spent its first screen on material the checkpoints then said again.
 
@@ -756,8 +758,8 @@ requirement that explains a shift, is usually in another flow's trace.
 
 **Ask it; never answer it.** No *should have been*, *unidiomatic*, *the Rails way*, *coupled*,
 *leaky* or *cleaner*. The reviewer knows why the codebase is shaped as it is and you do not — step
-6's neutrality rule is the register, and a decision you cannot resolve goes on the *Open question*
-line, not into a verdict.
+6's neutrality rule is the register, and a decision you cannot resolve is the review question, not a
+verdict.
 
 **In a refactor delta, ask the equivalence first.** A refactor's claim is that nothing a caller sees
 moved, so its first judgment is *is behaviour preserved?*, with the lines where it would not be — a
@@ -791,7 +793,7 @@ about.
 as a behavioural judgment merges into it — the behavioural question stays and the shift becomes a
 clause, because what the system now does outranks what it now permits. And three files that each add
 the same edge are one question with three *Look at* entries. A shift that is also an impact path
-keeps both, the checkpoint asking and section 05 drawing, each pointing at the other in a clause.
+keeps both, the checkpoint explaining and asking and section 05 drawing, each pointing at the other.
 
 **7d. Rank.** Order the candidates by four things, in this priority: the consequence if the reviewer
 misunderstands it; how uncertain the notes are about it, because the reviewer's attention is worth
@@ -806,8 +808,8 @@ decisions, because misreading structure costs the reviewer a conversation and mi
 costs them production.
 
 **The order is the order to think about them, and it is not a scale.** No number that reads as
-severity, no *high* or *low*, no *blocking*, no *watch*. The rail and the reading path refer to a
-checkpoint by its question.
+severity, no *high* or *low*, no *blocking*, no *watch*. The rail and the reading path both name a
+checkpoint by its heading.
 
 **7e. Select the smallest useful agenda.** Three to five checkpoints **per independent semantic delta
 7a named**, and the page's **ceiling** at the outside — seven, nine or eleven, set by the files and
@@ -852,8 +854,7 @@ be?*, which is the rule that already covers it.
 honest rather than hidden. **A judgment is the exception**: an entry in
 the foot the reviewer has to decide about is a checkpoint that was mis-filed, per the hard rule below,
 which is why the agenda has room to grow rather than a ceiling that would push one down there. What is
-never done is dropping a checkpoint to hit a word count: § *The agenda budget* is guidance on how a
-checkpoint is written, never on how many there are.
+never done is dropping a checkpoint to make the page shorter.
 
 **Architectural questions and then coding decisions take the last slots, as many as clear their
 bars and fit** — fitting is a limit, never a reason, and none is the common right answer. One per
@@ -863,9 +864,42 @@ ones stay and architectural questions are kept ahead of coding decisions. **In a
 are the judgments**, after its equivalence — say plainly in *What changed* that the delta is a
 refactor rather than manufacturing a behavioural checkpoint to sit in front of them.
 
-**7f. Choose each checkpoint's representation.** Every checkpoint has a question and an explanation of
-two to four sentences. Then decide whether it also earns a figure, which shape, and how many *Look at*
-entries it needs. **Each entry is three things in order — a title, a clause, then the citation.** The title names
+**7f. Choose each checkpoint's representation.** Every checkpoint has a heading naming the behaviour,
+an explanation, and a review question last. **Explain first, challenge second**: the explanation
+establishes what the system does here, then what the change did to it and why that matters — facts
+stated as facts, the unknown said plainly — and stops where the reader can judge; only then is the
+question asked. A checkpoint that opens on its question makes the reviewer reconstruct the situation
+before they can reason about it, and that is the difficulty the page exists to take off them; the
+judgment's own difficulty is the one to keep. Write it as an experienced engineer explaining the
+change to a colleague who knows the stack and not this codebase: the behaviour before the identifier,
+two plain sentences rather than one compressed one, the precise mechanism kept rather than smoothed
+into *the existing logic handles it*, and nothing the reader has to fetch from another section to
+follow the argument. **Each checkpoint stands alone — understandable, never exhaustive**: a reviewer
+who jumps straight to it learns from it what it needs of the domain, the code and *What changed*, and
+when the change reaches unchanged callers or something a user sees, the checkpoint says what they now
+do — a sentence for a caller whose behaviour bears on the judgment, a count and a clause for the ones
+reached the same way, their list in the evidence. A pointer to *Context*, the impact panel or another
+checkpoint is depth, never a step of the argument. Repeat a little background when standing alone
+takes it; what keeps one home is the finding and the judgment. Write what you would say aloud to a
+teammate, not everything step 5 found.
+**Then separate the narrative from its proof — by purpose, not by format.** Everything down to the
+review question reads continuously — no collapsed excerpt, no walk through files, and citations only
+where a sentence resting on unchanged code keeps one beside its tier, or a claim about an untouched
+line of a changed file keeps that line's at the claim (step 8). What the reviewer would open to
+*verify* it — the *Look at* list with its excerpts, the probe — goes after the question in the
+checkpoint's shut *Supporting evidence* block. The test: what a reviewer needs to understand or
+challenge the change is explanation, so a test that leaves the boundary open is said above the
+question; what they need to substantiate it is evidence, so that test's code is an entry below.
+Uncertainty stays in the explanation even when the line that settles it is in the block, and even
+when a figure tells a clean story. **A figure or a few lines of code that carry the argument are
+explanation**: the figure sits in the prose where the argument reaches it, and so may one inline
+snippet of the lines that say the idea best — each introduced by the sentence before it and followed
+by what it shows, and neither owed.
+`report-format.md` § *The review checkpoint* owns these rules. **Name each checkpoint's one idea** in
+`agenda.md`, a line each — `cp-a idea: convention versus construction — the page is about
+instruments by convention, the timeline by construction` — the thread step 9's voice pass carries the
+explanation along. One that will not fit a line is worth a second look at 7c. Then decide
+whether it also earns a figure, which shape, and how many *Look at* entries it needs. **Each entry is three things in order — a title, a clause, then the citation.** The title names
 what is at that location in two to six words, so four entries can be scanned rather than read; the
 file name is not a title, because the citation says that already. `report-format.md` § *The review
 checkpoint* owns the rest.
@@ -875,7 +909,7 @@ guard order, a value derived across three or more hops, a request path with a br
 affirmatively rather than looking for an excuse: *if the explanation would have to name three hops in
 sequence, draw them.* It shows that mechanism **inside the change**, so if the chain you want to draw
 crosses into unchanged code, it is an impact path: it belongs in section 05, drawn once, and the
-checkpoint says so in a clause.
+checkpoint explains the consequence in its own prose and points at the drawing.
 
 **A chain is one of four shapes, and it is asked about last.** Before drawing one, ask what shape the
 judgment actually has — in this order, stopping at the first yes:
@@ -913,16 +947,28 @@ a node nobody traced.
 
 Diagram and prose have different jobs. The figure says how the value gets there, or which paths must
 hold; the explanation says what the reader has to judge about it. **An explanation that walks the
-figure node by node is the defect** — it doubles the length and teaches nothing twice, and it is what a
-run reaches for when it is unsure the figure landed.
+figure node by node is the defect**, before it as much as after — it doubles the length and teaches
+nothing twice, and it is what a run reaches for when it is unsure the figure landed. The figure
+replaces the paragraph that would have walked those hops. It sits in the explanation, set like
+prose with no card and no `figcaption`: the sentence before it says what the reader is about to see,
+and the sentence after it states the upshot — which path skips the invariant, what the guard order
+lets through.
 
-**7g. Select the evidence.** For each checkpoint, take only what is needed to investigate it:
+**7g. Select the evidence.** For each checkpoint, take only what is needed to investigate it — and
+**split it first**: what the explanation carries is what the question turns on; everything else the
+run found that substantiates it — the trail it walked, the callers that behave the same way, the
+framework internals — is a *Look at* entry. Decide that here, before the draft: step 10 holds the
+landed explanation to the draft's links and tiers, so nothing moves from prose to evidence after it.
 
-- Which citations are load-bearing for the judgment. Those get a collapsed excerpt beside the *Look
-  at* entry they confirm, generated in step 9.
+- Which citations are load-bearing for the judgment. Those get a collapsed excerpt in the *Look at*
+  entry they confirm, inside the checkpoint's supporting evidence, generated in step 9. A claim in the
+  explanation a reader would otherwise take on faith gets an entry of its own. The one excerpt the
+  prose may hold is an inline snippet — a few lines that *explain* rather than confirm, generated in
+  step 9 with `--inline` — and lines it quotes are not quoted again in an entry, which keeps a bare
+  `a.path`.
 - Which claims carry an evidence tier.
 - Whether a probe would settle the question **and would answer where the reviewer runs it** — a
-  `pre.probe`, proposed and never run, after the explanation, at most one per checkpoint. **A probe
+  `pre.probe`, proposed and never run, last in the supporting evidence, at most one per checkpoint. **A probe
   whose three-part label you cannot complete — instrument, safety, what the output would settle — was
   not earned.** § *Framework anchors* owns answerability and the label.
 - Whether a doc link explains why the framework consequence follows: at most one `a.doc` per
@@ -941,7 +987,7 @@ link* for every concept, and a page with no doc link is narrower rather than wro
 **Tests and author questions are facets, not sections.** A test appears inside a checkpoint when it
 changes how the reviewer judges it — *"the spec at `:88` pins the admin branch and leaves the invitee
 branch open"* — and a list of the specs that touch the file does not appear at all. An author question
-goes on the checkpoint's `p.open` line.
+is the checkpoint's review question.
 
 **7h. Build the reading path.** Three to seven stops, in the order that builds understanding — schema
 before the code that trusts it, the smallest complete example before the bulk, irreversible code last.
@@ -967,8 +1013,10 @@ locator, and a node you cannot address is a node you have not actually traced.
 **7j. Deduplicate.** *What changed*, a checkpoint's explanation, a chain, the reading path and the
 impact section can all mention the same scope. Each occurrence must serve a **different purpose** —
 intent, judgment, mechanism, route, consequence — and be one clause wherever it is not the canonical
-home. Read `references/report-format.md` § *One canonical home* for the routing table, then read your
-agenda once looking only for the second time anything is explained.
+home. **Background a checkpoint needs to stand alone is not a duplicate**: it is said there, in the
+checkpoint's own words, even where *What changed* or *Context* says it too. Read
+`references/report-format.md` § *One canonical home* for the routing table, then read your agenda
+once looking only for the second time a finding is explained.
 
 Two rules keep this from becoming ceremony:
 
@@ -983,11 +1031,13 @@ Two rules keep this from becoming ceremony:
 **7k. Name the context.** At `--context never`, skip this step and write *context: never* in
 `agenda.md`. At `always`, read the conditions below with § *How much Context*'s lowered bar; at
 `collapsed`, exactly as written. Last, because it is decided against the finished agenda: read each
-checkpoint as a reviewer who knows the stack and not this repository, and list what it assumes they
-can name — a sequence of requests, a plugin wrapping core code, a domain term a setting introduces.
-A concept gets an entry only when **all four** of `references/report-format.md` § *Section 2*'s
-conditions hold: a checkpoint uses it, that checkpoint would otherwise assume it, a newcomer to this
-repository would lack it, and it is the repository's rather than the framework's. Write the entries
+checkpoint as a reviewer who knows the stack and not this repository and jumped straight to it. A
+concept it assumes they can name — a sequence of requests, a plugin wrapping core code, a domain
+term a setting introduces — gets a sentence **in that checkpoint** first, because an entry is never
+the only place a checkpoint's background lives. Then list the concepts where the fuller picture
+would help. One gets an entry only when **all four** of `references/report-format.md` § *Section 2*'s
+conditions hold: a checkpoint uses it, it takes more than the checkpoint's own sentence, a newcomer
+to this repository would lack it, and it is the repository's rather than the framework's. Write the entries
 into `agenda.md` under `## Context`, each with its one-sentence *is*, its citation, and the
 checkpoint letters that use it; at most five. **No entry is a correct result** when nothing meets all four, and
 then the section is omitted rather than stubbed — say *none earned* in `agenda.md` and nowhere else.
@@ -1035,8 +1085,8 @@ the reader's memory, and a wrong claim corrected in the last stage was still wro
   citation in another field, or in the shut search record, does not cover it.
 - **Tests are evidence of intent, not proof of correctness.** Say which behaviour they pin, which
   branch they leave open, and what still needs a human to exercise it.
-- Where you could not confirm something, put it in the page as an open question. Do not round
-  uncertainty up.
+- Where you could not confirm something, say so in the explanation as plainly as the facts around
+  it, and let the review question ask it when it is the judgment. Do not round uncertainty up.
 - Drop any finding that does not survive the check, and do not backfill it with something weaker.
 - **A correction replaces the claim; it never annotates it.** Whatever made you revise something
   already written — a second reading of the file, a falsifier challenge, a search you re-ran — the
@@ -1121,7 +1171,7 @@ mid-paragraph is worse than one that arrives late.
 | Stage | After step | The page holds |
 |---|---|---|
 | 1 · Orientation | 4 | The skeleton, written once by `page-skeleton.sh`; then the masthead and *What changed*, with sections 02 to 05 marked pending — at `--context never`, section 02 and its rail entry are deleted here instead, since nothing will fill them |
-| 2 · Agenda | 7, then per checkpoint | Section 03's heading, its one lead sentence, and one pending stub per checkpoint carrying its question. Then each checkpoint replaces its own stub as it is written |
+| 2 · Agenda | 7, then per checkpoint | Section 03's heading, its one lead sentence, and one pending stub per checkpoint carrying its heading and review question. Then each checkpoint replaces its own stub as it is written |
 | 3 · Context and impact | 7i and 7k, after stage 2's opening publish | *Context*, as step 7k settled it (inside its fold at `--context collapsed`) — or its stub and rail entry removed when nothing was earned — and *Impact outside the diff*, as step 7i settled it |
 | 4 · Complete | 10 | *Read the code in this order*, the evidence foot, gate passed, build banner and every marker gone |
 
@@ -1135,8 +1185,8 @@ falsifiers fold in during stage 2 (step 8) and add no milestone.
 heading and its lead sentence, and each checkpoint is its own `<section class="cp" id="cp-x">` with
 a unique `id` — the anchor a later stage edits. Take the per-checkpoint rail marker and the pending
 stub from the template rather than inventing markup. Stage 2 **opens with a cheap publish**: the
-heading, the lead, and one stub per checkpoint whose line of substance is **the question** — a reader
-learns what the judgments *are* before any is written. Then:
+heading, the lead, and one stub per checkpoint carrying **its heading and its review question** — a
+reader learns what the judgments *are* before any is explained. Then:
 
 - **One publish per checkpoint that lands, not per edit.** Two landing in one turn share a publish.
 - **Publish in the turn that completes the stage, never in a turn of its own.** Send the `Edit`s and
@@ -1149,8 +1199,9 @@ learns what the judgments *are* before any is written. Then:
 every `Edit` that is ready in the same turn, side by side** — edits to different ids do not touch each
 other — and **do not inspect the page to find where an edit goes**: every anchor is an `id` or a
 marker the template names. When one is genuinely in doubt, `grep -n` for it in a call that does other
-work. **Write to the budget as you draft** (§ *How big should the page be?*); compressing afterwards
-pays for the same prose twice and tends to cut the clause a claim rested on.
+work. **Write it plain the first time** (§ *How big should the page be?*); compressing afterwards
+pays for the same prose twice and tends to cut the clause a claim rested on. The voice pass below is
+the one second writing, and it revises a draft file before the page carries it, never the page.
 
 **Fill the page in; never rewrite it.** After the first `Write`, every later stage replaces a
 *pending* marker with `Edit`. Re-emitting a page already on disk is the single largest cost a profile
@@ -1213,9 +1264,29 @@ Everything else about writing holds at every stage:
   figure's box captions, a primer's prose about `ActiveModel::Dirty` — is a claim about a file, and a
   claim copied out of a specimen is a false claim nothing catches. Type a topology figure only from
   its `agenda.md` block, and the shift from the one step 7k wrote.
+- **Prose reads as prose.** In an explanation, *What changed* and a GAP, a citation is the phrase
+  that makes the claim, linked as `a.ref` — never `(path:line)` mid-sentence, which the reader
+  decodes and skips. The paragraph's one `<strong>`, if it has one, is the sentence the judgment
+  turns on, stated and never graded. `report-format.md` § *The review checkpoint* and § *A citation
+  inside the narration* own both.
+- **Draft, revise for voice, then land it.** Write each checkpoint's explanation, GAP and review
+  question — and *What changed*'s prose at stage 1 — to `$W/voice/<section id>.html` first, from the
+  split 7g made, then
+  revise the explanation once as `report-format.md` § *The voice pass* says, carrying the idea 7f
+  named; the revision is what the `Edit` replacing the stub lands. The GAP, the question and the
+  supporting evidence land as drafted, so draft the GAP and the question in the voice to begin with:
+  the behaviour's words rather than identifiers, one relationship, the qualifying fact left to the
+  prose (`report-format.md` § *The review checkpoint* owns both). The draft carries the figure and the inline snippet in their
+  places, and the revision moves sentences around them, never them out. Draft every checkpoint that
+  is ready in one turn and land their revisions together in the next, so the pass costs a turn per
+  batch, not per checkpoint, and keep the draft files: step 10 holds the page to them. **Empty
+  `$W/voice/` before the first draft** — every run, `--update` included, which keeps `$W` — so
+  step 10 compares this run's drafts and never a checkpoint since deleted or re-lettered.
 - **Figures are components, and there is no `<svg>` on this page.** A component reflows, has no
   canvas to overflow and cannot be drawn wrong; the only thing left to get wrong is whether the edges
-  are true. A chain that lands in unchanged code is an impact path, drawn once in section 05.
+  are true. A chain that lands in unchanged code is an impact path, drawn once in section 05. A
+  checkpoint's figure sits in its explanation with no `figcaption` — the sentence before it is the
+  caption — and the page's styles set it like prose; never wrap it in a box of your own.
 - **Generate source excerpts; never type them.** An excerpt is a quotation, and a paraphrased
   quotation is a false one nothing catches. The script reads the real bytes, escapes them, tags the
   language and derives the state tag from the diff:
@@ -1227,6 +1298,8 @@ Everything else about writing holds at every stage:
 
   **Both forms need `--base`**, because the tag is a claim about the diff. Pass `--blob` or `--link`
   whenever the rung allows; an entry with an excerpt has no `a.path` of its own and uses `--in-entry`.
+  The inline snippet in an explanation uses `--inline` instead — open, captioned with its location and
+  tag, no why — and its placeholder goes in the draft where the sentence introducing it ends.
   **Generate all of them in one call**, one line per excerpt, each to a file in `$W`. **Never read the
   generated HTML back and retype it**: leave a one-line placeholder where each belongs and splice the
   files in with shell at the end. Never write a colour class into the code; pass `--lang` only when
@@ -1338,7 +1411,27 @@ complete. With `--output` there is no URL: say where the file is, once.
   cite the line, add the tier, drop the label — as a correction that replaces (step 8), never as a
   note about the page's own drafting; where it is wrong about this page, leave the sentence and say
   so in chat. Re-run after the fixes; `Edit` the sentence the WARN quotes rather than re-reading the
-  page whole. **Run the gate, the lint and a grep for leftover markers in one call, fix everything
+  page whole. The same call checks that the voice pass (step 9) kept every link, tier and figure of each
+  draft of this run, comparing the draft with what landed down to the review question:
+
+  ```sh
+  refs() { grep -oE 'class="(ref|cite|path ip-loc)" href="[^"]*"|class="tier[^"]*"|<figure class="[^"]*"' | sort; }
+  for f in "$W"/voice/*.html; do
+    [ -e "$f" ] || continue; id=$(basename "$f" .html)
+    grep -q "id=\"$id\"" <page.html> || continue
+    awk -v id="$id" 'index($0, "id=\"" id "\"") {on=1} on && /class="open"/ {q=1}
+      on && (q && /<\/p>/ || /<\/section>/) {print; exit} on' <page.html> | refs > "$W/voice/.page"
+    refs < "$f" > "$W/voice/.draft"
+    cmp -s "$W/voice/.page" "$W/voice/.draft" || echo "voice: $id"
+  done
+  ```
+
+  `<page.html>` is the page itself — `$W/page.html`, or `<dir>/index.html` with `--output`. The page
+  side stops where the review question's paragraph closes, however many lines it wraps to, so a
+  primer below it is never compared, and plain `sh` runs it. The inline snippet's citation is its
+  caption's `a.cite`, so a snippet the revision moved out is a missing `cite`. A `voice:` line is a
+  citation, a tier, a snippet or a figure the revision dropped or added; put the draft's back. **Run
+  the gate, the lint, the voice check and a grep for leftover markers in one call, fix everything
   they print in one turn of side-by-side `Edit`s, then re-run that one call** — a fix per turn
   re-bills the whole context for every sentence. A fix can raise a WARN of its own, so keep going
   until the call prints nothing you have not already fixed or answered in chat; it is usually one
@@ -1385,14 +1478,12 @@ fighting the sandbox with quoting.
 
 ## How big should the page be?
 
-Short by design and long by exception, and the two are governed differently.
+**There is no word budget.** Prose is as long as the reader needs to understand each judgment, and
+`references/report-format.md` § *The agenda budget* says what bounds it instead: relevance to a
+judgment, never a count. A shorter page bought by compressing an explanation has moved the work of
+understanding it onto the reader.
 
-**Prose is governed by guidance**, in `references/report-format.md` § *The agenda budget*: 80 to 160
-words for *What changed*, 50 to 140 a checkpoint, and a page total that is those parts summed — about
-700 to 1,500 visible words at four checkpoints on a small or medium PR.
-
-**A hundred-file diff legitimately runs past those numbers, and what it buys depends on why it is
-big.** If the bulk is one change — a rename, a codemod, one behaviour reaching a long way — it buys
+**What a big diff buys depends on why it is big.** If the bulk is one change — a rename, a codemod, one behaviour reaching a long way — it buys
 more *Look at* entries per checkpoint, the impact figure's third card, and an inventory that grows
 with the diff at no cost to anyone, because it is collapsed. **The agenda does not move**: eighty
 files of one transform is one judgment. If the PR instead ships genuinely independent changes, *What
@@ -1405,16 +1496,18 @@ naming a checkpoint, and the reading order has become an index of the agenda. It
 application code because more of it is more to route through — and a page that cannot route every
 checkpoint through three to seven stops is wider than it carries, whatever its tier.
 
-**A mentor page is that budget plus its primers**, each 90–200 words and at most three of them,
-counted separately for the reason § *The agenda budget* gives: folded in, a run would buy a lesson by
-dropping a judgment. Nothing else about the length changes, and the flag is never a reason to write a
-longer explanation, a sixth checkpoint or an extra *Look at* entry.
+**A mentor page is that page plus its primers**, each 90–200 words and at most three of them, added
+to the checkpoint they sit in and never paid for out of it, and kept whole rather than cut toward a
+shorter page: a primer is teaching material, and the checkpoint reads complete without it. Nothing
+else about the length changes, and
+the flag is never a reason to write a longer explanation, a sixth checkpoint or an extra *Look at*
+entry.
 
 **Trim only content that fails its own test** — a chain whose explanation walks its nodes, a *Look at*
 entry with no clause or with a title that only repeats its own citation, an explanation that restates
-*What changed*, a checkpoint that turns out to be a category. Never trim toward an imagined length, and **never trim a checkpoint out**. A page that
-came in under the numbers by losing a judgment has done the one thing the budget forbids; the numbers
-are what to argue with, never the agenda.
+*What changed*, a review question that restates its explanation, a checkpoint that turns out to be a
+category. Never trim a step the reader needs to follow an explanation, and **never trim a checkpoint
+out**.
 
 This runs in a single context by design, so a very large diff will strain it. That is a signal worth
 reporting, not one to hide: if you had to skim a region to fit, say which region, in *What changed*,
@@ -1429,12 +1522,13 @@ the most unverifiable claims are worth the challenges, and the rest are worth th
 
 ## Hard rules
 
-- Every claim carries a `file:line`, linked when a link is possible.
+- Every claim carries a `file:line`, linked when a link is possible — in prose, as the claim itself
+  linked (`a.ref`) rather than a path in parentheses.
 - **Never grade the PR.** No approval recommendation, no risk score, no confidence percentage, no
   "looks good". The reviewer decides; the page equips them. Evidence, relationships, invariants,
   uncertainty, and validation steps are the output — verdicts are not. **The checkpoints are ordered
   and an order is not a scale**: no number beside a question, no *blocking*, no *watch*. The line that
-  names an unresolved thing is labelled *Open question* and nothing else.
+  hands the reader the judgment is labelled *Review question* and nothing else.
 - **Never present inference as fact.** If the diff does not show it, the page says how you know.
 - **Never carry a claim across revisions without saying so on the page.** An update
   (`references/update.md`) leaves parts that were analysed at an earlier head, and a page describing
@@ -1460,10 +1554,12 @@ the most unverifiable claims are worth the challenges, and the rest are worth th
   run. Name one of this application's constants in a demo and it becomes exactly the fiction above,
   with this rule switched off. Nothing else on the page carries output, at any flag, and a `pre.demo`
   outside an `aside.primer` is a general-purpose hole for the same lie.
-- **The page must read completely with every collapsed block closed.** Three components collapse — a
-  source excerpt beside the entry it confirms, `details.searched`, and `details.evidence`, the foot
-  that is section 06 — and the rule is the same for all three: they confirm a claim the prose already
-  made, and never carry one. A claim that exists only inside a collapsed block is hidden content
+- **The page must read completely with every collapsed block closed.** Four components collapse — a
+  checkpoint's `details.cp-ev`, its *Supporting evidence*; a source excerpt beside the entry it
+  confirms; `details.searched`; and `details.evidence`, the foot that is section 06 — and the rule is
+  the same for all four: they confirm a claim the prose already made, and never carry one. A *Look
+  at* clause restates a claim the explanation above the question makes; one that says something the
+  explanation does not is a sentence missing from the explanation. A claim that exists only inside a collapsed block is hidden content
   wearing the clothes of progressive disclosure. Judge this **entry by entry**: a citation that
   appears elsewhere on the page does not rescue a *Look at* entry whose only `file:line` is inside the
   block a reader has not opened.

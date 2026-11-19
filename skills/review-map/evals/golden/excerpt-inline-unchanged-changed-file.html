@@ -1,0 +1,21 @@
+<!-- Planted defect: an inline snippet in a checkpoint's explanation quotes db/structure.sql and
+     labels it Unchanged, while the ledger lists that path as changed. The inline form is a div, not
+     a disclosure, so this proves the tag rule reads it too: a snippet in the prose is the excerpt a
+     reader is most sure to see, and the last one the check should go blind to. -->
+<section id="ledger">
+  <div class="gt">
+    <div class="c" data-path="db/structure.sql">db/structure.sql</div>
+  </div>
+</section>
+<section class="cp" id="cp-a">
+  <p>Both columns are integers with a default and nothing bounding them:</p>
+  <div class="excerpt excerpt--source ex-inline">
+    <p class="ex-cap"><span class="ex-loc"><a class="cite" href="#">db/structure.sql:310-311</a></span> <span class="tag">Unchanged</span></p>
+    <div class="ex-body">
+<pre data-src="db/structure.sql" data-lang="sql" style="counter-reset: exl 309"><span class="l">    rows integer DEFAULT 1 NOT NULL,</span>
+<span class="l">    cols integer DEFAULT 1 NOT NULL</span>
+</pre>
+    </div>
+  </div>
+  <p>So a report may still ask for any number of rows.</p>
+</section>

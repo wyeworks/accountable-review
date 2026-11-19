@@ -21,7 +21,8 @@
 # the page carries a file:line, so a checkpoint that turns on a file cites it. Therefore:
 #
 #   a checkpoint is carried iff no path in the delta appears among the path tokens inside its
-#   own <section class="cp">, and a Context entry iff none appears inside its own dt/dd pair
+#   own <section class="cp">, and a Context entry iff none appears inside its own dt/dd pair —
+#   a path in an href counted, since a citation woven into the prose shows only a claim
 #
 # WHAT THIS CANNOT KNOW, and what therefore stays with the run. Effort and mentor are invisible
 # on the page by design, the plugin version is recorded only in CI's manifest, and the deep-link
@@ -391,16 +392,34 @@ awk '
 # there it fails a page loudly, here it would carry a checkpoint that cites the changed file.
 BOUND='[^A-Za-z0-9._/-]'
 
+# A citation woven into the prose (a.ref) shows a claim, not a path: its file is only in its href.
+# A blob href spells the path, so cutting the URL in front of it leaves the path a token. A diff
+# href spells only sha256(path), so each delta path's hash is looked for as well — and with no
+# tool to compute one, any diff fragment counts as citing, because the failure must be a redo.
+sha256of() {
+  if command -v shasum >/dev/null 2>&1; then
+    printf '%s' "$1" | shasum -a 256 | cut -d' ' -f1
+  elif command -v sha256sum >/dev/null 2>&1; then
+    printf '%s' "$1" | sha256sum | cut -d' ' -f1
+  fi
+}
+while IFS= read -r p; do
+  printf '%s\t%s\n' "$p" "$(sha256of "$p")"
+done < "$TMP/delta" > "$TMP/delta-hash"
+
 # Sets $reason to "cites <path>" for the first delta path among $1's path tokens, or to "-".
 first_cited() {
   reason=-
-  while IFS= read -r p; do
+  body=$(printf '%s' "$1" | sed 's#/blob/[0-9a-f]\{7,40\}/# #g')
+  while IFS="$(printf '\t')" read -r p h; do
     esc=$(printf '%s' "$p" | sed 's/[][\.*^$+?(){}|]/\\&/g')
-    if printf '%s' "$1" | grep -qE "(^|$BOUND)$esc($BOUND|\$)"; then
+    if printf '%s' "$body" | grep -qE "(^|$BOUND)$esc($BOUND|\$)" \
+      || { [ -n "$h" ] && printf '%s' "$body" | grep -qF "#diff-$h"; } \
+      || { [ -z "$h" ] && printf '%s' "$body" | grep -qE '#diff-[0-9a-f]{64}'; }; then
       reason="cites $p"
       break
     fi
-  done < "$TMP/delta"
+  done < "$TMP/delta-hash"
 }
 
 # $1 the row kind, $2 its key.

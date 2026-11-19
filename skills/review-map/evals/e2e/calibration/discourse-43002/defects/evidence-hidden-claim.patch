@@ -1,18 +1,12 @@
 --- gold.html
 +++ gold.html
-@@ -1639,14 +1639,13 @@
-         <ul class="lookat">
+@@ -2498,8 +2498,7 @@
+           </li>
            <li>
-             <b>Click branch of resize end</b>
--            <span><code>isNormal</code> is true only for 1&times;1. Every other card becomes 1&times;1</span>
-             <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L356-L370">frontend/discourse/admin/components/dashboard/reports.gjs:356-370</a>
- <details class="excerpt excerpt--source">
+             <b>What the section shows</b>
+-            <span>only rows that resolve, clipped to the newest ten before sorting by position</span>
+-<details class="excerpt excerpt--source">
++            <details class="excerpt excerpt--source">
    <summary>
      <span class="chev">&#9656;</span>
-     <span class="ex-loc">frontend/discourse/admin/components/dashboard/reports.gjs:356-370</span>
-     <span class="tag">At head</span>
--    <span class="ex-why">the not-moved branch: 1x1 goes wide, every other size goes to 1x1</span>
-+    <span class="ex-why">the click branch</span>
-   </summary>
-   <div class="ex-body">
- <pre data-src="frontend/discourse/admin/components/dashboard/reports.gjs" style="counter-reset: exl 355"><span class="l">  async onCardResizeEnd(item, _payload, dragInfo) {</span>
+     <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/pull/43002/files#diff-7746fec8454dfbbb711ddef80bc797cac7b3de6d1925f55ac19d3e939418cab7R26-R37">lib/admin_dashboard/reports/section.rb:26-37</a></span>

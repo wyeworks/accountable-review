@@ -202,7 +202,9 @@ if collapsed.nil? || !render_answered || collapsed.empty?
   check.skip("withheld-file excerpts: no verdict on which files GitHub renders, so nothing to expect an excerpt for")
 else
   quoted = page.scan(/data-src="([^"]*)"/).map { |a| a[/"([^"]*)"/, 1].to_s }.map { |v| ReviewMap.unescape(v) }
-  cited = citations.map { |c| c.text.sub(TEXT_SPAN, "") }.uniq
+  # A phrase woven into the prose (a.ref) names no file in its text, so its file is its blob path.
+  refs = doc.scan(%r{<a class="ref"[^>]*href="[^"]*/blob/\h{7,40}/([^"#]+)}).flatten.map { |v| ReviewMap.unescape(v) }
+  cited = (citations.map { |c| c.text.sub(TEXT_SPAN, "") } + refs).uniq
   bare = collapsed.select { |path| cited.include?(path) && !quoted.include?(path) }
   if bare.any?
     check.maybe("cited from a withheld file with no excerpt to make up for it, where the link cannot show what the line replaced: #{bare.join(" ")}")

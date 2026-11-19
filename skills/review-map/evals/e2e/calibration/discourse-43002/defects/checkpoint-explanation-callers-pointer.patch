@@ -1,0 +1,21 @@
+--- gold.html
++++ gold.html
+@@ -2577,17 +2577,7 @@
+           <span class="tier tier-unc">from unchanged code</span>. The database adds
+           <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-1dd5a8f580b9615769ddc19a64a98f455d9d20eb149c443f41d9d3c797d39b12R311-R312">a default of 1 and a not-null constraint, and no
+           check</a>. In practice the endpoint&#39;s check is the one in force.</p>
+-        <p>The same check also guards a request that only reads. Each card&#39;s chart data is fetched
+-          through <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/app/controllers/admin/dashboard_controller.rb#L148-L160">a bulk
+-          endpoint that parses its items with the same method</a>, and the browser now sends each
+-          card&#39;s size with that request. A stored size the check refuses would fail the request,
+-          and the dashboard then
+-          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/dashboard/reports.gjs#L241-L249">marks
+-          every card as errored</a>, not just the one. Neither the endpoint nor
+-          <a class="ref" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/seed_data/admin_dashboard_reports.rb#L11-L14">the default-report
+-          seeders</a>, the only other writers, can store such a size
+-          <span class="tier tier-unc">from unchanged code</span>; a later writer that skips the endpoint
+-          could.</p>
++        <p>The same check reaches other callers too; see <a href="#impact">Impact outside the diff</a>.</p>
+         <p class="open"><b>Review question</b>Is the layout endpoint&#39;s check meant to be the only guard on stored sizes?</p>
+         <details class="cp-ev">
+           <summary><span class="chev">&#9656;</span><span class="cp-ev-lbl">Supporting evidence</span></summary>

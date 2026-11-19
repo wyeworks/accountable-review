@@ -28,6 +28,11 @@ checkpoint-judgments:
   3: form    # the order is not a grade
   4: form    # asks, does not answer
 
+checkpoint-explanation:
+  1: form    # explains before it asks
+  2: form    # stands alone, never exhaustive
+  3: form    # reads complete with supporting evidence shut
+
 checkpoint-claims:
   1: truth   # every Look at entry is true
   2: truth   # every explanation is true
@@ -50,4 +55,4 @@ evidence:
   2: deferred   # no label on what the diff shows
   3: deferred   # an untouched line of a changed file is cited
   4: form    # every excerpt is earned
-  5: form    # the page reads complete with every block shut
+  5: form    # every field reads complete with its excerpt shut

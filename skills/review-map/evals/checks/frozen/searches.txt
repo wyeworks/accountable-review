@@ -302,11 +302,27 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-repo-tree-clean.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-repo-tree-clean.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment anchors-runner-mutates.html
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page anchors-runner-mutates.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment anchors-tree-tag-uncatalogued.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page anchors-tree-tag-uncatalogued.html
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
@@ -430,6 +446,14 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment excerpt-inline-unchanged-changed-file.html
+exit=0
+SKIP  no affected entry carries a citation to hold against the diff
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page excerpt-inline-unchanged-changed-file.html
+exit=0
+SKIP  no affected entry carries a citation to hold against the diff
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment excerpt-linked-clean.html
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
@@ -550,6 +574,14 @@ SKIP  search provenance: needs --repo to re-run the searches the page recorded
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment figures-evidence-no-caption.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page figures-evidence-no-caption.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --fragment figures-lifecycle-aff.html
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
@@ -571,6 +603,14 @@ exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page figures-lifecycle-no-loc.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment figures-narrative-clean.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page figures-narrative-clean.html
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
@@ -763,6 +803,14 @@ exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page impact-unlabelled-edge.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment impact-why-citation-ref.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page impact-why-citation-ref.html
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
@@ -1075,6 +1123,22 @@ exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
 ## --page links-collapsed-no-excerpt.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment links-collapsed-ref-no-excerpt.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page links-collapsed-ref-no-excerpt.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --fragment links-collapsed-ref.html
+exit=0
+SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
+SKIP  search provenance: needs --repo to re-run the searches the page recorded
+## --page links-collapsed-ref.html
 exit=0
 SKIP  affected entries against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 SKIP  search provenance: needs --repo to re-run the searches the page recorded
