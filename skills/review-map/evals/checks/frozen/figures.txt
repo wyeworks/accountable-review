@@ -358,6 +358,12 @@ SKIP  no checkpoint figure in this input
 ## --page excerpt-linked-duplicate.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment excerpt-open-in-evidence.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page excerpt-open-in-evidence.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment excerpt-open.html
 exit=0
 SKIP  no checkpoint figure in this input
@@ -684,6 +690,12 @@ PASS  no checkpoint carries a figure — a valid result, and most checkpoints ea
 exit=0
 SKIP  no checkpoint figure in this input
 ## --page impact-why-variant-class.html
+exit=0
+PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
+## --fragment invariants-assurance-domain.html
+exit=0
+SKIP  no checkpoint figure in this input
+## --page invariants-assurance-domain.html
 exit=0
 PASS  no checkpoint carries a figure — a valid result, and most checkpoints earn none
 ## --fragment invariants-assurance.html

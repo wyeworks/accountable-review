@@ -11,11 +11,11 @@
 reviewer through what changed, how the new behaviour works, what existing code is affected, and what
 to understand before merge.
 
-It ships two skills: **`review-map`**, which produces the page for a Rails or a Rust codebase — a
-Rust backend or Rust in general — with or without a separate client such as Next.js, with
-Elixir/Phoenix and React (a Next.js app or React in general) support still in development; and
-**`setup-ci`**, which arranges for one to be produced automatically on every review-ready pull
-request.
+It ships two skills: **`review-map`**, which produces the page, and **`setup-ci`**, which arranges
+for one to be produced automatically on every review-ready pull request. Rails and Rust codebases —
+a Rust backend or Rust in general — are supported, with or without a separate client such as
+Next.js; Elixir/Phoenix and React (a Next.js app or React in general) support is still in
+development.
 
 Built by **[WyeWorks](https://www.wyeworks.com)**.
 
@@ -416,7 +416,7 @@ is worth doing when the diff is small enough that a second reader has nothing to
 
 ### Onboarding a reviewer into the stack
 
-A third axis, and the only one that puts anything inside a checkpoint:
+The one option that puts anything inside a checkpoint:
 
 ```text
 /accountable-review:review-map 412 --mentor          # add framework primers
@@ -485,7 +485,7 @@ tool cannot establish intent, it says so:
 > It is unclear whether existing time entries stay editable after archival. No test covers it.
 
 Every claim also carries a `file:line` into your repository, and by default a second reader attacks
-those claims before the page is finished (see [Usage](#usage-) → *effort*).
+those claims before the page is finished (see [How hard it works](#how-hard-it-works)).
 
 Nor does the page claim to have found everything — see
 [What a Review Map cannot do](#what-a-review-map-cannot-do) below. It never reads as a clean bill of
@@ -607,9 +607,9 @@ Worth opening them for:
 - a reading order that builds understanding rather than following the diff
 - open questions only the author can answer
 
-Both were generated with version 1.0.1. The page format moves between releases, so
-[`examples/README.md`](examples/README.md) records which version produced each page and how to
-regenerate them — a linked example quietly rendering an old format is worse than none.
+The page format moves between releases, so [`examples/README.md`](examples/README.md) records
+which version produced each page and how to regenerate them — a linked example quietly rendering an
+old format is worse than none.
 
 The other way to see one is to run the skill against a branch of your own; a four-file bugfix
 produces a one-screen page in a couple of minutes.
@@ -654,7 +654,7 @@ the second run compares what it would write against what is there and says *unch
 | Pull requests changing no application code | Skipped — the run says what changed and why none of it earned a map |
 | Trivial application changes | Skipped — 2 files **and** 20 lines or fewer of application code; both configurable |
 | Delivery | GitHub Actions artifact, kept 30 days |
-| The link | One comment on the pull request, updated in place, naming the revision |
+| The link | One comment on the pull request per revision the map describes, naming it |
 | Concurrency | One run per pull request; superseded runs cancelled |
 | Permissions | `contents: read`, plus `pull-requests: write` for that one comment |
 
@@ -687,7 +687,10 @@ gives you a map for every change that touches code. `docs/ci.md` has the rule an
 
 One cost worth knowing, and it is quiet: **a push does not regenerate the map**, so on a branch that
 keeps moving it describes an earlier revision while looking current — the revision in its masthead is
-how you tell, and `--regenerate-on-push` is how you change it. A skipped pull request is not the same
+how you tell, and `--regenerate-on-push` is how you change it. With it, each push updates the previous
+map rather than rebuilding it (`review_map.update`), comments the new revision's link, and stands
+down when the push changed no application code — the existing map still describes the application
+code as it is. A skipped pull request is not the same
 kind of quiet: the run still happens and its summary says which rule skipped it and what it counted,
 so "too small for a map" never looks like a broken workflow.
 
@@ -740,7 +743,7 @@ What you choose per run — effort, mentor, context and impact can also be a tea
 | **Context** | `--context auto` by default: the repository-orientation section appears only when a checkpoint needs it. `never` drops it, `always` lowers the bar for a team onboarding people into the codebase (it still never invents an entry), `collapsed` puts it behind a toggle. |
 | **Impact** | `--impact collapsed` by default: *Impact outside the diff* keeps its heading and puts its chains and affected list behind one toggle, since every one points back at the checkpoint that explains it. `open` shows them expanded, `never` leaves the section out. The analysis behind it runs the same at all three. |
 | **Theme** | Daylight by default; `workshop` or `field-notes` via `review_map.theme` in `.accountable-review.yml`. A setting of the repository, not a flag — and only the default: readers switch from the page's *Aa* menu. |
-| **Update** | A flag only, off unless you pass it: `--update` re-reads only the commits since the existing page and edits it in place. CI turns it on for you (`review_map.update`). |
+| **Update** | A flag only, off unless you pass it: `--update` re-reads only the commits since the existing page and edits it in place. In CI, where it only applies with `--regenerate-on-push`, it is on unless `review_map.update` turns it off. |
 | **Output** | A published artifact in Claude Code, a local HTML file in Codex; `--output <dir>` writes static HTML to a chosen directory instead. |
 
 A repository's standing answers live in an optional `.accountable-review.yml` — the whole schema,

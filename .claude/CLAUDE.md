@@ -809,7 +809,10 @@ pass*, § *A citation inside the narration*); the template, `excerpt.sh --inline
 - **Source excerpts are quotations, and the page reads complete without them.** A collapsed
   `details.excerpt` holding verbatim code, in two variants — `--diff` for changed lines, `--source`
   for unchanged ones, which quotes the affected-but-unchanged code because no diff view can address
-  an unchanged line.
+  an unchanged line. **An entry's excerpt ships open inside the shut *Supporting evidence***, because
+  opening the evidence was the reader's choice to verify; every other excerpt ships closed.
+  `excerpt.sh --in-entry` emits it, `excerpts.rb` fails an open one outside `details.cp-ev`, and
+  `report-format.md` § *Source excerpts* owns the rule.
 
   The page reads completely with **every excerpt closed** — judged **field by field**: a citation
   elsewhere does not rescue a field whose only `file:line` sits inside the collapsed block. An excerpt

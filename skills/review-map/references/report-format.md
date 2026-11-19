@@ -1122,10 +1122,12 @@ one of three more figures, built from § *Chains*'s boxes, its locator and its n
 | `figure.lifecycle` | an entity moves between named states | *what states can this be in, and what moves it between them?* |
 | `figure.structure` | a persistent entity or relationship appeared, changed or went | *what is this now attached to?* |
 
-**This is not a diagram feature, and zero is a valid result.** A figure exists only where it saves the
-reader reconstructing something the prose would make them hold in their head; the success test is that
-a reviewer who meets one understands that part of the change faster than from the explanation and the
-diff, never that more pages carry figures. Nothing counts figures, and nothing ever should.
+**This is not a diagram feature, and zero is a valid result — but a redundant figure beats a missing
+one.** A figure exists to save the reader reconstructing a shape the prose would make them hold in
+their head. When a shape question below answers yes and the gates hold, draw it: a figure that
+repeats a sentence the explanation needs anyway costs a glance, and one withheld leaves the reader to
+assemble the shape alone. Once it is drawn, the paragraph that walked its hops goes.
+Nothing counts figures, and nothing ever should.
 
 ### Choosing the shape
 
@@ -1139,7 +1141,7 @@ At step 7f, for a checkpoint that may earn a figure, ask in this order and stop 
 4. **Would the explanation otherwise name three hops in sequence?** → `figure.chain`.
 5. **None of these** → no figure.
 
-Then four gates, all of which must hold, or there is no figure:
+Then three gates, all of which must hold, or there is no figure:
 
 - **A reviewer question.** The figure answers a question from the table above, and the sentence that
   introduces it in the explanation asks it — *which paths have to keep the history row truthful? Three
@@ -1148,8 +1150,6 @@ Then four gates, all of which must hold, or there is no figure:
 - **A topology, not adjacency.** Files joined by arrows are not a shape — `ownership.rb → historical_ownership.rb → rubygem.rb`
   says nothing a list would not. *Normal removal and the `disown` path both have to close the history row*
   is a shape.
-- **Simpler than the prose.** If the figure would need more explaining than the thing it shows, write
-  the sentence instead.
 - **Evidenced.** Every node and every edge carries a locator to the line that makes it true. A
   relationship or transition you inferred rather than read is left out, not drawn dashed; a figure
   completed to look complete is the most convincing wrong thing a page can hold.
@@ -1867,6 +1867,11 @@ regenerated diff. It was never about quoting one committed line that a claim tur
   content the rule forbids. `excerpt.sh` emits it there; do not move it. **Inside a *Look at* entry
   the clause is the entry's own**, directly above the block and just as visible, so `--in-entry`
   leaves the summary's why out rather than repeating it.
+- **An entry's excerpt ships open; every other excerpt ships closed.** Inside a checkpoint's shut
+  *Supporting evidence* the reader has already chosen to verify, and the quotation is what they
+  opened it for, so `--in-entry` emits `open` — a second click per entry would be the same choice
+  asked twice. Anywhere else an open excerpt is a code dump in the reading path. The closed-page rule
+  is unchanged: the evidence block itself is shut, and the page reads complete with it.
 - **Verbatim, generated, never typed.** Run `scripts/excerpt.sh`. A mistyped inventory cell fails the
   coverage gate loudly; a paraphrased quotation is a *false* quotation and the reader has no way to
   catch it. This is the strongest version of the argument that produced `ledger-rows.sh`.
@@ -2919,9 +2924,10 @@ document — and each is held to a rule that keeps the page this one.
   inventory, which is the per-layer regression this section exists to refuse, and the
   never-manufacture rule is `--mentor`'s for the same reason.
 - **`collapsed` — the `auto` section, shut.** Same entries, same shift, decided by the same four
-  conditions, wrapped in one `details.ctx-fold` directly under the eyebrow, its `summary` the fixed
-  label *Repository context* and the entry names joined by commas — so a reader sees which concepts
-  are there without opening it. When `auto` earns nothing, the section is omitted exactly as it is
+  conditions, wrapped in one `details.ctx-fold` directly under the eyebrow, its `summary` a
+  chevron, the fixed label *Repository context* and the entry names joined by commas in
+  `span.fold-names` — so a reader sees which concepts are there without opening it, and the names
+  hide once it is open, where each entry's heading says them. When `auto` earns nothing, the section is omitted exactly as it is
   there; an empty fold is the stub § *Section 2* forbids.
 
   **This is one of the two named exceptions to *a page reads complete with every block shut***,
@@ -3064,9 +3070,10 @@ find what they turn on. The setting decides only how much of the result section 
 - **`collapsed` — the default: the earned section, shut.** The eyebrow and the `<h2>` stay where they
   are, so the rail entry lands on a heading, and directly under the `<h2>` one `details.imp-fold`
   holds the whole `figure.impact` and the *Affected, not changed* list beneath it. Its `summary` is
-  the fixed label *Impact paths* and the cards' behaviours, the text of each `.ip-hd` after its
-  letter, joined by commas — so a reader sees which consequences are drawn without opening it. No
-  count, no badge. When nothing crosses, the section is omitted exactly as it is at `open`; an
+  a chevron, the fixed label *Impact paths* and the cards' behaviours, the text of each `.ip-hd`
+  after its letter, joined by commas in `span.fold-names` — so a reader sees which consequences are
+  drawn without opening it. Open, the names and the panel's own label are hidden, because the
+  cards' headings say both. No count, no badge. When nothing crosses, the section is omitted exactly as it is at `open`; an
   empty fold is the stub this section forbids.
 - **`open` — the section as the rest of this file describes it**, with no fold.
 - **`never` — the section is not written.** No `section#impact`, no rail entry 05, and step 7i is

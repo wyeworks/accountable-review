@@ -171,7 +171,7 @@ open_block() {  # $1 variant, $2 path, $3 loc label, $4 counter seed, $5 state t
       "$(escattr "$2")" "$( [ -n "${6:-}" ] && printf ' data-lang="%s"' "$(escattr "$6")" )" "$4"
     return
   fi
-  printf '<details class="excerpt excerpt--%s">\n' "$1"
+  printf '<details class="excerpt excerpt--%s"%s>\n' "$1" "${IN_ENTRY:+ open}"
   printf '  <summary>\n'
   printf '    <span class="chev">&#9656;</span>\n'
   printf '    <span class="ex-loc">%s</span>\n' "$(loc_html "$3")"
@@ -381,7 +381,7 @@ diff)
           printf "<div class=\"excerpt excerpt--diff ex-inline\">\n"
           printf "  <p class=\"ex-cap\">%s <span class=\"tag\">Changed</span></p>\n", locspan
         } else {
-          printf "<details class=\"excerpt excerpt--diff\">\n"
+          printf "<details class=\"excerpt excerpt--diff\"%s>\n", (inentry != "") ? " open" : ""
           printf "  <summary>\n"
           printf "    <span class=\"chev\">&#9656;</span>\n"
           printf "    %s\n", locspan

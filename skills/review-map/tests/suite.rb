@@ -366,7 +366,11 @@ class ReviewMapSuite
     assert_eq count(imp, '<details class="imp-fold">'), 1, "section 05 is assembled inside one impact fold, its default"
     check fold.include?('<figure class="impact">') && fold.include?('<ul class="ev-list">'),
           "the impact fold holds the panel and the affected list both"
-    check fold.include?('<summary><span class="imp-fold-lbl">Impact paths</span>'), "the impact fold's summary opens on its fixed label"
+    check fold.include?('<summary><span class="chev">&#9656;</span><span class="imp-fold-lbl">Impact paths</span><span class="fold-names">'),
+          "the impact fold's summary is a chevron, its fixed label and the behaviours in span.fold-names"
+    # Open, the summary's names and the panel's own label repeat what the cards say right beneath.
+    check head.include?("details.imp-fold[open] > summary > .fold-names") && head.include?("details.imp-fold > .impact > .lbl { display: none; }"),
+          "an open impact fold hides its names and the panel's duplicate label"
     assert_eq count(head, /details\.imp-fold \{/), 1, "the impact fold is styled in the emitted head"
     check count(markup, 'class="ip-n ip-step"') >= 1, "the chain uses .ip-step, the neutral hop that exists only there"
     assert_eq count(chain, "ip-aff"), 0, "no .ip-aff node inside the chain — that hop is an impact path"
@@ -1131,6 +1135,8 @@ class ReviewMapSuite
     out = ex.("--at", "app/same.rb:1-1", "--base", "HEAD~1", "--in-entry", "--blob", "https://h/blob/s/app/same.rb").out
     assert_eq count(out, "ex-why"), 0, "--in-entry leaves the why to the entry's clause"
     assert_eq count(out, "WHY_THIS_MATTERS"), 0, "and leaves no placeholder for it either"
+    assert_eq count(out, '<details class="excerpt excerpt--source" open>'), 1, "--in-entry ships the excerpt open inside the shut evidence"
+    assert_eq count(ex.("--at", "app/same.rb:1-1", "--base", "HEAD~1", "--why", "w").out, " open>"), 0, "and --why ships it closed"
 
     assert_eq ex.("--at", "app/same.rb:1-1", "--base", "HEAD~1", "--in-entry", "--why", "w").code, 2,
               "--in-entry with --why is refused rather than choosing one"
@@ -1138,6 +1144,7 @@ class ReviewMapSuite
     out = ex.("--diff", "app/changed.rb", "--base", "HEAD~1", "--blob", "https://h/blob/s/app/changed.rb", "--in-entry").out
     assert_eq count(out, '<span class="ex-loc"><a class="cite" href="https://h/blob/s/app/changed.rb#L1-L3">app/changed.rb:1-3</a></span>'), 1,
               "--diff links the summary's location at the hunk's own range"
+    assert_eq count(out, '<details class="excerpt excerpt--diff" open>'), 1, "--diff --in-entry ships the hunk open too"
     assert_eq count(out, /ex-src|ex-why/), 0, "and, in an entry, carries no second citation and no why"
 
     d = "0123456789abcdef" * 4
@@ -1315,10 +1322,16 @@ class ReviewMapSuite
   #
   # Step 10's check that the voice pass kept every link, tier, snippet and figure of a draft. It is
   # shell written into SKILL.md rather than a script, so the row runs the block exactly as a run
-  # copies it: lifted from the prose, `<page.html>` replaced by a path, under plain sh.
+  # copies it: lifted from the prose, `<page.html>` replaced by a path, under plain sh. The prose is
+  # read as a run receives it — Claude Code replaces `$0`, `$1`… in SKILL.md with the skill's
+  # arguments, so an awk `$0` arrives as a PR number and the comparison silently matches nothing.
+
+  ARGS = %w[43845 --effort high].freeze
+
+  def as_loaded(text) = text.gsub(/\$(\d+)/) { ARGS[$1.to_i].to_s }
 
   def voice(page, draft, id = "cp-a")
-    block = first_block(read(File.join(@skill, "SKILL.md")).split("The same call checks that the voice pass", 2).last.to_s,
+    block = first_block(as_loaded(read(File.join(@skill, "SKILL.md"))).split("The same call checks that the voice pass", 2).last.to_s,
                         "```sh", /^\s*```\s*$/).lines[1...-1].to_a.join
     w = path("voice-run")
     FileUtils.rm_rf(w)
@@ -1346,6 +1359,9 @@ class ReviewMapSuite
 
     r = voice(page.(expl + question.sub(" #{tier}", "") + evidence), draft)
     assert_eq r.out, "voice: cp-a\n", "a tier dropped from the question's second line draws a voice line"
+
+    skill = read(File.join(@skill, "SKILL.md"))
+    assert_eq skill.scan(/\$\d+/).uniq.join(" "), "", "SKILL.md carries no $0, $1… for the loader to replace with an argument"
   end
 
   # ------------------------------------------------------------------ usage.sh

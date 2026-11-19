@@ -352,6 +352,12 @@ SKIP  completeness.rb needs a whole page, got a fragment
 ## --page excerpt-linked-duplicate.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment excerpt-open-in-evidence.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page excerpt-open-in-evidence.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment excerpt-open.html
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
@@ -626,6 +632,12 @@ FAIL  completeness: needs --repo and --base to compare the ledger against the di
 exit=3
 SKIP  completeness.rb needs a whole page, got a fragment
 ## --page impact-why-variant-class.html
+exit=1
+FAIL  completeness: needs --repo and --base to compare the ledger against the diff
+## --fragment invariants-assurance-domain.html
+exit=3
+SKIP  completeness.rb needs a whole page, got a fragment
+## --page invariants-assurance-domain.html
 exit=1
 FAIL  completeness: needs --repo and --base to compare the ledger against the diff
 ## --fragment invariants-assurance.html

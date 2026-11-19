@@ -22,7 +22,13 @@
 # detached worktree of the pinned head — through the e2e harness's checkout code, so it inherits
 # the force-push guard: a head that is no longer on the pull ref stops the run rather than
 # publishing a page whose every citation 404s. The page settings come from the manifest, passed
-# explicitly, so an example keeps the settings it was made with. It never edits a page.
+# explicitly, so an example keeps the settings it was made with. It never edits a page, and it
+# never updates one: --no-update is passed, and a manifest naming updated_from is refused.
+#
+# A page it refuses is kept, never discarded: the output directory, the run's work/ notes and the
+# check's output are copied to ~/.cache/accountable-review-e2e/refused-examples/<id>-<stamp>/,
+# and the path printed, because a FAIL can be the rule's mistake rather than the page's, and only
+# the page says which. Kept is not promoted: nothing under examples/ moves.
 #
 # This script lives outside examples/ on purpose: .github/workflows/pages.yml uploads that whole
 # directory to the public site.
@@ -39,6 +45,7 @@ ROOT = E2E::ROOT
 DIR = File.join(ROOT, "examples")
 README = File.join(DIR, "README.md")
 INDEX = File.join(DIR, "index.html")
+REFUSED = File.join(E2E.cache, "refused-examples")
 
 def die(msg, code = 2)
   warn "examples: #{msg}"
@@ -199,6 +206,16 @@ def credential!
   MSG
 end
 
+# Outside the repository and outside examples/, which Pages uploads whole; and out of the
+# mktmpdir, which is emptied on the way out.
+def keep(e, tmp, why, check = nil)
+  dest = File.join(REFUSED, "#{e.id}-#{Time.now.strftime('%Y%m%d-%H%M%S')}")
+  FileUtils.mkdir_p(dest)
+  %w[page work].each { |d| FileUtils.cp_r(File.join(tmp, d), dest) if File.directory?(File.join(tmp, d)) }
+  File.write(File.join(dest, "check.txt"), check) if check
+  "#{why}; examples/#{e.id}/ is unchanged. Kept at #{dest}"
+end
+
 def regen(e)
   pr = E2E::Pr.new(id: e.id, repo: e.rev["repository"], pr: e.rev["pull_request"],
                    base_sha: e.rev["base_sha"], head_sha: e.rev["head_sha"])
@@ -213,12 +230,14 @@ def regen(e)
              "--output", out, "--repository", pr.repo, "--pr", pr.pr.to_s,
              "--base-sha", pr.base_sha, "--head-sha", pr.head_sha,
              "--repo-dir", repo, "--plugin-dir", ROOT,
-             "--effort", s["effort"], "--mentor", s["mentor"], "--context", s["context"]]
+             "--effort", s["effort"], "--mentor", s["mentor"], "--context", s["context"],
+             # An example is always generated whole: a carried claim is one nobody re-read.
+             "--no-update"]
       # A manifest written before --impact existed names none; its page is regenerated at the default.
       cmd += ["--impact", s["impact"]] if s["impact"]
       cmd += ["--claude-bin", ENV["CLAUDE_BIN"]] if ENV["CLAUDE_BIN"]
       env = s["theme"] ? { "ACCOUNTABLE_REVIEW_THEME" => s["theme"] } : {}
-      system(env, *cmd) or die("#{e.id}: generation failed; examples/#{e.id}/ is unchanged", 1)
+      system(env, *cmd) or die(keep(e, tmp, "#{e.id}: generation failed"), 1)
 
       page = File.join(out, "index.html")
       check, st = Open3.capture2e(File.join(E2E::EVALS, "check.rb"), "--final", "--page", page,
@@ -226,9 +245,11 @@ def regen(e)
       puts check.lines.last(3).join
       unless st.success?
         puts check
-        die("#{e.id}: check.rb --final failed; examples/#{e.id}/ is unchanged. Re-run, never edit.", 1)
+        die("#{keep(e, tmp, "#{e.id}: check.rb --final failed", check)}. Re-run, never edit.", 1)
       end
 
+      built = JSON.parse(File.read(File.join(out, "manifest.json")))
+      die(keep(e, tmp, "#{e.id}: the page was updated from #{built.dig("revision", "updated_from")}, not generated whole"), 1) if built.dig("revision", "updated_from")
       FileUtils.cp(page, File.join(DIR, e.id, "index.html"))
       FileUtils.cp(File.join(out, "manifest.json"), File.join(DIR, e.id, "manifest.json"))
     ensure

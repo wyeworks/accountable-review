@@ -1,0 +1,13 @@
+<!-- Plants no defect: domain prose that shares words with assurance language. A change to
+     sign-up by emailed code says "verification passes" about the code, not about the page,
+     so page-invariants.rb § 2b must stay green. Everything else matches
+     invariants-assurance.html, minus its planted sentence. -->
+<section id="cp-a">
+  <div class="mech">When the code verification passes, the account is created with the chosen username.</div>
+  <dl class="rows">
+    <dt>Affected, unchanged</dt>
+    <dd><code>EmailCodeVerifier</code> marks the code spent before the username is checked
+      <a class="cite" href="#">app/services/email_code_verifier.rb:12</a>
+      <span class="tier">from unchanged code</span></dd>
+  </dl>
+</section>

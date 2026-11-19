@@ -507,14 +507,24 @@ section { padding: 58px 0 0; scroll-margin-top: 20px; }
    thing is known", and neither section is provenance. The two folds allowed to hold
    content rather than provenance — report-format.md § How much Context and § How
    much Impact say why each is safe. */
-details.ctx-fold, details.imp-fold { margin-top: 8px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+details.ctx-fold, details.imp-fold { margin-top: 8px; border-top: 1px solid var(--rule); }
+/* Context's fold is followed by the agenda and closes on its own rule; section 05's is followed by
+   the evidence foot, whose top rule closes it, so a second line there would draw two. */
+details.ctx-fold { border-bottom: 1px solid var(--rule); }
 details.ctx-fold > summary, details.imp-fold > summary { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; padding: 12px 0; cursor: pointer; list-style: none; font-size: 14px; color: var(--ink-2); }
 details.ctx-fold > summary::-webkit-details-marker, details.imp-fold > summary::-webkit-details-marker { display: none; }
 details.ctx-fold > summary::marker, details.imp-fold > summary::marker { content: ""; }
 .ctx-fold-lbl, .imp-fold-lbl { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+details.ctx-fold > summary > .chev, details.imp-fold > summary > .chev { font-family: var(--mono); font-size: 10px; color: var(--faint); transition: transform 120ms ease; }
+details.ctx-fold[open] > summary > .chev, details.imp-fold[open] > summary > .chev { transform: rotate(90deg); }
+details.ctx-fold > summary:hover > .ctx-fold-lbl, details.imp-fold > summary:hover > .imp-fold-lbl { color: var(--ink-2); }
+/* Open, the names would repeat the dt texts and card headings directly beneath them. */
+details.ctx-fold[open] > summary > .fold-names, details.imp-fold[open] > summary > .fold-names { display: none; }
 details.ctx-fold > .ctx { margin-top: 0; }
 details.imp-fold[open] { padding-bottom: 24px; }
 details.imp-fold > .impact { margin-top: 10px; }
+/* The summary already says Impact paths; the panel's own label would say it twice. */
+details.imp-fold > .impact > .lbl { display: none; }
 @media (max-width: 700px) {
   .ctx { grid-template-columns: minmax(0, 1fr); }
   .ctx > dd { padding-top: 4px; }
@@ -933,8 +943,8 @@ div.excerpt.ex-inline .ex-body > pre { margin: 0; }
    the checkpoint, and set tight against the GAP note above or the evidence below
    it reads as part of either. A theme that hangs a badge off its top edge adds
    the badge's overhang to the space above. */
-.open { margin: 28px 0; padding: 14px 16px; background: var(--gap-bg-2); border-left: 2px solid var(--gap-rule); font-size: 14.5px; line-height: 1.62; color: var(--ink-3); }
-.open > b { display: block; margin-bottom: 5px; font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .1em; color: var(--gap-ink); }
+.open { margin: 28px 0; padding: 14px 16px; background: var(--gap-bg-2); border-left: 2px solid var(--gap-rule); font-size: 16px; font-weight: 600; line-height: 1.55; color: var(--ink-2); }
+.open > b { display: block; margin-bottom: 5px; font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; color: var(--gap-ink); }
 
 /* Supporting evidence — the checkpoint's proof, after its question and shut by
    default. The explanation above is the narrative and reads complete without it;
@@ -1369,6 +1379,8 @@ figure.structure .st-e > * { grid-column: auto; }
    so it neither knows nor cares that the carrier sits in here.
    ============================================================ */
 details.evidence { margin-top: 62px; padding-top: 24px; border-top: 1px solid var(--rule); }
+/* A shut impact fold is a one-line section; the full gap beneath it reads as a missing block. */
+section:has(> details.imp-fold:not([open])) + details.evidence { margin-top: 36px; }
 details.evidence > summary { display: flex; gap: 9px; align-items: center; cursor: pointer; list-style: none; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--prov-ink); }
 details.evidence > summary::-webkit-details-marker { display: none; }
 details.evidence > summary::marker { content: ""; }
@@ -1821,9 +1833,11 @@ figcaption strong { color: var(--ink-3); }
          else to make up for it. always: the same markup, entries earned by the
          lowered bar, still omitted when none qualifies. collapsed: wrap the shift
          and the dl in ONE details.ctx-fold, shut, directly under the h2:
-           <details class="ctx-fold"><summary><span class="ctx-fold-lbl">Repository
-           context</span> Name one, Name two</summary> ...figure, dl... </details>
-         The label is fixed and the names are the dt texts; no count, no badge. ===== -->
+           <details class="ctx-fold"><summary><span class="chev">&#9656;</span><span
+           class="ctx-fold-lbl">Repository context</span><span class="fold-names">Name
+           one, Name two</span></summary> ...figure, dl... </details>
+         The label is fixed and the names are the dt texts; no count, no badge. The
+         names hide once the fold is open, where the dt texts say them. ===== -->
     <section id="context">
       <div class="eyebrow"><span class="lbl lbl-a">Context</span><i></i></div>
       <h2 style="margin-bottom:18px">What the judgments below rely on</h2>
@@ -2164,7 +2178,7 @@ post.saved_change_to_title?  # =&gt; true</pre>
             <span>{{WHAT_TO_CHECK_THERE}}</span>
             <!-- generated by scripts/excerpt.sh --diff --in-entry — never typed.
                  No a.path above it: the summary's location is the citation. -->
-            <details class="excerpt excerpt--diff">
+            <details class="excerpt excerpt--diff" open>
               <summary>
                 <span class="chev">&#9656;</span>
                 <span class="ex-loc"><a class="cite" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a></span>
@@ -2273,7 +2287,7 @@ post.saved_change_to_title?  # =&gt; true</pre>
                  so a changed file quoted at head comes back tagged `At head`, and a
                  page that says Unchanged about a path in its own inventory fails
                  evals/checks/excerpts.rb. report-format.md § Source excerpts. -->
-            <details class="excerpt excerpt--source">
+            <details class="excerpt excerpt--source" open>
               <summary>
                 <span class="chev">&#9656;</span>
                 <span class="ex-loc"><a class="cite" href="{{BLOB}}#L{{START}}-L{{END}}">{{PATH}}:{{START}}-{{END}}</a></span>
@@ -2494,7 +2508,9 @@ post.saved_change_to_title?  # =&gt; true</pre>
          what is assembled here: the figure and the affected list inside ONE
          details.imp-fold, shut, directly under the h2. Its summary is the fixed
          label and each card's behaviour — the .ip-hd text after its letter —
-         joined by commas; no count, no badge. open: the same section with the
+         joined by commas inside span.fold-names, behind the chevron; no count, no
+         badge. Open, the names and the panel's own label hide, because the cards'
+         headings say them. open: the same section with the
          details and its summary removed and nothing else changed. never: delete
          this section and its rail entry, drop every clause that points at an
          impact path, list an affected entry only this section carried in the
@@ -2503,7 +2519,7 @@ post.saved_change_to_title?  # =&gt; true</pre>
       <div class="eyebrow"><span class="lbl lbl-a">Beyond the diff</span><i></i></div>
       <h2 style="margin-bottom:22px">Impact outside the diff</h2>
       <details class="imp-fold">
-        <summary><span class="imp-fold-lbl">Impact paths</span> {{THE_BEHAVIOUR_THIS_PATH_IS_ABOUT}}, {{A_DIFFERENT_BEHAVIOUR}}</summary>
+        <summary><span class="chev">&#9656;</span><span class="imp-fold-lbl">Impact paths</span><span class="fold-names">{{THE_BEHAVIOUR_THIS_PATH_IS_ABOUT}}, {{A_DIFFERENT_BEHAVIOUR}}</span></summary>
 
       <figure class="impact">
         <span class="lbl">Impact paths</span>
