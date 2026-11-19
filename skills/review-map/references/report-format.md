@@ -2919,9 +2919,10 @@ document — and each is held to a rule that keeps the page this one.
   inventory, which is the per-layer regression this section exists to refuse, and the
   never-manufacture rule is `--mentor`'s for the same reason.
 - **`collapsed` — the `auto` section, shut.** Same entries, same shift, decided by the same four
-  conditions, wrapped in one `details.ctx-fold` directly under the eyebrow, its `summary` the fixed
-  label *Repository context* and the entry names joined by commas — so a reader sees which concepts
-  are there without opening it. When `auto` earns nothing, the section is omitted exactly as it is
+  conditions, wrapped in one `details.ctx-fold` directly under the eyebrow, its `summary` a
+  chevron, the fixed label *Repository context* and the entry names joined by commas in
+  `span.fold-names` — so a reader sees which concepts are there without opening it, and the names
+  hide once it is open, where each entry's heading says them. When `auto` earns nothing, the section is omitted exactly as it is
   there; an empty fold is the stub § *Section 2* forbids.
 
   **This is one of the two named exceptions to *a page reads complete with every block shut***,
@@ -3064,9 +3065,10 @@ find what they turn on. The setting decides only how much of the result section 
 - **`collapsed` — the default: the earned section, shut.** The eyebrow and the `<h2>` stay where they
   are, so the rail entry lands on a heading, and directly under the `<h2>` one `details.imp-fold`
   holds the whole `figure.impact` and the *Affected, not changed* list beneath it. Its `summary` is
-  the fixed label *Impact paths* and the cards' behaviours, the text of each `.ip-hd` after its
-  letter, joined by commas — so a reader sees which consequences are drawn without opening it. No
-  count, no badge. When nothing crosses, the section is omitted exactly as it is at `open`; an
+  a chevron, the fixed label *Impact paths* and the cards' behaviours, the text of each `.ip-hd`
+  after its letter, joined by commas in `span.fold-names` — so a reader sees which consequences are
+  drawn without opening it. Open, the names and the panel's own label are hidden, because the
+  cards' headings say both. No count, no badge. When nothing crosses, the section is omitted exactly as it is at `open`; an
   empty fold is the stub this section forbids.
 - **`open` — the section as the rest of this file describes it**, with no fold.
 - **`never` — the section is not written.** No `section#impact`, no rail entry 05, and step 7i is

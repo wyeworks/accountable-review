@@ -366,7 +366,11 @@ class ReviewMapSuite
     assert_eq count(imp, '<details class="imp-fold">'), 1, "section 05 is assembled inside one impact fold, its default"
     check fold.include?('<figure class="impact">') && fold.include?('<ul class="ev-list">'),
           "the impact fold holds the panel and the affected list both"
-    check fold.include?('<summary><span class="imp-fold-lbl">Impact paths</span>'), "the impact fold's summary opens on its fixed label"
+    check fold.include?('<summary><span class="chev">&#9656;</span><span class="imp-fold-lbl">Impact paths</span><span class="fold-names">'),
+          "the impact fold's summary is a chevron, its fixed label and the behaviours in span.fold-names"
+    # Open, the summary's names and the panel's own label repeat what the cards say right beneath.
+    check head.include?("details.imp-fold[open] > summary > .fold-names") && head.include?("details.imp-fold > .impact > .lbl { display: none; }"),
+          "an open impact fold hides its names and the panel's duplicate label"
     assert_eq count(head, /details\.imp-fold \{/), 1, "the impact fold is styled in the emitted head"
     check count(markup, 'class="ip-n ip-step"') >= 1, "the chain uses .ip-step, the neutral hop that exists only there"
     assert_eq count(chain, "ip-aff"), 0, "no .ip-aff node inside the chain — that hop is an impact path"
