@@ -1,0 +1,7 @@
+<!-- ONE DEFECT, a WARN: links-collapsed-no-excerpt.html's citation, woven into the prose as an
+     a.ref. Its text is the claim and names no file, so the rule has to take the file from the
+     blob href — or a withheld file cited this way would never be asked for its excerpt. -->
+<section class="cp" id="cp-a">
+  <h3>Order state in the schema dump</h3>
+  <p>Orders gain a state column, and <a class="ref" href="https://github.com/acme/shop/blob/6ebe1a49faca500d90efcb83a85a016df2cc256d/db/structure.sql#L4">the dump adds it with no default</a>, so every existing row reads NULL.</p>
+</section>

@@ -1,15 +1,14 @@
 --- gold.html
 +++ gold.html
-@@ -1612,6 +1612,26 @@
-             <b>Columns with no constraint</b>
-             <span><code>integer DEFAULT 1 NOT NULL</code>, with no range check</span>
-             <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-1dd5a8f580b9615769ddc19a64a98f455d9d20eb149c443f41d9d3c797d39b12R311-R312">db/structure.sql:311-312</a>
+@@ -2667,6 +2667,25 @@
+             <b>Default-report seeder</b>
+             <span>creates rows through the model without a size, so the defaults apply and pass <span class="tier tier-unc">from unchanged code</span></span>
+             <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/seed_data/admin_dashboard_reports.rb#L11-L14">lib/seed_data/admin_dashboard_reports.rb:11-14</a>
 +<details class="excerpt excerpt--source">
 +  <summary>
 +    <span class="chev">&#9656;</span>
 +    <span class="ex-loc"><a class="cite" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/app/assets/stylesheets/admin/admin_dashboard.scss#L486-L494">app/assets/stylesheets/admin/admin_dashboard.scss:486-494</a></span>
 +    <span class="tag">At head</span>
-+    <span class="ex-why">the grid's fixed row height and its two columns</span>
 +  </summary>
 +  <div class="ex-body">
 +<pre data-src="app/assets/stylesheets/admin/admin_dashboard.scss" data-lang="scss" style="counter-reset: exl 485"><span class="l">    &amp;.--grid {</span>
@@ -25,5 +24,5 @@
 +  </div>
 +</details>
            </li>
-           <li>
-             <b>Model-level rule spec</b>
+         </ul>
+         </details>

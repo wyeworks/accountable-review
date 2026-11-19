@@ -10,7 +10,8 @@ criteria:
   - >-
     ACCURATE. Every factual claim § 01 makes about what the change does — the problem it solves,
     what is now true that was not, who is affected, the change-shape chip — is true of the code at
-    head against the base. Open the files; the diff is `git diff {{BASE}}...{{HEAD}}`. A claim the
+    head against the base. Open the files; the diff is `git diff {{BASE}}...{{HEAD}}`, and a linked
+    claim (an `a.ref`, whose text is the claim) is held to the range its href names. A claim the
     code does not support, or supports only in part, fails this criterion even if it is plausible.
   - >-
     COMPLETE AT THE LEVEL OF DELTAS. If the pull request carries genuinely independent changes,
@@ -39,8 +40,9 @@ person about to review it. You grade **the page, never the pull request**. Wheth
 good is not your question and nothing you write may answer it.
 
 The section is **§ 01, What changed**: the masthead plus `<section id="changed">`. It orients a
-reviewer in a screenful — what the change does, what is now true that was not — and leaves every
-judgment to the sections after it.
+reviewer in a short narrative — the situation, the change as one named idea, what is now true that
+was not — and leaves every judgment to the sections after it. Where it cites, the citation is the
+claim itself, linked (`a.ref`).
 
 ## Where things are
 

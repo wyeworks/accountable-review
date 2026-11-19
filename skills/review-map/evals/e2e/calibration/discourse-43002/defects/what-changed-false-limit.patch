@@ -1,10 +1,10 @@
 --- gold.html
 +++ gold.html
-@@ -1404,6 +1404,7 @@
-         viewports. The commits also add reduced-motion handling and right-to-left handle placement. The
-         description says cards &ldquo;remember their size&rdquo;. Checkpoint A tests that claim against the
-         one writer the diff did not touch.</p>
-+      <p>The Ember client under <code>frontend/</code> could not be read, so what this page says about the handle is inferred from the server side.</p>
+@@ -2351,6 +2351,7 @@
+       <p>Admins get layouts that survive a reload, and anyone else who can open the dashboard sees the
+         sizes admins chose. A dashboard where no card has been resized looks as it did: every existing
+         row reads one row by one column, which is how every card rendered before.</p>
++      <p>The Ember client under <code>frontend/</code> could not be read, so what this page says about the handles is inferred from the server side.</p>
      </section>
  
-     <section id="attention" style="padding-top:48px">
+     <section id="context">

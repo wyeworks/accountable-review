@@ -1,0 +1,11 @@
+--- gold.html
++++ gold.html
+@@ -2463,6 +2463,8 @@
+       <section class="cp" id="cp-b">
+         <span class="lbl lbl-wide">Checkpoint B</span>
+         <h3>Saving one card&#39;s size by rewriting the whole layout</h3>
++        <p><code>setSize</code> sends the layout to the endpoint that calls
++          <code>LayoutUpdater</code>, which runs <code>delete_all</code> and then <code>insert_all</code>.</p>
+         <p>The dashboard stores its pinned reports as one list, and the only way to change any part of
+           it is to send the whole list again: the layout endpoint deletes every stored row and inserts
+           the list it was given. Removing a report from the dashboard already worked this way.</p>

@@ -1,15 +1,15 @@
 --- gold.html
 +++ gold.html
-@@ -1404,6 +1404,12 @@
-         viewports. The commits also add reduced-motion handling and right-to-left handle placement. The
-         description says cards &ldquo;remember their size&rdquo;. Checkpoint A tests that claim against the
-         one writer the diff did not touch.</p>
+@@ -2351,6 +2351,12 @@
+       <p>Admins get layouts that survive a reload, and anyone else who can open the dashboard sees the
+         sizes admins chose. A dashboard where no card has been resized looks as it did: every existing
+         row reads one row by one column, which is how every card rendered before.</p>
 +      <ul>
 +        <li>An admin hovers a card and the handle appears</li>
 +        <li>The admin drags the corner and the grid reflows</li>
-+        <li>The client sends the new layout to the server</li>
++        <li>The browser sends the whole layout to the server</li>
 +        <li>The server deletes and re-inserts every row</li>
 +      </ul>
      </section>
  
-     <section id="attention" style="padding-top:48px">
+     <section id="context">

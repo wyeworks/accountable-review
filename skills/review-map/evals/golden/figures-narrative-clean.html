@@ -1,0 +1,24 @@
+<!-- CLEAN: a chain in the explanation, between the sentence that introduces it and the one that
+     says what follows, with no figcaption — the sentence before it is its caption. Must pass. -->
+<section class="cp" id="cp-a">
+  <span class="lbl lbl-wide">Checkpoint A</span>
+  <h3>Skipping the slot search for reservations about to start</h3>
+  <p>The finder now returns before searching when the reservation starts within a minute. The old
+    search could not have found an earlier slot in that case either, and this is why:</p>
+  <figure class="chain">
+    <ol class="ip-path">
+      <li class="ip-n ip-chg"><span class="ip-box"><b>early return</b><span class="ip-d">start within a minute, nil</span><a class="path ip-loc" href="#">app/support/reservations/moving_up.rb:12</a></span></li>
+      <li class="ip-n ip-step"><span class="ip-rel"><i></i>falls through to</span><span class="ip-box"><b>first candidate</b><span class="ip-d">no earlier than a minute from now</span><a class="path ip-loc" href="#">app/models/concerns/products/scheduling_support.rb:157</a></span></li>
+      <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>no Move Up link</b><span class="ip-d">observable behaviour</span></span></li>
+    </ol>
+  </figure>
+  <p>Every candidate starts too late, so the guard the change kept would have rejected it.</p>
+  <p class="open"><b>Review question</b> Does the shortcut answer the same for every caller of the finder?</p>
+  <details class="cp-ev">
+    <summary><span class="chev">&#9656;</span><span class="cp-ev-lbl">Supporting evidence</span></summary>
+    <ul class="lookat">
+      <li><b>The kept guard</b> <span>drops any slot not before the reservation's start</span>
+        <a class="path" href="#">app/support/reservations/moving_up.rb:24</a></li>
+    </ul>
+  </details>
+</section>

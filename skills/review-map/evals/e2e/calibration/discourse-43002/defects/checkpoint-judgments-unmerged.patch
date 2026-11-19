@@ -1,34 +1,29 @@
 --- gold.html
 +++ gold.html
-@@ -1678,7 +1678,31 @@
-             <span>covers only 1&times;1 to full width. No test clicks a multi-row card, and none runs in
-               right-to-left</span>
-             <a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/tests/integration/components/dashboard/reports-test.gjs#L284-L338">frontend/discourse/tests/integration/components/dashboard/reports-test.gjs:284-338</a>
+@@ -2805,6 +2805,26 @@
+             <b>The existing ui-kit modifiers</b>
+             <span>twenty entries; none animates a layout change or positions an element at a rectangle <span class="tier tier-unc">from unchanged code</span></span>
+             <a class="path" href="https://github.com/discourse/discourse/tree/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/app/ui-kit/modifiers">frontend/discourse/app/ui-kit/modifiers/</a>
 +          </li>
 +        </ul>
++        </details>
 +      </section>
 +
-+      <section class="cp" id="cp-e">
-+        <span class="lbl lbl-wide">Checkpoint E</span>
-+        <h3>Should a layout save that leaves out a size store that card at 1&times;1?</h3>
-+
-+        <p>The parser treats a missing <code>rows</code> or <code>cols</code> as 1, at
-+          <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R240">app/controllers/admin/dashboard_controller.rb:235-240</a>,
-+          and <code>LayoutUpdater</code> deletes every row before it writes what it is handed. A save that
-+          omits a card's size therefore stores that card at one cell, whatever size it had. Decide whether an
-+          omitted size should mean one cell, or should keep the size the card already has.</p>
-+
++      <section class="cp" id="cp-f">
++        <span class="lbl lbl-wide">Checkpoint F</span>
++        <h3>Storing a layout save that leaves out a size</h3>
++        <p>The layout endpoint accepts a size with each report, and a report sent without one is not
++          refused: <a class="ref" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R241">an absent row count or column span becomes 1</a>.
++          The layout is then replaced as a whole, so a save that omits a card's size stores that card at
++          one cell, whatever size it had.</p>
++        <p class="open"><b>Review question</b>Should an omitted size mean one cell, or should it keep the size the card already has?</p>
++        <details class="cp-ev">
++          <summary><span class="chev">&#9656;</span><span class="cp-ev-lbl">Supporting evidence</span></summary>
 +        <ul class="lookat">
 +          <li>
-+            <b>Default in the parser</b>
++            <b>Defaults in the parser</b>
 +            <span>falls back to 1 for each missing dimension</span>
-+            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R240">app/controllers/admin/dashboard_controller.rb:235-240</a>
++            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R241">app/controllers/admin/dashboard_controller.rb:235-241</a>
            </li>
-+          <li>
-+            <b>Default-to-1 request spec</b>
-+            <span>pins the one-cell fallback for an item sent with no size</span>
-+            <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-944d3162ab0371dfd9113fb935b2e3216446d4841565b194a446d44ee97dea64R2378-R2392">spec/requests/admin/dashboard_controller_spec.rb:2378-2392</a>
-+          </li>
          </ul>
-       </section>
-     </section>
+         </details>

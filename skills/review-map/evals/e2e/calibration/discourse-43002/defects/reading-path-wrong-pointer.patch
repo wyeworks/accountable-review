@@ -1,11 +1,11 @@
 --- gold.html
 +++ gold.html
-@@ -1730,7 +1730,7 @@
-             <span class="why">Read <code>layoutItems</code> and <code>loadPayloads</code> together to see which copy
-               of a size each one trusts. Then read <code>setSize</code> at <code>:389</code>.</span>
+@@ -2845,7 +2845,7 @@
+             <a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR18-R33">lib/admin_dashboard/reports/layout_updater.rb:18-33</a>
+             <span class="why">Where a received list replaces the stored layout, and where the bulk insert writes the sizes.</span>
            </span>
 -          <a class="ptr" href="#cp-b">Checkpoint B &rarr;</a>
-+          <a class="ptr" href="#cp-d">Checkpoint D &rarr;</a>
++          <a class="ptr" href="#cp-e">Checkpoint E &rarr;</a>
          </li>
          <li>
-           <span class="n">06</span>
+           <span class="n">05</span>

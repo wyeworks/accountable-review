@@ -1,31 +1,10 @@
 --- gold.html
 +++ gold.html
-@@ -1760,7 +1760,7 @@
-             <ol class="ip-path">
-               <li class="ip-n ip-chg"><span class="ip-box"><b>parse_reports_items_payload</b><span class="ip-d">missing size &rarr; 1&times;1</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43002/files#diff-adc7e857a80c568a183a7b17d30163292d709e6e73a802862fdb4ef314f56449R235-R240">app/controllers/admin/dashboard_controller.rb:235-240</a></span></li>
-               <li class="ip-n ip-aff"><span class="ip-rel"><i></i>called by</span><span class="ip-box"><b>ManageReports#apply</b><span class="ip-d">sends source + identifier only</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L201-L204">frontend/discourse/admin/components/modal/manage-reports.gjs:201-204</a></span></li>
--              <li class="ip-n ip-aff"><span class="ip-rel"><i></i>causes</span><span class="ip-box"><b>AdminDashboardReport.delete_all</b><span class="ip-d">no old size survives</span><a class="path ip-loc" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/admin_dashboard/reports/layout_updater.rb#L19">lib/admin_dashboard/reports/layout_updater.rb:19</a></span></li>
-+              <li class="ip-n ip-chg"><span class="ip-rel"><i></i>causes</span><span class="ip-box"><b>LayoutUpdater.call</b><span class="ip-d">deletes every row, re-inserts at 1&times;1</span><a class="path ip-loc" href="https://github.com/discourse/discourse/pull/43002/files#diff-e14c2deaef5cedc3ef477f317420dbcddffc1faa6376518de3055fff3b0c723aR18-R35">lib/admin_dashboard/reports/layout_updater.rb:18-35</a></span></li>
-               <li class="ip-n ip-out"><span class="ip-rel"><i></i>produces</span><span class="ip-box"><b>Every card back to 1&times;1</b><span class="ip-d">observable behaviour</span></span></li>
-             </ol>
-           </div>
-@@ -1768,8 +1768,8 @@
- 
-         <div class="ip-card">
-           <span class="ip-hd">B &middot; A resized card may revert when the Reports section is shown again</span>
--          <p class="ip-why">A resize updates only local state. Section data that the dashboard serves from its
--            cache still has the old size <span class="tier tier-inf">inferred</span>.
-+          <p class="ip-why">An admin who resizes a card, then hides the Reports section and shows it again,
-+            sees the card back at its old size <span class="tier tier-inf">inferred</span>.
-             <a href="#cp-b">Checkpoint B</a></p>
-           <div class="ip-lanes"><span>Changed by this PR</span><span>Existing system</span></div>
-           <div class="ip-body">
-@@ -1796,7 +1796,7 @@
+@@ -2903,6 +2903,7 @@
        <ul class="ev-list">
-         <li><a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L201-L204">frontend/discourse/admin/components/modal/manage-reports.gjs:201-204</a> &mdash; the one layout writer that sends no size. <a href="#cp-a">Checkpoint A</a></li>
-         <li><a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/controllers/admin/dashboard.js#L96-L127">frontend/discourse/admin/controllers/admin/dashboard.js:96-127</a> &mdash; showing the section again reuses cached data when the cache has it. <a href="#cp-b">Checkpoint B</a></li>
--        <li><a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/admin_dashboard/reports/bulk_fetch.rb#L10-L28">lib/admin_dashboard/reports/bulk_fetch.rb:10-28</a> &mdash; ignores rows and cols, but the shared parser now returns 400 for the whole bulk request if any size is out of range. <a href="#cp-c">Checkpoint C</a></li>
-+        <li><a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/admin_dashboard/reports/section.rb#L50-L52">lib/admin_dashboard/reports/section.rb:50-52</a> &mdash; sends each card's rows and cols back to the client with the section. <a href="#cp-b">Checkpoint B</a></li>
+         <li><a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/frontend/discourse/admin/components/modal/manage-reports.gjs#L197-L205">frontend/discourse/admin/components/modal/manage-reports.gjs:197-205</a> &mdash; saves the layout with no sizes, so each save resets them. <a href="#cp-a">Checkpoint A</a></li>
+         <li><a class="path" href="https://github.com/discourse/discourse/blob/4f7ccd0326cf1f7d36000d2e530aca6ff4f8981f/lib/admin_dashboard/reports/registry.rb#L16-L25">lib/admin_dashboard/reports/registry.rb:16-25</a> &mdash; skips rows whose source has no provider, so the next resize now deletes them. <a href="#cp-b">Checkpoint B</a></li>
++        <li><a class="path" href="https://github.com/discourse/discourse/pull/43002/files#diff-7746fec8454dfbbb711ddef80bc797cac7b3de6d1925f55ac19d3e939418cab7R26-R37">lib/admin_dashboard/reports/section.rb:26-37</a> &mdash; sends each card&#39;s rows and cols back to the browser with the section. <a href="#cp-b">Checkpoint B</a></li>
        </ul>
      </section>
  
