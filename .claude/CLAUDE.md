@@ -545,13 +545,20 @@ pass*, § *A citation inside the narration*); the template, `excerpt.sh --inline
   section per flow** — the per-layer page under new section names. The shortening happens in what
   gets *decided*, not in how the decisions get written up. Step 7 opens no file the notes have not
   already cited, and it is where the falsifiers' challenges arrive.
-- **Affected-but-unchanged code is the product.** Step 5 of `SKILL.md` finds it, the lens files'
-  search recipes are how, and it surfaces at three depths. The **checkpoint** that turns on it
-  explains it, with the line in its *Look at* list. **Section 05** shows the crossings whole — one to
-  three chains, with the entries they run through cited beneath the figure and pointing back at the
-  checkpoint in a clause. The **evidence foot** holds what is real and cited but not something the
-  reviewer has to decide about. **Nothing a reviewer acts on lives only in the foot**; a foot entry
-  that is a judgment is a mis-filed checkpoint.
+- **Affected-but-unchanged code is part of the judgment, and the checkpoint carries it.** The page
+  exists for the judgments in section 03, and what the change does to code it did not touch belongs
+  inside those judgments rather than standing as a deliverable of its own. **Finding it is not
+  optional**: step 5 of `SKILL.md` traces every consumer with the lens files' search recipes,
+  whatever section 05 will show, because a checkpoint cannot bring in a consequence the run never
+  found. It surfaces at three depths. The **checkpoint** that turns on it states it in its own prose
+  — what the unchanged caller now does, a clause each, with the line in its *Look at* list — and never
+  leaves a consequence for section 05 to state. **Section 05** is optional depth: one to three chains
+  drawing the crossings whole, with the entries they run through cited beneath the figure and
+  pointing back at the checkpoint in a clause, behind a shut fold by default, so a reader who never
+  opens it misses a picture and never a finding. The **evidence foot** holds what is real and cited
+  but not something the reviewer has to decide about. **Nothing a reviewer acts on lives only in
+  section 05 or the foot**; an impact card or a foot entry whose consequence no checkpoint states is
+  a mis-filed checkpoint.
 
   **Record what was searched**, so an empty result reads as evidence rather than as omission. The
   record is `details.searched`, shut by default, inside the foot: `ul.sr-list`, one row per search, a
@@ -801,7 +808,8 @@ pass*, § *A citation inside the narration*); the template, `excerpt.sh --inline
   comment-stripped copy.
 - **Source excerpts are quotations, and the page reads complete without them.** A collapsed
   `details.excerpt` holding verbatim code, in two variants — `--diff` for changed lines, `--source`
-  for unchanged ones, which carries the product because no diff view can address an unchanged line.
+  for unchanged ones, which quotes the affected-but-unchanged code because no diff view can address
+  an unchanged line.
 
   The page reads completely with **every excerpt closed** — judged **field by field**: a citation
   elsewhere does not rescue a field whose only `file:line` sits inside the collapsed block. An excerpt
