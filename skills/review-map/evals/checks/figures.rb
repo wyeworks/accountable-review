@@ -32,7 +32,7 @@
 #   It is a WARN because the search lives in the foot and a fragment cannot see it.
 #
 #   A .cv-note that grades. It is a free-text slot on a node — the third place on this page a
-#   severity word can get in, after GAP and Open question, and the only one with no fixed label.
+#   severity word can get in, after Testing gap and Review question, and the only one with no fixed label.
 #   It says what the path skips. Why that matters is the checkpoint's to say.
 #
 # WHERE A FIGURE SITS DECIDES ITS CAPTION. A figure carries part of the argument, so it sits in the

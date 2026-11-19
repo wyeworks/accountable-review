@@ -3,7 +3,7 @@
   "generated_at": "2026-11-19T13:47:31Z",
   "plugin": {
     "name": "accountable-review",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "commit": "d47be5f77e5ba3d31926c7394a507a0063f9fbb1"
   },
   "review_map": {

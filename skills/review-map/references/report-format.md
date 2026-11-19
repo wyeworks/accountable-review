@@ -247,9 +247,9 @@ change the judgment, and the page carries the judgment.
   <figure class="chain">…</figure>                     <!-- optional: at most ONE figure, of any kind, no figcaption -->
   <p>What follows from it, with facts stated as facts and the rest marked
      <span class="tier tier-unc">from unchanged code</span>.</p>
-  <div class="gap"><b>GAP</b><span>…</span></div>       <!-- optional: a stated absence -->
   <p class="open"><b>Review question</b> Does the filter still hide archived projects for every
      caller, including the two reports that build their own scope?</p>   <!-- always; last in the explanation -->
+  <div class="gap"><b>Testing gap</b><span>…</span></div>   <!-- optional: what the tests leave open -->
   <aside class="primer">…</aside>                        <!-- optional, --mentor only: § Mentor mode -->
   <details class="cp-ev">                                <!-- the supporting evidence, shut -->
     <summary><span class="chev">▸</span><span class="cp-ev-lbl">Supporting evidence</span></summary>
@@ -283,8 +283,8 @@ evidence*. A checkpoint that interleaves the two makes the reviewer understand a
 and the default reading becomes an investigation log. The line between them is one test: **what a
 reviewer needs to understand or challenge the change belongs in the explanation; what they need to
 substantiate it belongs in the evidence.** *The new test covers a reservation that started an hour
-ago and none starting within the next minute* changes the judgment, so it is said above the
-question (as the GAP); the test's code is evidence. The uncertainty stays in the explanation too —
+ago and none starting within the next minute* changes the judgment, so it is said outside
+the evidence (as the testing gap, beneath the question); the test's code is evidence. The uncertainty stays in the explanation too —
 a tier, *the run could not tell whether…* — even when the line that settles it is in the block
 below, and even when a figure above tells a clean causal story.
 
@@ -398,7 +398,7 @@ narrative a second time.
     alone: *a single such row anywhere on the page would fail the whole page, before anything
     renders*. At most one per paragraph, a clause or a sentence and never a lone word. **Bold
     states; it never grades** — not on *critical*, *dangerous* or *the important part*, which are
-    the severity chip set in heavier type, and never inside the review question or the GAP, whose
+    the severity chip set in heavier type, and never inside the review question or the testing gap, whose
     labels already set them apart. A paragraph with nothing a reader must not miss has no bold, and
     bolding the same position in every checkpoint is a habit, not emphasis.
   - **Don't repeat the explanation in the question.** The question names the judgment; the prose
@@ -411,22 +411,6 @@ narrative a second time.
   teammate who knows the stack, and then asking the question that matters — what they would say,
   not everything they looked at. The draft is then revised once for voice —
   § *The voice pass*, below.
-- **The gap, `div.gap`, optional.** One line, labelled **GAP** and nothing else, naming what the
-  tests leave open **where that changes the judgment**. It is earned by the same test as everything
-  else here: *"no request spec covers the archived branch"* is a gap when the reviewer's decision
-  turns on whether that branch was exercised, and is noise when it does not. At most one per
-  checkpoint. **It is secondary to the review question below it**, and the page sets it that way in
-  every theme — a note with a thin ochre rule, quieter type, no box — because two filled boxes in a
-  row read as two equal calls to act, and only the question is one.
-
-  **It states an absence; it does not grade one.** The label is fixed for the reason the review question's is —
-  *Missing*, *Untested* and *Risk* are a severity vocabulary in a component the palette already
-  marks ochre — and a gap never implies the change should not ship. Silence is not a claim of
-  coverage either: a checkpoint with nothing the tests leave open writes no `div.gap`, and the page
-  never says the tests are complete. That is the same rule as the omitted section, one component
-  down. The voice pass never revises it, so it is drafted in the voice: the case left open in the
-  behaviour's words, as the prose named it — *nothing tests a reservation that has already started*,
-  not *no spec covers the `started?` branch of `move_earlier`*.
 - **The review question, `p.open`, always, and last in the explanation.** Labelled **Review question** and
   nothing else, in the ochre box the theme gives it: the moment the checkpoint hands the reader the
   judgment, set apart so a reader returning to the page finds every question by scanning for the box.
@@ -451,10 +435,29 @@ narrative a second time.
   The label is fixed because the box is ochre and the question is the one free-text line every
   checkpoint carries: *Watch*, *Blocking* and *Check* are severity by another name, and
   `evals/checks/page-invariants.rb` warns on the first two.
+- **The testing gap, `div.gap`, optional, directly beneath the review question.** One line,
+  labelled **Testing gap** and nothing else, naming what the tests leave open **where that changes
+  the judgment** — always test coverage, never another kind of unknown, which the explanation carries
+  with a tier. It is earned by the same test as everything else here: *"no request spec covers the
+  archived branch"* is a gap when the reviewer's decision turns on whether that branch was
+  exercised, and is noise when it does not. At most one per checkpoint. **It is secondary to the review question**, so it follows the question rather than
+  leading into it, and the page sets it that way in every theme — a note with a thin ochre rule,
+  quieter type, no box — because two filled boxes in a row read as two equal calls to act, and only
+  the question is one. It is a fact the reviewer weighs in answering the question, and it stays
+  outside the shut evidence because the judgment turns on it.
+
+  **It states an absence; it does not grade one.** The label is fixed for the reason the review question's is —
+  *Missing*, *Untested* and *Risk* are a severity vocabulary in a component the palette already
+  marks ochre — and a gap never implies the change should not ship. Silence is not a claim of
+  coverage either: a checkpoint with nothing the tests leave open writes no `div.gap`, and the page
+  never says the tests are complete. That is the same rule as the omitted section, one component
+  down. The voice pass never revises it, so it is drafted in the voice: the case left open in the
+  behaviour's words, as the prose named it — *nothing tests a reservation that has already started*,
+  not *no spec covers the `started?` branch of `move_earlier`*.
 - **The primer, `aside.primer`, optional and `--mentor` only.** The framework's rule stated rather
-  than pointed at, for a reviewer new to the stack. It sits here — after the review question, before
-  the supporting evidence — as its own layer: never inside the explanation it would interrupt, and
-  never inside the evidence block, where it would read as proof of a claim. § *Mentor mode* owns every
+  than pointed at, for a reviewer new to the stack. It sits here — after the review question and any
+  testing gap, before the supporting evidence — as its own layer: never inside the explanation it
+  would interrupt, and never inside the evidence block, where it would read as proof of a claim. § *Mentor mode* owns every
   rule about it, including that it holds this checkpoint's single `a.doc`. Without the flag a
   checkpoint has no such slot, and the shape above is the shape.
 - **The supporting evidence, `details.cp-ev`, after the question.** Shut by default, its `summary`
@@ -672,7 +675,7 @@ his vocabulary.
   named refactoring grade the code — the severity chip in a famous voice.
 - **Move the figure or the inline snippet out of the explanation.** The sentences around them may
   change; the sentence before each still introduces it and the one after still says what follows.
-- **Touch the review question, the GAP or the supporting evidence.** Restyled, a question turns into a
+- **Touch the review question, the testing gap or the supporting evidence.** Restyled, a question turns into a
   choice between two actions, and a choice leans toward one of them. The question keeps the form the
   rules above gave it.
 
@@ -1200,7 +1203,7 @@ list keeps its row as it would for any other.
 
 **`.cv-note` says what the path skips, and nothing else.** *skips destroy callbacks*, *writes with
 `update_column`* — a fact about the code, in about six words. It is a free-text slot on a node, which
-makes it the third place on the page a severity word can get in after `GAP` and *Review question*, and
+makes it the third place on the page a severity word can get in after *Testing gap* and *Review question*, and
 the only one with no fixed label: *critical bypass* is a grade, and why the path matters is the
 checkpoint's to say. `figures.rb` warns on the common grading words. Name **whose** callbacks are
 skipped — *ownerships deleted without callbacks*, not *deletes skip callbacks* — because a path that
@@ -3234,7 +3237,7 @@ are not and take the blob. § *Chains* carries that table.
 
 ### A citation inside the narration
 
-In prose a reader reads straight through — a checkpoint's explanation, *What changed*, a GAP — the
+In prose a reader reads straight through — a checkpoint's explanation, *What changed*, a testing gap — the
 citation is **the claim, linked**: `<a class="ref" href="…">the phrase that makes the claim</a>`.
 The text says what is true; the href says where, in exactly the forms above, chosen by the line, with
 the range in the href when the claim spans one. Nothing about the URL changes, only what the reader

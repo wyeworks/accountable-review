@@ -17,8 +17,8 @@ which is most of what makes an example worth reading.
 | `discourse-43845/` | [discourse/discourse#43845](https://github.com/discourse/discourse/pull/43845) | `320f173` → `64358ac` | 36 files · 2 context entries · 5 checkpoints · 1 converge figure · 1 lifecycle figure · 1 impact path |
 | `rubygems-6699/` | [rubygems/rubygems.org#6699](https://github.com/rubygems/rubygems.org/pull/6699) | `4199bcb` → `e9b5a3e` | 11 files · 2 context entries · 3 checkpoints · 1 converge figure · no impact path |
 
-- `discourse-43845/`: generated on **2026-11-19** by **`accountable-review` 1.4.0** from plugin commit `d47be5f`, at `--effort high`, `--mentor off`, `--context auto`, `--impact collapsed`; coverage gate: pass.
-- `rubygems-6699/`: generated on **2026-11-19** by **`accountable-review` 1.4.0** from plugin commit `d47be5f`, at `--effort high`, `--mentor off`, `--context auto`, `--impact collapsed`; coverage gate: pass.
+- `discourse-43845/`: generated on **2026-11-19** by **`accountable-review` 1.4.1** from plugin commit `d47be5f`, at `--effort high`, `--mentor off`, `--context auto`, `--impact collapsed`; coverage gate: pass.
+- `rubygems-6699/`: generated on **2026-11-19** by **`accountable-review` 1.4.1** from plugin commit `d47be5f`, at `--effort high`, `--mentor off`, `--context auto`, `--impact collapsed`; coverage gate: pass.
 <!-- examples:end -->
 
 Each directory is one run's whole output: the page and the `manifest.json` written beside it. The
