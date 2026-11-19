@@ -22,7 +22,8 @@
 # detached worktree of the pinned head — through the e2e harness's checkout code, so it inherits
 # the force-push guard: a head that is no longer on the pull ref stops the run rather than
 # publishing a page whose every citation 404s. The page settings come from the manifest, passed
-# explicitly, so an example keeps the settings it was made with. It never edits a page.
+# explicitly, so an example keeps the settings it was made with. It never edits a page, and it
+# never updates one: --no-update is passed, and a manifest naming updated_from is refused.
 #
 # This script lives outside examples/ on purpose: .github/workflows/pages.yml uploads that whole
 # directory to the public site.
@@ -213,7 +214,9 @@ def regen(e)
              "--output", out, "--repository", pr.repo, "--pr", pr.pr.to_s,
              "--base-sha", pr.base_sha, "--head-sha", pr.head_sha,
              "--repo-dir", repo, "--plugin-dir", ROOT,
-             "--effort", s["effort"], "--mentor", s["mentor"], "--context", s["context"]]
+             "--effort", s["effort"], "--mentor", s["mentor"], "--context", s["context"],
+             # An example is always generated whole: a carried claim is one nobody re-read.
+             "--no-update"]
       # A manifest written before --impact existed names none; its page is regenerated at the default.
       cmd += ["--impact", s["impact"]] if s["impact"]
       cmd += ["--claude-bin", ENV["CLAUDE_BIN"]] if ENV["CLAUDE_BIN"]
@@ -229,6 +232,8 @@ def regen(e)
         die("#{e.id}: check.rb --final failed; examples/#{e.id}/ is unchanged. Re-run, never edit.", 1)
       end
 
+      built = JSON.parse(File.read(File.join(out, "manifest.json")))
+      die("#{e.id}: the page was updated from #{built.dig("revision", "updated_from")}, not generated whole; examples/#{e.id}/ is unchanged", 1) if built.dig("revision", "updated_from")
       FileUtils.cp(page, File.join(DIR, e.id, "index.html"))
       FileUtils.cp(File.join(out, "manifest.json"), File.join(DIR, e.id, "manifest.json"))
     ensure
