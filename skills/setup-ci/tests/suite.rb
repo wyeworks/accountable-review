@@ -655,6 +655,20 @@ class SetupCiSuite
     write(File.join(c, "context-bad.yml"), "review_map:\n  context: needed\n")
     assert_eq sh(@read_cfg, File.join(c, "context-bad.yml")).code, 1, "a context value that is none of the four is an error"
 
+    # --impact is how section 05 is shown. `collapsed` is the default, spelled out like the rest.
+    assert_in default, "--impact collapsed",        "impact's default reaches the run as --impact collapsed"
+    %w[open never].each do |v|
+      assert_in inv.call("--repo-dir", @tmp, "--impact", v).out, "--impact #{v}", "--impact #{v} reaches the run"
+    end
+    assert_eq inv.call("--repo-dir", @tmp, "--impact", "auto").code, 1, "an impact value that is none of the three is refused"
+    write(File.join(c, "impact.yml"), "review_map:\n  impact: open\n")
+    assert_in inv.call("--repo-dir", c, "--config", File.join(c, "impact.yml"), chdir: c).out, "--impact open",
+              "impact is read from the config file"
+    assert_in inv.call("--repo-dir", c, "--config", File.join(c, "impact.yml"), "--impact", "never", chdir: c).out,
+              "--impact never", "and the impact flag beats the config file"
+    write(File.join(c, "impact-bad.yml"), "review_map:\n  impact: shut\n")
+    assert_eq sh(@read_cfg, File.join(c, "impact-bad.yml")).code, 1, "an impact value that is none of the three is an error"
+
     # The theme is how the page looks and nothing about what is on it, so it is never a flag on the
     # skill: page-skeleton.sh reads it from the checkout, and the adapter passes it through the
     # environment only so a --config file kept elsewhere still counts.
@@ -779,6 +793,7 @@ class SetupCiSuite
     assert_not_in m, "severity",                    "the manifest carries no verdict vocabulary"
     check m.match?(/"commit": ("[0-9a-f]{40}"|null)/), "the manifest records the plugin's commit, which names a branch build"
     assert_in m, '"context": "auto"',               "the manifest records how much Context was asked for"
+    assert_in m, '"impact": "collapsed"',           "the manifest records how section 05 was shown"
 
     o2 = path("out-pending")
     page.call(o2, "<div class=\"buildstate\">Still being written</div>#{filler}")

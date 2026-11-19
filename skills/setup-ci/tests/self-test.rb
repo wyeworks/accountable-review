@@ -255,6 +255,16 @@ CASES = [
            edit: sub('emit("context", val)', ""),
            sections: %i[config], expect: "context is read from the config file"),
 
+  # --impact's default is the fold, and `open` is the plausible edit — it is what every page did
+  # before the setting, and it would open section 05 on every CI page while the docs say it is shut.
+  Case.new(desc: "impact defaults to open, so every CI page shows section 05 expanded", file: GENERATE,
+           edit: sub("IMPACT=${CFG_impact:-collapsed}", "IMPACT=${CFG_impact:-open}"),
+           sections: %i[config], expect: "impact's default reaches the run as --impact collapsed"),
+
+  Case.new(desc: "the config parser stops reading impact at all", file: READ_CONFIG,
+           edit: sub('emit("impact", val)', ""),
+           sections: %i[config], expect: "impact is read from the config file"),
+
   # And the peek that reads --mentor's optional value. Consuming ANY next argument turns
   # `--mentor --effort low` into a mentor run at the default effort, with nothing saying so.
   Case.new(desc: "the optional stack name swallows whatever flag follows --mentor", file: GENERATE,

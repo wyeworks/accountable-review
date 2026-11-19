@@ -7,6 +7,7 @@
 #                                 [--effort high|low]
 #                                 [--mentor [off|rails|elixir|phoenix|rust|react|nextjs]]
 #                                 [--context auto|never|always|collapsed]
+#                                 [--impact collapsed|open|never]
 #                                 [--update | --no-update]
 #                                 [--config FILE] [--repo-dir DIR]
 #                                 (the page's theme is review_map.theme in the config, never a flag)
@@ -40,7 +41,7 @@ set -eu
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 PLUGIN_ROOT=$(dirname "$HERE")
 
-OUTPUT=; REPOSITORY=; PR=; BASE_SHA=; HEAD_SHA=; EFFORT=; MENTOR=; CONTEXT=; CONFIG=
+OUTPUT=; REPOSITORY=; PR=; BASE_SHA=; HEAD_SHA=; EFFORT=; MENTOR=; CONTEXT=; IMPACT=; CONFIG=
 REPO_DIR=.; PLUGIN_DIR=; CLAUDE_BIN=${CLAUDE_BIN:-claude}
 STRICT_GATE=0; PRINT_INVOCATION=0; VERIFY_ONLY=0; UPDATE=
 
@@ -60,6 +61,7 @@ while [ $# -gt 0 ]; do
                    case ${2:-} in off|rails|elixir|phoenix|rust|react|nextjs) MENTOR=$2; shift ;; esac
                    shift ;;
     --context)     CONTEXT=$2;    shift 2 ;;
+    --impact)      IMPACT=$2;     shift 2 ;;
     --update)      UPDATE=on;     shift ;;
     --no-update)   UPDATE=off;    shift ;;
     --config)      CONFIG=$2;     shift 2 ;;
@@ -90,6 +92,7 @@ fi
 [ -n "$EFFORT" ] || EFFORT=${CFG_effort:-high}
 [ -n "$MENTOR" ] || MENTOR=${CFG_mentor:-off}
 [ -n "$CONTEXT" ] || CONTEXT=${CFG_context:-auto}
+[ -n "$IMPACT" ] || IMPACT=${CFG_impact:-collapsed}
 [ -n "$UPDATE" ] || UPDATE=${CFG_update:-true}
 THEME=${CFG_theme:-}
 
@@ -118,6 +121,13 @@ esac
 case $CONTEXT in
   auto|never|always|collapsed) ;;
   *) die "--context must be auto, never, always or collapsed, got '$CONTEXT'" ;;
+esac
+
+# How section 05 Impact outside the diff is shown. `collapsed` is the default; the three are
+# report-format.md § How much Impact's, and this script only checks the name.
+case $IMPACT in
+  collapsed|open|never) ;;
+  *) die "--impact must be collapsed, open or never, got '$IMPACT'" ;;
 esac
 
 # Whether a second run over the same pull request re-reads only the commits since the previous
@@ -157,13 +167,13 @@ PROMPT="/accountable-review:review-map${PR:+ $PR} --effort $EFFORT --output $OUT
 # Every page setting is passed EXPLICITLY, its default included. The skill reads the checkout's
 # .accountable-review.yml itself, under its flags, so a value left to the absence of a flag would be
 # decided twice — here, possibly from a --config kept elsewhere, and there from the checkout — and
-# the checkout would win. Passing all three makes this script's resolution the run's, which is also
+# the checkout would win. Passing all four makes this script's resolution the run's, which is also
 # what the manifest below records.
 case $MENTOR in
   on)  PROMPT="$PROMPT --mentor" ;;
   *)   PROMPT="$PROMPT --mentor $MENTOR" ;;
 esac
-PROMPT="$PROMPT --context $CONTEXT"
+PROMPT="$PROMPT --context $CONTEXT --impact $IMPACT"
 # --update goes on only when something already put a page where this run writes. That check is
 # mechanical rather than editorial: the adapter reports that a previous map is present, and the
 # skill decides — via carry-plan.sh — whether any of it may be carried. Asking for an update
@@ -311,6 +321,7 @@ cat > "$OUTPUT_ABS/manifest.json" <<JSON
     "effort": "$EFFORT",
     "mentor": "$MENTOR",
     "context": "$CONTEXT",
+    "impact": "$IMPACT",
     "theme": "${THEME:-daylight}"
   },
   "revision": {

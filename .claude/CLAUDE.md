@@ -43,9 +43,10 @@ helpful it seems. The agent does the work of explaining; the human does the work
 Installed, it is invoked as `/accountable-review:review-map`: plugin skills are namespaced by the
 plugin name. It takes a target, an **effort** — `--effort high` (the default, sending an adversarial
 pass at the run's own analysis before any of it is written) or `--effort low`, which opts out —
-`--mentor`, off by default, the one flag that puts anything inside a checkpoint, and
-`--context auto|never|always|collapsed`, which tunes section 02 alone. The repository's
-`.accountable-review.yml` supplies effort, mentor and context when no flag does. All of it is parsed
+`--mentor`, off by default, the one flag that puts anything inside a checkpoint,
+`--context auto|never|always|collapsed`, which tunes section 02 alone, and
+`--impact collapsed|open|never`, which tunes how section 05 is shown. The repository's
+`.accountable-review.yml` supplies effort, mentor, context and impact when no flag does. All of it is parsed
 in step 1 as prose, because `argument-hint` and `arguments` are not in the Agent Skills frontmatter
 allowlist and `claude plugin validate --strict` rejects an unknown key. **There is no level flag**,
 and an unrecognised one is reported rather than guessed at. The "source" is prose that another Claude
@@ -277,7 +278,7 @@ Editing one of these means checking the others still agree.
   may show a result line only because it quotes the manual on a class this repository does not have,
   so a demo goes nowhere but inside a primer and a probe never inside one.
 
-  These agree: `report-format.md` § *Mentor mode* owns every rule **alone**, with § *One page shape*,
+  These agree: `report-format.md` § *Mentor mode* owns every rule **alone**, with § *One page shape*
   § *The review checkpoint*'s slot, § *Framework anchors*' third row and § *The agenda budget*'s
   primer line pointing at it; `SKILL.md` parses it at step 1, checks the stack name and the
   catalogue at step 2, earns one at step 7g, writes it at step 9 and carries the demo exception in
@@ -544,13 +545,20 @@ pass*, § *A citation inside the narration*); the template, `excerpt.sh --inline
   section per flow** — the per-layer page under new section names. The shortening happens in what
   gets *decided*, not in how the decisions get written up. Step 7 opens no file the notes have not
   already cited, and it is where the falsifiers' challenges arrive.
-- **Affected-but-unchanged code is the product.** Step 5 of `SKILL.md` finds it, the lens files'
-  search recipes are how, and it surfaces at three depths. The **checkpoint** that turns on it
-  explains it, with the line in its *Look at* list. **Section 05** shows the crossings whole — one to
-  three chains, with the entries they run through cited beneath the figure and pointing back at the
-  checkpoint in a clause. The **evidence foot** holds what is real and cited but not something the
-  reviewer has to decide about. **Nothing a reviewer acts on lives only in the foot**; a foot entry
-  that is a judgment is a mis-filed checkpoint.
+- **Affected-but-unchanged code is part of the judgment, and the checkpoint carries it.** The page
+  exists for the judgments in section 03, and what the change does to code it did not touch belongs
+  inside those judgments rather than standing as a deliverable of its own. **Finding it is not
+  optional**: step 5 of `SKILL.md` traces every consumer with the lens files' search recipes,
+  whatever section 05 will show, because a checkpoint cannot bring in a consequence the run never
+  found. It surfaces at three depths. The **checkpoint** that turns on it states it in its own prose
+  — what the unchanged caller now does, a clause each, with the line in its *Look at* list — and never
+  leaves a consequence for section 05 to state. **Section 05** is optional depth: one to three chains
+  drawing the crossings whole, with the entries they run through cited beneath the figure and
+  pointing back at the checkpoint in a clause, behind a shut fold by default, so a reader who never
+  opens it misses a picture and never a finding. The **evidence foot** holds what is real and cited
+  but not something the reviewer has to decide about. **Nothing a reviewer acts on lives only in
+  section 05 or the foot**; an impact card or a foot entry whose consequence no checkpoint states is
+  a mis-filed checkpoint.
 
   **Record what was searched**, so an empty result reads as evidence rather than as omission. The
   record is `details.searched`, shut by default, inside the foot: `ul.sr-list`, one row per search, a
@@ -663,7 +671,7 @@ pass*, § *A citation inside the narration*); the template, `excerpt.sh --inline
   agenda on every update. **Which checkpoints carry is a script**: `carry-plan.sh`, six
   preconditions joined by AND, failing to a *full* run. P6 replays the page's recorded searches,
   because the dangerous delta is a new consumer in a file no checkpoint cites. The resolved settings
-  (effort, mentor, context) must match the previous run's, and an `.accountable-review.yml` changed in
+  (effort, mentor, context, impact) must match the previous run's, and an `.accountable-review.yml` changed in
   the delta forces a full run. **Every way it can go wrong leads to a full run** — a cache miss, a
   missing `rg`, a refused precondition. In CI the carrier is `actions/cache`, never the previous
   artifact.
@@ -756,8 +764,8 @@ pass*, § *A citation inside the narration*); the template, `excerpt.sh --inline
   fold, and the `auto` page remains, with every checkpoint unchanged because none leaned on the
   section. `always` **lowers the bar and never fills the section**: an impact path's use counts, a
   clause-explained concept qualifies, the cap stays at five, and nothing qualifying still omits the
-  section. `collapsed` is the one named exception to the reads-complete-when-shut rule, safe because
-  an entry carries no claim. No value is announced on the page.
+  section. `collapsed` is one of the two named exceptions to the reads-complete-when-shut rule, safe
+  because an entry carries no claim. No value is announced on the page.
 
   **The rail does not close up when Context is omitted**: *01, 03* says a section went, which is true.
 
@@ -800,7 +808,8 @@ pass*, § *A citation inside the narration*); the template, `excerpt.sh --inline
   comment-stripped copy.
 - **Source excerpts are quotations, and the page reads complete without them.** A collapsed
   `details.excerpt` holding verbatim code, in two variants — `--diff` for changed lines, `--source`
-  for unchanged ones, which carries the product because no diff view can address an unchanged line.
+  for unchanged ones, which quotes the affected-but-unchanged code because no diff view can address
+  an unchanged line.
 
   The page reads completely with **every excerpt closed** — judged **field by field**: a citation
   elsewhere does not rescue a field whose only `file:line` sits inside the collapsed block. An excerpt
@@ -853,6 +862,20 @@ pass*, § *A citation inside the narration*); the template, `excerpt.sh --inline
   Shape is a FAIL and vocabulary a WARN, because a hard failure on a verb teaches a run to mislabel a
   true edge. Whether each edge is **true** is `evals/e2e/judges/impact.md`'s question; whether these
   are the right paths has no judge yet (`evals/e2e/judges/IDEAS.md`).
+
+  **Section 05 is shut by default, and `--impact` tunes what it shows, never what is traced.**
+  `collapsed` (the default) keeps the eyebrow and `<h2>` and puts the panel and the affected list in
+  one shut `details.imp-fold`; `open` drops the fold; `never` writes no section and compensates
+  nowhere — only the pointers into it go, and an affected entry only it carried moves to the foot.
+  Step 5 runs in full at every value, because cutting the trace is the shorter page that looks like
+  success. `collapsed` is the second named exception to the reads-complete-when-shut rule, safe
+  because every card and entry points back at the checkpoint that owns its explanation. No value is
+  announced. These agree: `report-format.md` § *How much Impact* **alone**, with § *One page shape*
+  and § *Section 6* pointing at it; `SKILL.md` steps 1, 7i and 9;
+  `references/update.md`; the template's fold, its CSS in the head range, and `tests/run.rb` with a
+  `self-test.rb` row on the fold's range; `golden/impact-collapsed.html`, which `impact-paths.rb` and
+  `searches.rb` must read through; and the CI half — `read-config.sh`, `references/config.md`,
+  `ci/generate-review-map.sh` (always passes `--impact`), `bin/examples` and `setup-ci/tests/`.
 - **The skeleton is emitted, never typed.** `references/page-template.html` carries four `SKELETON:`
   markers. Everything in the head and tail ranges — the `<head>`, the themes' token blocks, the
   highlight.js tags and the tint script — is written straight into the page by
@@ -981,12 +1004,12 @@ pass*, § *A citation inside the narration*); the template, `excerpt.sh --inline
 Same rule as above: editing one of these means checking the others still agree.
 
 - **`.accountable-review.yml` means the same thing wherever it is read.** The page keys — `effort`,
-  `mentor`, `context`, `theme` — are read by the skill itself, so a person's run and a CI run of one
+  `mentor`, `context`, `impact`, `theme` — are read by the skill itself, so a person's run and a CI run of one
   repository start from the same settings; `update`, `trivial_*` and `delivery` are CI's. Precedence
   is flag > file > default in both, and every reader parses the **whole** file with
   `skills/review-map/scripts/read-config.sh`, so a key CI refuses stops a person's run too. The CI
   adapter passes every page key **explicitly**, defaults included (`--mentor off`, `--context
-  auto`), because the skill reads the checkout's file under its flags and an absent flag would be
+  auto`, `--impact collapsed`), because the skill reads the checkout's file under its flags and an absent flag would be
   decided twice.
 
   These agree: `read-config.sh`; `SKILL.md` step 1 and `references/update.md`; `page-skeleton.sh`;

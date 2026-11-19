@@ -104,7 +104,8 @@ def readme_region(all)
     s = e.settings
     "- `#{e.id}/`: generated on **#{e.date}** by **`accountable-review` #{e.plugin['version']}** " \
       "from plugin commit `#{e.short(e.plugin['commit'])}`, at `--effort #{s['effort']}`, " \
-      "`--mentor #{s['mentor']}`, `--context #{s['context']}`; coverage gate: #{e.manifest['coverage_gate']}."
+      "`--mentor #{s['mentor']}`, `--context #{s['context']}`#{s['impact'] && ", `--impact #{s['impact']}`"}; " \
+      "coverage gate: #{e.manifest['coverage_gate']}."
   end
   <<~MD.chomp
     | Path | Pull request | Revision (head → base) | Shape |
@@ -213,6 +214,8 @@ def regen(e)
              "--base-sha", pr.base_sha, "--head-sha", pr.head_sha,
              "--repo-dir", repo, "--plugin-dir", ROOT,
              "--effort", s["effort"], "--mentor", s["mentor"], "--context", s["context"]]
+      # A manifest written before --impact existed names none; its page is regenerated at the default.
+      cmd += ["--impact", s["impact"]] if s["impact"]
       cmd += ["--claude-bin", ENV["CLAUDE_BIN"]] if ENV["CLAUDE_BIN"]
       env = s["theme"] ? { "ACCOUNTABLE_REVIEW_THEME" => s["theme"] } : {}
       system(env, *cmd) or die("#{e.id}: generation failed; examples/#{e.id}/ is unchanged", 1)
