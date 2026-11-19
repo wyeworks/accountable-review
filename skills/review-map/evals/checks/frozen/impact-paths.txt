@@ -490,6 +490,12 @@ SKIP  no .impact panel in this input
 ## --page excerpt-linked-duplicate.html
 exit=0
 WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
+## --fragment excerpt-open-in-evidence.html
+exit=0
+SKIP  no .impact panel in this input
+## --page excerpt-open-in-evidence.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment excerpt-open.html
 exit=0
 SKIP  no .impact panel in this input
@@ -1640,6 +1646,12 @@ PASS  every changed and affected node carries exactly one locator, last in its b
 SKIP  affected nodes against the diff: nothing to compare with — needs --repo and --base, or an input carrying the ledger
 PASS  no unsubstituted placeholders in the panel
 PASS  the panel carries a legend naming all three node kinds
+## --fragment invariants-assurance-domain.html
+exit=0
+SKIP  no .impact panel in this input
+## --page invariants-assurance-domain.html
+exit=0
+WARN  no .impact panel on this page — right only if nothing the change does reaches unchanged code
 ## --fragment invariants-assurance.html
 exit=0
 SKIP  no .impact panel in this input

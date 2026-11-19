@@ -108,6 +108,7 @@
  page-invariants    | invariants-risk-score-trailing.html | 1 | graded noun asserted rather than refused
  page-invariants    | invariants-clean.html        | 0 | no asserted risk or severity score
  page-invariants    | invariants-assurance.html    | 1 | assurance language
+ page-invariants    | invariants-assurance-domain.html | 0 | no assurance language
  page-invariants    | invariants-draft-narration.html | 1 | narrates its own drafting
  page-invariants    | invariants-update-narration.html | 1 | narrates its own drafting
  page-invariants    | invariants-update-assurance.html | 1 | assurance language
@@ -166,7 +167,8 @@
  page-invariants    | invariants-section-sign.html  | 1 | the page points with a section sign
  page-invariants    | invariants-section-sign-quoted.html | 0 | no section-sign pointers
  excerpts           | excerpt-clean.html            | 0 | collapsed by default
- excerpts           | excerpt-open.html             | 1 | open by default
+ excerpts           | excerpt-open.html             | 1 | open by default outside the supporting evidence
+ excerpts           | excerpt-open-in-evidence.html | 0 | or open inside the supporting evidence it confirms
  excerpts           | excerpt-duplicate.html        | 1 | same range is excerpted more than once
  excerpts           | excerpt-linked-clean.html     | 0 | no excerpt quotes the same lines twice
  excerpts           | excerpt-linked-duplicate.html | 1 | same range is excerpted more than once

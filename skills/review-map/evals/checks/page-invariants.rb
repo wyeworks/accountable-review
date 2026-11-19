@@ -80,14 +80,15 @@ end
 # easy to reintroduce while believing rule 2 still holds. A run at --effort high sends an
 # adversarial pass at its own flows; nothing about that is allowed to reach the page (SKILL.md
 # step 8, report-format.md § Detail levels). The patterns are high-precision on purpose: a bare
-# 'verified' is a real column name in real Rails apps.
+# 'verified' is a real column name in real Rails apps, and "verification pass" is bounded because
+# "the code verification passes" is ordinary prose on a sign-up change.
 # The `re-?` prefixes are not decoration. "every claim was re-checked against the new commits" is
 # the sentence an --update run reaches for, and without them it read as clean while saying exactly
 # what a verification badge says. The numeric alternative is that badge with the arithmetic left to
 # the reader: "3 of 5 checkpoints re-analysed" advertises how much of the page was looked at again,
 # which report-format.md § Build state § An updated page refuses for the reason a count of
 # corrected claims is refused at --effort high.
-ASSURE = /(independently|adversarially|externally) verified|verification pass|falsification pass|(claims|findings) (were|have been|are all) (re-?)?(verified|checked|confirmed)|every claim (was|has been) (re-?)?(verified|checked|confirmed)|\d+ of \d+ (checkpoints?|judgments?|claims?|sections?) (were |have been )?(re-?)?(analysed|analyzed|verified|checked|derived|read)|class="(verified|checked)"|chip-verified/i
+ASSURE = /(independently|adversarially|externally) verified|verification pass\b|falsification pass\b|(claims|findings) (were|have been|are all) (re-?)?(verified|checked|confirmed)|every claim (was|has been) (re-?)?(verified|checked|confirmed)|\d+ of \d+ (checkpoints?|judgments?|claims?|sections?) (were |have been )?(re-?)?(analysed|analyzed|verified|checked|derived|read)|class="(verified|checked)"|chip-verified/i
 
 # The standing disclaimer, which is the OPPOSITE leak from ASSURE and therefore its own rule:
 # that one is the page overclaiming its coverage, this one is the page hedging it in a sentence

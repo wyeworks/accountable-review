@@ -5,7 +5,7 @@
 #
 # The half that matters is not here: does the prose still read completely with every
 # excerpt CLOSED, judged field by field. That needs a reader and lives in the cases.
-# What a script can settle is shape — collapsed by default (the inline snippet an explanation
+# What a script can settle is shape — collapsed by default outside a checkpoint's evidence (the inline snippet an explanation
 # shows is a div, not a disclosure, and is read rather than opened), a summary that says what is
 # inside, tints that exist in all three theme blocks, no range quoted twice, a quotation
 # nobody coloured by hand, and a state tag that agrees with the diff it describes.
@@ -126,12 +126,23 @@ else
   check.bad("#{details} <details> but #{summaries} <summary> — a disclosure with no summary is an unlabelled black box")
 end
 
-# Collapsed by default. An excerpt that ships open is just a code dump, and it is the
-# reader who decides when they are ready to check the claim.
-if page.has?(/<details[^>]*[[:space:]]open([[:space:]>]|=)/)
-  check.bad("an excerpt is open by default — excerpts are revealed by the reader, not shipped expanded")
+# Collapsed by default, except inside a checkpoint's supporting evidence. An excerpt that ships
+# open in the page is just a code dump, and it is the reader who decides when they are ready to
+# check the claim. Inside details.cp-ev the reader already decided: they opened the evidence, and
+# an entry's excerpt is what they opened it for. So the depth of each <details> is tracked, and an
+# open one fails unless it is an excerpt with a shut cp-ev around it.
+OPEN = /[[:space:]]open([[:space:]>]|=)/
+stack = []
+loose = []
+page.lines.join("\n").scan(%r{<details\b[^>]*>|</details>}) do |tag|
+  next stack.pop if tag == "</details>"
+  loose << tag if tag.match?(OPEN) && !(tag.include?('class="excerpt') && stack.include?(true))
+  stack << tag.include?('class="cp-ev"')
+end
+if loose.empty?
+  check.ok("every excerpt is collapsed by default, or open inside the supporting evidence it confirms")
 else
-  check.ok("every excerpt is collapsed by default")
+  check.bad("an excerpt is open by default outside the supporting evidence — excerpts are revealed by the reader, not shipped expanded")
 end
 
 # A closed excerpt is the state most readers see, so its summary has to say what is

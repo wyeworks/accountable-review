@@ -923,10 +923,15 @@ judgment actually has — in this order, stopping at the first yes:
 2. Does an entity move between named states? → `figure.lifecycle`
 3. Did a persistent entity or relationship appear, change or disappear? → `figure.structure`
 4. Would the explanation otherwise name three hops in sequence? → `figure.chain`
-5. None of these → no figure, which is the commonest answer and a correct one.
+5. None of these → no figure.
+
+**A yes is a figure.** When one of the four answers yes and the gates hold, draw it — don't talk
+yourself out of it because the prose already says it. A figure that repeats a sentence the explanation
+needs anyway costs the reader a glance; one withheld leaves them to assemble the shape in their head.
+Once it is drawn, drop the paragraph that walked its hops.
 
 Converge is first because the path that does not keep the invariant is the finding, and a chain
-drawn through any one path hides it. A figure also has to pass four gates; `report-format.md`
+drawn through any one path hides it. A figure also has to pass three gates; `report-format.md`
 § *Topology figures* owns them and every shape's rules.
 
 **A converge needs its writer search before it may be drawn.** Its list claims to be every path, and
@@ -1426,7 +1431,7 @@ complete. With `--output` there is no URL: say where the file is, once.
   for f in "$W"/voice/*.html; do
     [ -e "$f" ] || continue; id=$(basename "$f" .html)
     grep -q "id=\"$id\"" <page.html> || continue
-    awk -v id="$id" 'index($0, "id=\"" id "\"") {on=1} on && /class="open"/ {q=1}
+    awk -v id="$id" 'index($(0), "id=\"" id "\"") {on=1} on && /class="open"/ {q=1}
       on && (q && /<\/p>/ || /<\/section>/) {print; exit} on' <page.html> | refs > "$W/voice/.page"
     refs < "$f" > "$W/voice/.draft"
     cmp -s "$W/voice/.page" "$W/voice/.draft" || echo "voice: $id"

@@ -496,7 +496,7 @@ CASES = [
 
   # An entry keeps its own a.path beside the excerpt whose summary is the link.
   Case.new(desc: "a Look at entry keeps an a.path beside its excerpt", file: T,
-           edit: insert(/<details class="excerpt excerpt--diff">/,
+           edit: insert(/<details class="excerpt excerpt--diff"[ >]/,
                         '            <a class="path" href="{{DIFF}}R{{START}}-R{{END}}">{{PATH}}:{{START}}-{{END}}</a>',
                         armed: /<ul class="lookat">/),
            section: :skeleton, expect: "and neither keeps an a.path beside the excerpt's linked summary"),

@@ -1122,10 +1122,12 @@ one of three more figures, built from § *Chains*'s boxes, its locator and its n
 | `figure.lifecycle` | an entity moves between named states | *what states can this be in, and what moves it between them?* |
 | `figure.structure` | a persistent entity or relationship appeared, changed or went | *what is this now attached to?* |
 
-**This is not a diagram feature, and zero is a valid result.** A figure exists only where it saves the
-reader reconstructing something the prose would make them hold in their head; the success test is that
-a reviewer who meets one understands that part of the change faster than from the explanation and the
-diff, never that more pages carry figures. Nothing counts figures, and nothing ever should.
+**This is not a diagram feature, and zero is a valid result — but a redundant figure beats a missing
+one.** A figure exists to save the reader reconstructing a shape the prose would make them hold in
+their head. When a shape question below answers yes and the gates hold, draw it: a figure that
+repeats a sentence the explanation needs anyway costs a glance, and one withheld leaves the reader to
+assemble the shape alone. Once it is drawn, the paragraph that walked its hops goes.
+Nothing counts figures, and nothing ever should.
 
 ### Choosing the shape
 
@@ -1139,7 +1141,7 @@ At step 7f, for a checkpoint that may earn a figure, ask in this order and stop 
 4. **Would the explanation otherwise name three hops in sequence?** → `figure.chain`.
 5. **None of these** → no figure.
 
-Then four gates, all of which must hold, or there is no figure:
+Then three gates, all of which must hold, or there is no figure:
 
 - **A reviewer question.** The figure answers a question from the table above, and the sentence that
   introduces it in the explanation asks it — *which paths have to keep the history row truthful? Three
@@ -1148,8 +1150,6 @@ Then four gates, all of which must hold, or there is no figure:
 - **A topology, not adjacency.** Files joined by arrows are not a shape — `ownership.rb → historical_ownership.rb → rubygem.rb`
   says nothing a list would not. *Normal removal and the `disown` path both have to close the history row*
   is a shape.
-- **Simpler than the prose.** If the figure would need more explaining than the thing it shows, write
-  the sentence instead.
 - **Evidenced.** Every node and every edge carries a locator to the line that makes it true. A
   relationship or transition you inferred rather than read is left out, not drawn dashed; a figure
   completed to look complete is the most convincing wrong thing a page can hold.
@@ -1867,6 +1867,11 @@ regenerated diff. It was never about quoting one committed line that a claim tur
   content the rule forbids. `excerpt.sh` emits it there; do not move it. **Inside a *Look at* entry
   the clause is the entry's own**, directly above the block and just as visible, so `--in-entry`
   leaves the summary's why out rather than repeating it.
+- **An entry's excerpt ships open; every other excerpt ships closed.** Inside a checkpoint's shut
+  *Supporting evidence* the reader has already chosen to verify, and the quotation is what they
+  opened it for, so `--in-entry` emits `open` — a second click per entry would be the same choice
+  asked twice. Anywhere else an open excerpt is a code dump in the reading path. The closed-page rule
+  is unchanged: the evidence block itself is shut, and the page reads complete with it.
 - **Verbatim, generated, never typed.** Run `scripts/excerpt.sh`. A mistyped inventory cell fails the
   coverage gate loudly; a paraphrased quotation is a *false* quotation and the reader has no way to
   catch it. This is the strongest version of the argument that produced `ledger-rows.sh`.
