@@ -4,8 +4,9 @@ Invoke `/accountable-review:review-map` when installed as the plugin, or `/revie
 installed as a standalone skill (for example by `npx skills add`). Resolve scripts and references
 from the loaded skill's base directory; `$CLAUDE_PLUGIN_ROOT` need not be set in the shell.
 
-Without `--output`, publish with `Artifact` at each shared milestone, reusing the same
-`$W/page.html` path so the URL stays stable. With `--output`, save `<dir>/index.html`
+Without `--output` or `--local`, publish with `Artifact` at each shared milestone, reusing the
+same `$W/page.html` path so the URL stays stable. With `--local`, save `$W/page.html` at each
+milestone, make no `Artifact` call, and link the file. With `--output`, save `<dir>/index.html`
 and skip every publishing call. The shared staging and completeness rules apply to both.
 
 **Do not load the `artifact-design` skill.** `references/page-template.html` and the themes
