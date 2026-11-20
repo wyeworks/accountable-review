@@ -34,7 +34,7 @@ Use `/accountable-review:review-map` in Claude Code or `$accountable-review:revi
 Both accept a
 PR number, URL, branch, or diff range; `--effort high` (default) or `--effort low`;
 `--mentor` with an optional stack or `off`; `--context auto|never|always|collapsed`;
-`--impact collapsed|open|never`; and `--output <dir>`. The repository's `.accountable-review.yml`
+`--impact collapsed|open|never`; `--local`; and `--output <dir>`. The repository's `.accountable-review.yml`
 supplies the first four when no flag does (step 1).
 
 Before step 1, read **only your host's reference**: [Claude Code](references/hosts/claude-code.md)
@@ -110,7 +110,7 @@ Copy this into your own notes and tick it as you go; a long run loses its place 
   current branch against its base.
 - **There is one page shape, and no flag chooses it.** No argument selects a length, a depth or a
   second document, and there is nothing to map one onto if someone invents one. An argument starting
-  with `--` that is not one of `--effort`, `--mentor`, `--context`, `--impact`, `--output`, `--update`, `--repository`,
+  with `--` that is not one of `--effort`, `--mentor`, `--context`, `--impact`, `--local`, `--output`, `--update`, `--repository`,
   `--base-sha` or `--head-sha` with its value is **reported, not guessed at**. A misread flag silently produces the
   wrong run, and the reader has no way to tell.
 - **Read the repository's settings before the flags that override them.** If the repository's top
@@ -148,6 +148,7 @@ Copy this into your own notes and tick it as you go; a long run loses its place 
   | `--mentor` | bare, a stack name, `off` | off | Whether a checkpoint may carry a primer | `report-format.md` § *Mentor mode*, step 7g |
   | `--context` | `auto`, `never`, `always`, `collapsed` | `auto` | How much of section 02 the page carries, and nothing else | `report-format.md` § *How much Context*, step 7k |
   | `--impact` | `collapsed`, `open`, `never` | `collapsed` | How section 05 is shown, and nothing else | `report-format.md` § *How much Impact*, step 7i |
+  | `--local` | — | — | The page stays at `$W/page.html`, nothing published; the run stays interactive | below |
   | `--output <dir>` | a directory outside the repository | — | Where the page lands: `<dir>/index.html`, nothing published | below |
   | `--update` | — | — | Edit the existing page over the commits since its revision | `references/update.md` |
 
@@ -178,6 +179,12 @@ Copy this into your own notes and tick it as you go; a long run loses its place 
     runs in full at every value, because the checkpoints are built from what it finds. `collapsed`
     shuts the earned section behind one fold, `open` shows it, `never` writes none and compensates
     nowhere. § *How much Impact* owns all three.
+- **`--local` keeps the page on disk and changes nothing else.** The page is `$W/page.html`, the
+  file every stage already writes; no `Artifact` call is made at any stage, and the run stays
+  interactive — it still asks what it would ask and still stages as step 9 says, saving the file
+  where it would publish. Say the absolute path at stage 1 and at completion instead of a URL. It
+  takes no value, so nobody has to name a directory. A host that already delivers locally treats it
+  as the default it is. With `--output` it is redundant: `--output` wins, and say so in chat.
 - **`--output <dir>` makes the run non-interactive.** It changes where the page goes and nothing
   else: the page is written to `<dir>/index.html` and **nothing is published** — no `Artifact` call,
   at any stage. Same sections, same depth rules, same excerpt budget, same gate; the moment this flag
@@ -1166,8 +1173,8 @@ all of them. Publish early and republish as parts complete: **the same file path
 URL never changes.** The reader can open it at minute two, watch it fill in, and start reading the
 moment the part they need lands. A crash then leaves a useful page rather than nothing.
 
-The host reference supplies the delivery mechanics. Claude publishes an Artifact; Codex and every
-other host save portable HTML locally. There, every later “publish” means saving that same local file,
+The host reference supplies the delivery mechanics. Claude publishes an Artifact, unless `--local`;
+Codex and every other host save portable HTML locally. There, every later “publish” means saving that same local file,
 not calling a publishing tool. `Write` and `Edit` below mean file creation and targeted edits
 with the host’s available tools, not required tool names.
 
@@ -1322,7 +1329,7 @@ Everything else about writing holds at every stage:
 - The page lives at `$W/page.html`, or `<dir>/index.html` with `--output`, and never in the repo.
   Excerpt fragments go in `$W` either way.
 
-Tell the user the URL (or local file link outside Claude Code) when stage 1 goes out, say it will fill
+Tell the user the URL (or local file link outside Claude Code or with `--local`) when stage 1 goes out, say it will fill
 in, and do not repeat it on every republish — one link, mentioned once, then a note when it is
 complete. With `--output` there is no URL: say where the file is, once.
 
